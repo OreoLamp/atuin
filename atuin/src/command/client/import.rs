@@ -9,8 +9,11 @@ use atuin_client::{
     database::Database,
     history::History,
     import::{
-        bash::Bash, fish::Fish, nu::Nu, nu_histdb::NuHistDb, resh::Resh, zsh::Zsh,
-        zsh_histdb::ZshHistDb, Importer, Loader,
+        bash::Bash, 
+        fish::Fish, 
+        nu::Nu, nu_histdb::NuHistDb, 
+        resh::Resh, 
+        zsh::Zsh, zsh_histdb::ZshHistDb, Importer, Loader,
     },
 };
 
@@ -19,7 +22,6 @@ use atuin_client::{
 pub enum Cmd {
     /// Import history for the current shell
     Auto,
-
     /// Import history from the zsh history file
     Zsh,
     /// Import history from the zsh history file
