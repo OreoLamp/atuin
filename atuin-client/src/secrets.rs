@@ -45,7 +45,7 @@ mod tests {
     #[test]
     fn test_secrets() {
         for (name, regex, test) in SECRET_PATTERNS {
-            let re =
+            let re: Regex =
                 Regex::new(regex).unwrap_or_else(|_| panic!("Failed to compile regex for {name}"));
 
             assert!(re.is_match(test), "{name} test failed!");

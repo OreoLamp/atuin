@@ -36,7 +36,7 @@ fn fix_error(error: sqlx::Error) -> DbError {
 impl Database for Postgres {
     type Settings = PostgresSettings;
     async fn new(settings: &PostgresSettings) -> DbResult<Self> {
-        let pool = PgPoolOptions::new()
+        let pool: sqlx::Pool<sqlx::Postgres> = PgPoolOptions::new()
             .max_connections(100)
             .connect(settings.db_uri.as_str())
             .await
@@ -45,7 +45,7 @@ impl Database for Postgres {
         sqlx::migrate!("./migrations")
             .run(&pool)
             .await
-            .map_err(|error| DbError::Other(error.into()))?;
+            .map_err(|error: sqlx::migrate::MigrateError| DbError::Other(error.into()))?;
 
         Ok(Self { pool })
     }
@@ -156,7 +156,7 @@ impl Database for Postgres {
         // They will have one as soon as they post up some new history, but handle that
         // edge case.
 
-        let res = sqlx::query(
+        let res: Vec<sqlx::postgres::PgRow> = sqlx::query(
             "select client_id from history 
             where user_id = $1
             and deleted_at is not null",
@@ -166,9 +166,9 @@ impl Database for Postgres {
         .await
         .map_err(fix_error)?;
 
-        let res = res
+        let res: Vec<String> = res
             .iter()
-            .map(|row| row.get::<String, _>("client_id"))
+            .map(|row: &sqlx::postgres::PgRow| row.get::<String, _>("client_id"))
             .collect();
 
         Ok(res)
@@ -205,7 +205,7 @@ impl Database for Postgres {
         host: &str,
         page_size: i64,
     ) -> DbResult<Vec<History>> {
-        let res = sqlx::query_as(
+        let res: Vec<History> = sqlx::query_as(
             "select id, client_id, user_id, hostname, timestamp, data, created_at from history 
             where user_id = $1
             and hostname != $2
@@ -230,7 +230,7 @@ impl Database for Postgres {
 
     #[instrument(skip_all)]
     async fn add_history(&self, history: &[NewHistory]) -> DbResult<()> {
-        let mut tx = self.pool.begin().await.map_err(fix_error)?;
+        let mut tx: sqlx::Transaction<'_, sqlx::Postgres> = self.pool.begin().await.map_err(fix_error)?;
 
         for i in history {
             let client_id: &str = &i.client_id;
@@ -355,10 +355,10 @@ impl Database for Postgres {
 
     #[instrument(skip_all)]
     async fn add_records(&self, user: &User, records: &[Record<EncryptedData>]) -> DbResult<()> {
-        let mut tx = self.pool.begin().await.map_err(fix_error)?;
+        let mut tx: sqlx::Transaction<'_, sqlx::Postgres> = self.pool.begin().await.map_err(fix_error)?;
 
         for i in records {
-            let id = atuin_common::utils::uuid_v7();
+            let id: uuid::Uuid = atuin_common::utils::uuid_v7();
 
             sqlx::query(
                 "insert into records
@@ -397,8 +397,8 @@ impl Database for Postgres {
         count: u64,
     ) -> DbResult<Vec<Record<EncryptedData>>> {
         tracing::debug!("{:?} - {:?} - {:?}", host, tag, start);
-        let mut ret = Vec::with_capacity(count as usize);
-        let mut parent = start;
+        let mut ret: Vec<Record<EncryptedData>> = Vec::with_capacity(count as usize);
+        let mut parent: Option<RecordId> = start;
 
         // yeah let's do something better
         for _ in 0..count {
@@ -441,7 +441,7 @@ impl Database for Postgres {
     async fn tail_records(&self, user: &User) -> DbResult<RecordIndex> {
         const TAIL_RECORDS_SQL: &str = "select host, tag, client_id from records rp where (select count(1) from records where parent=rp.client_id and user_id = $1) = 0 and user_id = $1;";
 
-        let res = sqlx::query_as(TAIL_RECORDS_SQL)
+        let res: RecordIndex = sqlx::query_as(TAIL_RECORDS_SQL)
             .bind(user.id)
             .fetch(&self.pool)
             .try_collect()
@@ -453,7 +453,7 @@ impl Database for Postgres {
 }
 
 fn into_utc(x: OffsetDateTime) -> PrimitiveDateTime {
-    let x = x.to_offset(UtcOffset::UTC);
+    let x: OffsetDateTime = x.to_offset(UtcOffset::UTC);
     PrimitiveDateTime::new(x.date(), x.time())
 }
 
@@ -465,15 +465,15 @@ mod tests {
 
     #[test]
     fn utc() {
-        let dt = datetime!(2023-09-26 15:11:02 +05:30);
+        let dt: time::OffsetDateTime = datetime!(2023-09-26 15:11:02 +05:30);
         assert_eq!(into_utc(dt), datetime!(2023-09-26 09:41:02));
         assert_eq!(into_utc(dt).assume_utc(), dt);
 
-        let dt = datetime!(2023-09-26 15:11:02 -07:00);
+        let dt: time::OffsetDateTime = datetime!(2023-09-26 15:11:02 -07:00);
         assert_eq!(into_utc(dt), datetime!(2023-09-26 22:11:02));
         assert_eq!(into_utc(dt).assume_utc(), dt);
 
-        let dt = datetime!(2023-09-26 15:11:02 +00:00);
+        let dt: time::OffsetDateTime = datetime!(2023-09-26 15:11:02 +00:00);
         assert_eq!(into_utc(dt), datetime!(2023-09-26 15:11:02));
         assert_eq!(into_utc(dt).assume_utc(), dt);
     }

@@ -98,26 +98,26 @@ pub trait Database: Sized + Clone + Send + Sync + 'static {
         period: TimePeriod,
         tz: UtcOffset,
     ) -> DbResult<HashMap<u64, TimePeriodInfo>> {
-        let mut ret = HashMap::new();
+        let mut ret: HashMap<u64, TimePeriodInfo> = HashMap::new();
         let iter: Box<dyn Iterator<Item = DbResult<(u64, Range<Date>)>> + Send> = match period {
             TimePeriod::Year => {
                 // First we need to work out how far back to calculate. Get the
                 // oldest history item
-                let oldest = self
+                let oldest: i32 = self
                     .oldest_history(user)
                     .await?
                     .timestamp
                     .to_offset(tz)
                     .year();
-                let current_year = OffsetDateTime::now_utc().to_offset(tz).year();
+                let current_year: i32 = OffsetDateTime::now_utc().to_offset(tz).year();
 
                 // All the years we need to get data for
                 // The upper bound is exclusive, so include current +1
-                let years = oldest..current_year + 1;
+                let years: Range<i32> = oldest..current_year + 1;
 
-                Box::new(years.map(|year| {
-                    let start = Date::from_calendar_date(year, time::Month::January, 1)?;
-                    let end = Date::from_calendar_date(year + 1, time::Month::January, 1)?;
+                Box::new(years.map(|year: i32| {
+                    let start: Date = Date::from_calendar_date(year, time::Month::January, 1)?;
+                    let end: Date = Date::from_calendar_date(year + 1, time::Month::January, 1)?;
 
                     Ok((year as u64, start..end))
                 }))
@@ -128,19 +128,19 @@ pub trait Database: Sized + Clone + Send + Sync + 'static {
                     std::iter::successors(Some(Month::January), |m| Some(m.next())).take(12);
 
                 Box::new(months.map(move |month| {
-                    let start = Date::from_calendar_date(year, month, 1)?;
-                    let days = time::util::days_in_year_month(year, month);
-                    let end = start + Duration::days(days as i64);
+                    let start: Date = Date::from_calendar_date(year, month, 1)?;
+                    let days: u8 = time::util::days_in_year_month(year, month);
+                    let end: Date = start + Duration::days(days as i64);
 
                     Ok((month as u64, start..end))
                 }))
             }
 
             TimePeriod::Day { year, month } => {
-                let days = 1..time::util::days_in_year_month(year, month);
+                let days: Range<u8> = 1..time::util::days_in_year_month(year, month);
                 Box::new(days.map(move |day| {
-                    let start = Date::from_calendar_date(year, month, day)?;
-                    let end = start
+                    let start: Date = Date::from_calendar_date(year, month, day)?;
+                    let end: Date = start
                         .next_day()
                         .ok_or_else(|| DbError::Other(eyre::eyre!("no next day?")))?;
 
@@ -152,10 +152,10 @@ pub trait Database: Sized + Clone + Send + Sync + 'static {
         for x in iter {
             let (index, range) = x?;
 
-            let start = range.start.with_time(Time::MIDNIGHT).assume_offset(tz);
-            let end = range.end.with_time(Time::MIDNIGHT).assume_offset(tz);
+            let start: OffsetDateTime = range.start.with_time(Time::MIDNIGHT).assume_offset(tz);
+            let end: OffsetDateTime = range.end.with_time(Time::MIDNIGHT).assume_offset(tz);
 
-            let count = self.count_history_range(user, start..end).await?;
+            let count: i64 = self.count_history_range(user, start..end).await?;
 
             ret.insert(
                 index,

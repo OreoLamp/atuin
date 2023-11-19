@@ -131,7 +131,7 @@ impl RecordIndex {
     /// check if the other index is ahead of us, or behind.
     /// If the other index does not have the (host, tag) pair, then the other value will be None.
     pub fn diff(&self, other: &Self) -> Vec<Diff> {
-        let mut ret = Vec::new();
+        let mut ret: Vec<Diff> = Vec::new();
 
         // First, we check if other has everything that self has
         for (host, tag_map) in self.hosts.iter() {
@@ -176,7 +176,7 @@ impl RecordIndex {
             }
         }
 
-        ret.sort_by(|a, b| (a.host, a.tag.clone(), a.tail).cmp(&(b.host, b.tag.clone(), b.tail)));
+        ret.sort_by(|a: &Diff, b: &Diff| (a.host, a.tag.clone(), a.tail).cmp(&(b.host, b.tag.clone(), b.tail)));
         ret
     }
 }
@@ -188,7 +188,7 @@ pub trait Encryption {
         old_key: &[u8; 32],
         new_key: &[u8; 32],
     ) -> Result<EncryptedData> {
-        let data = Self::decrypt(data, ad, old_key)?;
+        let data: DecryptedData = Self::decrypt(data, ad, old_key)?;
         Ok(Self::encrypt(data, ad, new_key))
     }
     fn encrypt(data: DecryptedData, ad: AdditionalData, key: &[u8; 32]) -> EncryptedData;
@@ -197,7 +197,7 @@ pub trait Encryption {
 
 impl Record<DecryptedData> {
     pub fn encrypt<E: Encryption>(self, key: &[u8; 32]) -> Record<EncryptedData> {
-        let ad = AdditionalData {
+        let ad: AdditionalData<'_> = AdditionalData {
             id: &self.id,
             version: &self.version,
             tag: &self.tag,
@@ -218,7 +218,7 @@ impl Record<DecryptedData> {
 
 impl Record<EncryptedData> {
     pub fn decrypt<E: Encryption>(self, key: &[u8; 32]) -> Result<Record<DecryptedData>> {
-        let ad = AdditionalData {
+        let ad: AdditionalData<'_> = AdditionalData {
             id: &self.id,
             version: &self.version,
             tag: &self.tag,
@@ -241,7 +241,7 @@ impl Record<EncryptedData> {
         old_key: &[u8; 32],
         new_key: &[u8; 32],
     ) -> Result<Record<EncryptedData>> {
-        let ad = AdditionalData {
+        let ad: AdditionalData<'_> = AdditionalData {
             id: &self.id,
             version: &self.version,
             tag: &self.tag,
@@ -278,12 +278,12 @@ mod tests {
 
     #[test]
     fn record_index() {
-        let mut index = RecordIndex::new();
-        let record = test_record();
+        let mut index: RecordIndex = RecordIndex::new();
+        let record: Record<DecryptedData> = test_record();
 
         index.set(record.clone());
 
-        let tail = index.get(record.host, record.tag);
+        let tail: Option<crate::record::RecordId> = index.get(record.host, record.tag);
 
         assert_eq!(
             record.id,
@@ -294,14 +294,14 @@ mod tests {
 
     #[test]
     fn record_index_overwrite() {
-        let mut index = RecordIndex::new();
-        let record = test_record();
-        let child = record.new_child(vec![1, 2, 3]);
+        let mut index: RecordIndex = RecordIndex::new();
+        let record: Record<DecryptedData> = test_record();
+        let child: Record<DecryptedData> = record.new_child(vec![1, 2, 3]);
 
         index.set(record.clone());
         index.set(child.clone());
 
-        let tail = index.get(record.host, record.tag);
+        let tail: Option<crate::record::RecordId> = index.get(record.host, record.tag);
 
         assert_eq!(
             child.id,
@@ -314,15 +314,15 @@ mod tests {
     fn record_index_no_diff() {
         // Here, they both have the same version and should have no diff
 
-        let mut index1 = RecordIndex::new();
-        let mut index2 = RecordIndex::new();
+        let mut index1: RecordIndex = RecordIndex::new();
+        let mut index2: RecordIndex = RecordIndex::new();
 
-        let record1 = test_record();
+        let record1: Record<DecryptedData> = test_record();
 
         index1.set(record1.clone());
         index2.set(record1);
 
-        let diff = index1.diff(&index2);
+        let diff: Vec<Diff> = index1.diff(&index2);
 
         assert_eq!(0, diff.len(), "expected empty diff");
     }
@@ -331,16 +331,16 @@ mod tests {
     fn record_index_single_diff() {
         // Here, they both have the same stores, but one is ahead by a single record
 
-        let mut index1 = RecordIndex::new();
-        let mut index2 = RecordIndex::new();
+        let mut index1: RecordIndex = RecordIndex::new();
+        let mut index2: RecordIndex = RecordIndex::new();
 
-        let record1 = test_record();
-        let record2 = record1.new_child(vec![1, 2, 3]);
+        let record1: Record<DecryptedData> = test_record();
+        let record2: Record<DecryptedData> = record1.new_child(vec![1, 2, 3]);
 
         index1.set(record1);
         index2.set(record2.clone());
 
-        let diff = index1.diff(&index2);
+        let diff: Vec<Diff> = index1.diff(&index2);
 
         assert_eq!(1, diff.len(), "expected single diff");
         assert_eq!(
@@ -356,18 +356,18 @@ mod tests {
     #[test]
     fn record_index_multi_diff() {
         // A much more complex case, with a bunch more checks
-        let mut index1 = RecordIndex::new();
-        let mut index2 = RecordIndex::new();
+        let mut index1: RecordIndex = RecordIndex::new();
+        let mut index2: RecordIndex = RecordIndex::new();
 
-        let store1record1 = test_record();
-        let store1record2 = store1record1.new_child(vec![1, 2, 3]);
+        let store1record1: Record<DecryptedData> = test_record();
+        let store1record2: Record<DecryptedData> = store1record1.new_child(vec![1, 2, 3]);
 
-        let store2record1 = test_record();
-        let store2record2 = store2record1.new_child(vec![1, 2, 3]);
+        let store2record1: Record<DecryptedData> = test_record();
+        let store2record2: Record<DecryptedData> = store2record1.new_child(vec![1, 2, 3]);
 
-        let store3record1 = test_record();
+        let store3record1: Record<DecryptedData> = test_record();
 
-        let store4record1 = test_record();
+        let store4record1: Record<DecryptedData> = test_record();
 
         // index1 only knows about the first two entries of the first two stores
         index1.set(store1record1);
@@ -381,8 +381,8 @@ mod tests {
         // index1 knows of a 4th store
         index1.set(store4record1);
 
-        let diff1 = index1.diff(&index2);
-        let diff2 = index2.diff(&index1);
+        let diff1: Vec<Diff> = index1.diff(&index2);
+        let diff2: Vec<Diff> = index2.diff(&index1);
 
         // both diffs the same length
         assert_eq!(4, diff1.len());
@@ -393,9 +393,9 @@ mod tests {
         // both diffs should be ALMOST the same. They will agree on which hosts and tags
         // require updating, but the "other" value will not be the same.
         let smol_diff_1: Vec<(HostId, String)> =
-            diff1.iter().map(|v| (v.host, v.tag.clone())).collect();
+            diff1.iter().map(|v: &Diff| (v.host, v.tag.clone())).collect();
         let smol_diff_2: Vec<(HostId, String)> =
-            diff1.iter().map(|v| (v.host, v.tag.clone())).collect();
+            diff1.iter().map(|v: &Diff| (v.host, v.tag.clone())).collect();
 
         assert_eq!(smol_diff_1, smol_diff_2);
 

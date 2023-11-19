@@ -29,9 +29,9 @@ pub async fn run(
     password: &Option<String>,
 ) -> Result<()> {
     use super::login::or_user_input;
-    let username = or_user_input(username, "username");
-    let email = or_user_input(email, "email");
-    let password = password
+    let username: String = or_user_input(username, "username");
+    let email: String = or_user_input(email, "email");
+    let password: String = password
         .clone()
         .unwrap_or_else(super::login::read_user_password);
 
@@ -39,11 +39,11 @@ pub async fn run(
         bail!("please provide a password");
     }
 
-    let session =
+    let session: atuin_common::api::RegisterResponse =
         api_client::register(settings.sync_address.as_str(), &username, &email, &password).await?;
 
-    let path = settings.session_path.as_str();
-    let mut file = File::create(path).await?;
+    let path: &str = settings.session_path.as_str();
+    let mut file: File = File::create(path).await?;
     file.write_all(session.session.as_bytes()).await?;
 
     // Create a new key, and save it to disk

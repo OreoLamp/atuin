@@ -35,21 +35,21 @@ pub async fn register(
     email: &str,
     password: &str,
 ) -> Result<RegisterResponse> {
-    let mut map = HashMap::new();
+    let mut map: HashMap<&str, &str> = HashMap::new();
     map.insert("username", username);
     map.insert("email", email);
     map.insert("password", password);
 
-    let url = format!("{address}/user/{username}");
-    let resp = reqwest::get(url).await?;
+    let url: String = format!("{address}/user/{username}");
+    let resp: reqwest::Response = reqwest::get(url).await?;
 
     if resp.status().is_success() {
         bail!("username already in use");
     }
 
-    let url = format!("{address}/register");
-    let client = reqwest::Client::new();
-    let resp = client
+    let url: String = format!("{address}/register");
+    let client: reqwest::Client = reqwest::Client::new();
+    let resp: reqwest::Response = client
         .post(url)
         .header(USER_AGENT, APP_USER_AGENT)
         .json(&map)
@@ -57,19 +57,19 @@ pub async fn register(
         .await?;
 
     if !resp.status().is_success() {
-        let error = resp.json::<ErrorResponse>().await?;
+        let error: ErrorResponse<'_> = resp.json::<ErrorResponse>().await?;
         bail!("failed to register user: {}", error.reason);
     }
 
-    let session = resp.json::<RegisterResponse>().await?;
+    let session: RegisterResponse = resp.json::<RegisterResponse>().await?;
     Ok(session)
 }
 
 pub async fn login(address: &str, req: LoginRequest) -> Result<LoginResponse> {
-    let url = format!("{address}/login");
-    let client = reqwest::Client::new();
+    let url: String = format!("{address}/login");
+    let client: reqwest::Client = reqwest::Client::new();
 
-    let resp = client
+    let resp: reqwest::Response = client
         .post(url)
         .header(USER_AGENT, APP_USER_AGENT)
         .json(&req)
@@ -77,31 +77,31 @@ pub async fn login(address: &str, req: LoginRequest) -> Result<LoginResponse> {
         .await?;
 
     if resp.status() != reqwest::StatusCode::OK {
-        let error = resp.json::<ErrorResponse>().await?;
+        let error: ErrorResponse<'_> = resp.json::<ErrorResponse>().await?;
         bail!("invalid login details: {}", error.reason);
     }
 
-    let session = resp.json::<LoginResponse>().await?;
+    let session: LoginResponse = resp.json::<LoginResponse>().await?;
     Ok(session)
 }
 
 pub async fn latest_version() -> Result<Version> {
-    let url = "https://api.atuin.sh";
-    let client = reqwest::Client::new();
+    let url: &str = "https://api.atuin.sh";
+    let client: reqwest::Client = reqwest::Client::new();
 
-    let resp = client
+    let resp: reqwest::Response = client
         .get(url)
         .header(USER_AGENT, APP_USER_AGENT)
         .send()
         .await?;
 
     if resp.status() != reqwest::StatusCode::OK {
-        let error = resp.json::<ErrorResponse>().await?;
+        let error: ErrorResponse<'_> = resp.json::<ErrorResponse>().await?;
         bail!("failed to check latest version: {}", error.reason);
     }
 
-    let index = resp.json::<IndexResponse>().await?;
-    let version = Version::parse(index.version.as_str())?;
+    let index: IndexResponse = resp.json::<IndexResponse>().await?;
+    let version: Version = Version::parse(index.version.as_str())?;
 
     Ok(version)
 }
@@ -113,7 +113,7 @@ impl<'a> Client<'a> {
         connect_timeout: u64,
         timeout: u64,
     ) -> Result<Self> {
-        let mut headers = HeaderMap::new();
+        let mut headers: HeaderMap = HeaderMap::new();
         headers.insert(AUTHORIZATION, format!("Token {session_token}").parse()?);
 
         Ok(Client {
@@ -128,31 +128,31 @@ impl<'a> Client<'a> {
     }
 
     pub async fn count(&self) -> Result<i64> {
-        let url = format!("{}/sync/count", self.sync_addr);
-        let url = Url::parse(url.as_str())?;
+        let url: String = format!("{}/sync/count", self.sync_addr);
+        let url: Url = Url::parse(url.as_str())?;
 
-        let resp = self.client.get(url).send().await?;
+        let resp: reqwest::Response = self.client.get(url).send().await?;
 
         if resp.status() != StatusCode::OK {
             bail!("failed to get count (are you logged in?)");
         }
 
-        let count = resp.json::<CountResponse>().await?;
+        let count: CountResponse = resp.json::<CountResponse>().await?;
 
         Ok(count.count)
     }
 
     pub async fn status(&self) -> Result<StatusResponse> {
-        let url = format!("{}/sync/status", self.sync_addr);
-        let url = Url::parse(url.as_str())?;
+        let url: String = format!("{}/sync/status", self.sync_addr);
+        let url: Url = Url::parse(url.as_str())?;
 
-        let resp = self.client.get(url).send().await?;
+        let resp: reqwest::Response = self.client.get(url).send().await?;
 
         if resp.status() != StatusCode::OK {
             bail!("failed to get status (are you logged in?)");
         }
 
-        let status = resp.json::<StatusResponse>().await?;
+        let status: StatusResponse = resp.json::<StatusResponse>().await?;
 
         Ok(status)
     }
@@ -163,7 +163,7 @@ impl<'a> Client<'a> {
         history_ts: OffsetDateTime,
         host: Option<String>,
     ) -> Result<SyncHistoryResponse> {
-        let host = host.unwrap_or_else(|| {
+        let host: String = host.unwrap_or_else(|| {
             hash_str(&format!(
                 "{}:{}",
                 env::var("ATUIN_HOST_NAME").unwrap_or_else(|_| whoami::hostname()),
@@ -171,7 +171,7 @@ impl<'a> Client<'a> {
             ))
         });
 
-        let url = format!(
+        let url: String = format!(
             "{}/sync/history?sync_ts={}&history_ts={}&host={}",
             self.sync_addr,
             urlencoding::encode(sync_ts.format(&Rfc3339)?.as_str()),
@@ -179,17 +179,17 @@ impl<'a> Client<'a> {
             host,
         );
 
-        let resp = self.client.get(url).send().await?;
+        let resp: reqwest::Response = self.client.get(url).send().await?;
 
-        let status = resp.status();
+        let status: StatusCode = resp.status();
         if status.is_success() {
-            let history = resp.json::<SyncHistoryResponse>().await?;
+            let history: SyncHistoryResponse = resp.json::<SyncHistoryResponse>().await?;
             Ok(history)
         } else if status.is_client_error() {
-            let error = resp.json::<ErrorResponse>().await?.reason;
+            let error: std::borrow::Cow<'_, str> = resp.json::<ErrorResponse>().await?.reason;
             bail!("Could not fetch history: {error}.")
         } else if status.is_server_error() {
-            let error = resp.json::<ErrorResponse>().await?.reason;
+            let error: std::borrow::Cow<'_, str> = resp.json::<ErrorResponse>().await?.reason;
             bail!("There was an error with the atuin sync service: {error}.\nIf the problem persists, contact the host")
         } else {
             bail!("There was an error with the atuin sync service: Status {status:?}.\nIf the problem persists, contact the host")
@@ -197,8 +197,8 @@ impl<'a> Client<'a> {
     }
 
     pub async fn post_history(&self, history: &[AddHistoryRequest]) -> Result<()> {
-        let url = format!("{}/history", self.sync_addr);
-        let url = Url::parse(url.as_str())?;
+        let url: String = format!("{}/history", self.sync_addr);
+        let url: Url = Url::parse(url.as_str())?;
 
         self.client.post(url).json(history).send().await?;
 
@@ -206,8 +206,8 @@ impl<'a> Client<'a> {
     }
 
     pub async fn delete_history(&self, h: History) -> Result<()> {
-        let url = format!("{}/history", self.sync_addr);
-        let url = Url::parse(url.as_str())?;
+        let url: String = format!("{}/history", self.sync_addr);
+        let url: Url = Url::parse(url.as_str())?;
 
         self.client
             .delete(url)
@@ -219,8 +219,8 @@ impl<'a> Client<'a> {
     }
 
     pub async fn post_records(&self, records: &[Record<EncryptedData>]) -> Result<()> {
-        let url = format!("{}/record", self.sync_addr);
-        let url = Url::parse(url.as_str())?;
+        let url: String = format!("{}/record", self.sync_addr);
+        let url: Url = Url::parse(url.as_str())?;
 
         self.client.post(url).json(records).send().await?;
 
@@ -234,11 +234,11 @@ impl<'a> Client<'a> {
         start: Option<RecordId>,
         count: u64,
     ) -> Result<Vec<Record<EncryptedData>>> {
-        let url = format!(
+        let url: String = format!(
             "{}/record/next?host={}&tag={}&count={}",
             self.sync_addr, host.0, tag, count
         );
-        let mut url = Url::parse(url.as_str())?;
+        let mut url: Url = Url::parse(url.as_str())?;
 
         if let Some(start) = start {
             url.set_query(Some(
@@ -250,28 +250,28 @@ impl<'a> Client<'a> {
             ));
         }
 
-        let resp = self.client.get(url).send().await?;
+        let resp: reqwest::Response = self.client.get(url).send().await?;
 
-        let records = resp.json::<Vec<Record<EncryptedData>>>().await?;
+        let records: Vec<Record<EncryptedData>> = resp.json::<Vec<Record<EncryptedData>>>().await?;
 
         Ok(records)
     }
 
     pub async fn record_index(&self) -> Result<RecordIndex> {
-        let url = format!("{}/record", self.sync_addr);
-        let url = Url::parse(url.as_str())?;
+        let url: String = format!("{}/record", self.sync_addr);
+        let url: Url = Url::parse(url.as_str())?;
 
-        let resp = self.client.get(url).send().await?;
-        let index = resp.json().await?;
+        let resp: reqwest::Response = self.client.get(url).send().await?;
+        let index: RecordIndex = resp.json().await?;
 
         Ok(index)
     }
 
     pub async fn delete(&self) -> Result<()> {
-        let url = format!("{}/account", self.sync_addr);
-        let url = Url::parse(url.as_str())?;
+        let url: String = format!("{}/account", self.sync_addr);
+        let url: Url = Url::parse(url.as_str())?;
 
-        let resp = self.client.delete(url).send().await?;
+        let resp: reqwest::Response = self.client.delete(url).send().await?;
 
         if resp.status() == 403 {
             bail!("invalid login details");

@@ -34,14 +34,14 @@ where
         req: &mut Parts,
         state: &AppState<DB>,
     ) -> Result<Self, Self::Rejection> {
-        let auth_header = req
+        let auth_header: &http::HeaderValue = req
             .headers
             .get(http::header::AUTHORIZATION)
             .ok_or_else(|| {
                 ErrorResponse::reply("missing authorization header")
                     .with_status(http::StatusCode::BAD_REQUEST)
             })?;
-        let auth_header = auth_header.to_str().map_err(|_| {
+        let auth_header: &str = auth_header.to_str().map_err(|_| {
             ErrorResponse::reply("invalid authorization header encoding")
                 .with_status(http::StatusCode::BAD_REQUEST)
         })?;
@@ -57,11 +57,11 @@ where
             );
         }
 
-        let user = state
+        let user: User = state
             .database
             .get_session_user(token)
             .await
-            .map_err(|e| match e {
+            .map_err(|e: DbError| match e {
                 DbError::NotFound => ErrorResponse::reply("session not found")
                     .with_status(http::StatusCode::FORBIDDEN),
                 DbError::Other(e) => {
@@ -82,8 +82,8 @@ async fn teapot() -> impl IntoResponse {
 async fn clacks_overhead<B>(request: Request<B>, next: Next<B>) -> Response {
     let mut response = next.run(request).await;
 
-    let gnu_terry_value = "GNU Terry Pratchett, Kris Nova";
-    let gnu_terry_header = "X-Clacks-Overhead";
+    let gnu_terry_value: &str = "GNU Terry Pratchett, Kris Nova";
+    let gnu_terry_header: &str = "X-Clacks-Overhead";
 
     response
         .headers_mut()
@@ -98,7 +98,7 @@ pub struct AppState<DB: Database> {
 }
 
 pub fn router<DB: Database>(database: DB, settings: Settings<DB::Settings>) -> Router {
-    let routes = Router::new()
+    let routes: Router<AppState<DB>, _> = Router::new()
         .route("/", get(handlers::index))
         .route("/sync/count", get(handlers::history::count))
         .route("/sync/history", get(handlers::history::list))
@@ -114,7 +114,7 @@ pub fn router<DB: Database>(database: DB, settings: Settings<DB::Settings>) -> R
         .route("/register", post(handlers::user::register))
         .route("/login", post(handlers::user::login));
 
-    let path = settings.path.as_str();
+    let path: &str = settings.path.as_str();
     if path.is_empty() {
         routes
     } else {

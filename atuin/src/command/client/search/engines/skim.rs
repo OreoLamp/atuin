@@ -44,20 +44,20 @@ async fn fuzzy_search(
     state: &SearchState,
     all_history: &[(History, i32)],
 ) -> Vec<History> {
-    let mut set = Vec::with_capacity(200);
-    let mut ranks = Vec::with_capacity(200);
-    let query = state.input.as_str();
-    let now = OffsetDateTime::now_utc();
+    let mut set: Vec<History> = Vec::with_capacity(200);
+    let mut ranks: Vec<f64> = Vec::with_capacity(200);
+    let query: &str = state.input.as_str();
+    let now: OffsetDateTime = OffsetDateTime::now_utc();
 
     for (i, (history, count)) in all_history.iter().enumerate() {
         if i % 256 == 0 {
             yield_now().await;
         }
-        let context = &state.context;
-        let git_root = context
+        let context: &atuin_client::database::Context = &state.context;
+        let git_root: &str = context
             .git_root
             .as_ref()
-            .and_then(|git_root| git_root.to_str())
+            .and_then(|git_root: &std::path::PathBuf| git_root.to_str())
             .unwrap_or(&context.cwd);
         match state.filter_mode {
             FilterMode::Global => {}
@@ -94,13 +94,13 @@ async fn fuzzy_search(
             // log2(4) = 2, log2(5) = 2.3 (16% increase)
             // log2(8) = 3, log2(9) = 3.16 (5% increase)
             // log2(16) = 4, log2(17) = 4.08 (2% increase)
-            let count = (*count as f64 + 8.0).log2();
-            let begin = (begin as f64 + 16.0).log2();
-            let path = path_dist(history.cwd.as_ref(), state.context.cwd.as_ref());
-            let path = (path as f64 + 8.0).log2();
+            let count: f64 = (*count as f64 + 8.0).log2();
+            let begin: f64 = (begin as f64 + 16.0).log2();
+            let path: usize = path_dist(history.cwd.as_ref(), state.context.cwd.as_ref());
+            let path: f64 = (path as f64 + 8.0).log2();
 
             // reduce longer durations, raise higher counts, raise matches close to the start
-            let score = (-score as f64) * count / path / duration / begin;
+            let score: f64 = (-score as f64) * count / path / duration / begin;
 
             'insert: {
                 // algorithm:
@@ -111,7 +111,7 @@ async fn fuzzy_search(
                     if ranks[i] > score {
                         ranks.insert(i, score);
                         set.insert(i, history.clone());
-                        let mut j = i + 1;
+                        let mut j: usize = i + 1;
                         while j < set.len() {
                             // remove duplicates that have a worse score
                             if set[j].command == history.command {
@@ -154,7 +154,7 @@ fn path_dist(a: &Path, b: &Path) -> usize {
     let mut a: Vec<_> = a.components().collect();
     let b: Vec<_> = b.components().collect();
 
-    let mut dist = 0;
+    let mut dist: usize = 0;
 
     // pop a until there's a common anscestor
     while !b.starts_with(&a) {

@@ -15,11 +15,11 @@ pub async fn status<DB: Database>(
     UserAuth(user): UserAuth,
     state: State<AppState<DB>>,
 ) -> Result<Json<StatusResponse>, ErrorResponseStatus<'static>> {
-    let db = &state.0.database;
+    let db: &DB = &state.0.database;
 
-    let deleted = db.deleted_history(&user).await.unwrap_or(vec![]);
+    let deleted: Vec<String> = db.deleted_history(&user).await.unwrap_or(vec![]);
 
-    let count = match db.count_history_cached(&user).await {
+    let count: i64 = match db.count_history_cached(&user).await {
         // By default read out the cached value
         Ok(count) => count,
 

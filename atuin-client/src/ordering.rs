@@ -4,7 +4,7 @@ use super::{history::History, settings::SearchMode};
 
 pub fn reorder_fuzzy(mode: SearchMode, query: &str, res: Vec<History>) -> Vec<History> {
     match mode {
-        SearchMode::Fuzzy => reorder(query, |x| &x.command, res),
+        SearchMode::Fuzzy => reorder(query, |x: &History| &x.command, res),
         _ => res,
     }
 }
@@ -14,8 +14,8 @@ where
     F: Fn(&A) -> &String,
     A: Clone,
 {
-    let mut r = res.clone();
-    let qvec = &query.chars().collect();
+    let mut r: Vec<A> = res.clone();
+    let qvec: &Vec<char> = &query.chars().collect();
     r.sort_by_cached_key(|h| {
         // TODO for fzf search we should sum up scores for each matched term
         let (from, to) = match minspan::span(qvec, &(f(h).chars().collect())) {

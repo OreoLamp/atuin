@@ -24,31 +24,31 @@ pub struct Cmd {
 }
 
 fn compute_stats(history: &[History], count: usize) -> Result<()> {
-    let mut commands = HashSet::<&str>::with_capacity(history.len());
-    let mut prefixes = HashMap::<&str, usize>::with_capacity(history.len());
+    let mut commands: HashSet<&str> = HashSet::<&str>::with_capacity(history.len());
+    let mut prefixes: HashMap<&str, usize> = HashMap::<&str, usize>::with_capacity(history.len());
     for i in history {
         // just in case it somehow has a leading tab or space or something (legacy atuin didn't ignore space prefixes)
-        let command = i.command.trim();
+        let command: &str = i.command.trim();
         commands.insert(command);
         *prefixes.entry(interesting_command(command)).or_default() += 1;
     }
 
-    let unique = commands.len();
-    let mut top = prefixes.into_iter().collect::<Vec<_>>();
-    top.sort_unstable_by_key(|x| std::cmp::Reverse(x.1));
+    let unique: usize = commands.len();
+    let mut top: Vec<(&str, usize)> = prefixes.into_iter().collect::<Vec<_>>();
+    top.sort_unstable_by_key(|x: &(&str, usize)| std::cmp::Reverse(x.1));
     top.truncate(count);
     if top.is_empty() {
         bail!("No commands found");
     }
 
-    let max = top.iter().map(|x| x.1).max().unwrap();
-    let num_pad = max.ilog10() as usize + 1;
+    let max: usize = top.iter().map(|x| x.1).max().unwrap();
+    let num_pad: usize = max.ilog10() as usize + 1;
 
     for (command, count) in top {
-        let gray = SetForegroundColor(Color::Grey);
-        let bold = SetAttribute(crossterm::style::Attribute::Bold);
+        let gray: SetForegroundColor = SetForegroundColor(Color::Grey);
+        let bold: SetAttribute = SetAttribute(crossterm::style::Attribute::Bold);
 
-        let in_ten = 10 * count / max;
+        let in_ten: usize = 10 * count / max;
         print!("[");
         print!("{}", SetForegroundColor(Color::Red));
         for i in 0..in_ten {
@@ -74,39 +74,39 @@ fn compute_stats(history: &[History], count: usize) -> Result<()> {
 
 impl Cmd {
     pub async fn run(&self, db: &impl Database, settings: &Settings) -> Result<()> {
-        let context = current_context();
-        let words = if self.period.is_empty() {
+        let context: atuin_client::database::Context = current_context();
+        let words: String = if self.period.is_empty() {
             String::from("all")
         } else {
             self.period.join(" ")
         };
 
-        let history = if words.as_str() == "all" {
+        let history: Vec<History> = if words.as_str() == "all" {
             db.list(FilterMode::Global, &context, None, false, false)
                 .await?
         } else if words.trim() == "today" {
-            let start = OffsetDateTime::now_local()?.replace_time(Time::MIDNIGHT);
-            let end = start + Duration::days(1);
+            let start: OffsetDateTime = OffsetDateTime::now_local()?.replace_time(Time::MIDNIGHT);
+            let end: OffsetDateTime = start + Duration::days(1);
             db.range(start, end).await?
         } else if words.trim() == "month" {
-            let end = OffsetDateTime::now_local()?.replace_time(Time::MIDNIGHT);
-            let start = end - Duration::days(31);
+            let end: OffsetDateTime = OffsetDateTime::now_local()?.replace_time(Time::MIDNIGHT);
+            let start: OffsetDateTime = end - Duration::days(31);
             db.range(start, end).await?
         } else if words.trim() == "week" {
-            let end = OffsetDateTime::now_local()?.replace_time(Time::MIDNIGHT);
-            let start = end - Duration::days(7);
+            let end: OffsetDateTime = OffsetDateTime::now_local()?.replace_time(Time::MIDNIGHT);
+            let start: OffsetDateTime = end - Duration::days(7);
             db.range(start, end).await?
         } else if words.trim() == "year" {
-            let end = OffsetDateTime::now_local()?.replace_time(Time::MIDNIGHT);
-            let start = end - Duration::days(365);
+            let end: OffsetDateTime = OffsetDateTime::now_local()?.replace_time(Time::MIDNIGHT);
+            let start: OffsetDateTime = end - Duration::days(365);
             db.range(start, end).await?
         } else {
-            let start = parse_date_string(
+            let start: OffsetDateTime = parse_date_string(
                 &words,
                 OffsetDateTime::now_local()?,
                 settings.dialect.into(),
             )?;
-            let end = start + Duration::days(1);
+            let end: OffsetDateTime = start + Duration::days(1);
             db.range(start, end).await?
         };
         compute_stats(&history, self.count)?;
@@ -154,13 +154,13 @@ fn interesting_command(mut command: &str) -> &str {
     };
 
     // compute subcommand
-    let subcommand_indices = command
+    let subcommand_indices: Option<usize> = command
         // after the end of the command prefix
         .get(i..)
         // find the first non whitespace character (start of subcommand)
         .and_then(first_non_whitespace)
         // then find the end of that subcommand
-        .map(|j| i + j + first_whitespace(&command[i + j..]));
+        .map(|j: usize| i + j + first_whitespace(&command[i + j..]));
 
     match subcommand_indices {
         // if there is a subcommand and it's a common one, then count the full prefix + subcommand

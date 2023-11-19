@@ -18,10 +18,10 @@ pub struct Nu {
 }
 
 fn get_histpath() -> Result<PathBuf> {
-    let base = BaseDirs::new().ok_or_else(|| eyre!("could not determine data directory"))?;
-    let config_dir = base.config_dir().join("nushell");
+    let base: BaseDirs = BaseDirs::new().ok_or_else(|| eyre!("could not determine data directory"))?;
+    let config_dir: PathBuf = base.config_dir().join("nushell");
 
-    let histpath = config_dir.join("history.txt");
+    let histpath: PathBuf = config_dir.join("history.txt");
     if histpath.exists() {
         Ok(histpath)
     } else {
@@ -34,7 +34,7 @@ impl Importer for Nu {
     const NAME: &'static str = "nu";
 
     async fn new() -> Result<Self> {
-        let bytes = read_to_end(get_histpath()?)?;
+        let bytes: Vec<u8> = read_to_end(get_histpath()?)?;
         Ok(Self { bytes })
     }
 
@@ -43,18 +43,18 @@ impl Importer for Nu {
     }
 
     async fn load(self, h: &mut impl Loader) -> Result<()> {
-        let now = OffsetDateTime::now_utc();
+        let now: OffsetDateTime = OffsetDateTime::now_utc();
 
-        let mut counter = 0;
+        let mut counter: i64 = 0;
         for b in unix_byte_lines(&self.bytes) {
-            let s = match std::str::from_utf8(b) {
+            let s: &str = match std::str::from_utf8(b) {
                 Ok(s) => s,
                 Err(_) => continue, // we can skip past things like invalid utf8
             };
 
             let cmd: String = s.replace("<\\n>", "\n");
 
-            let offset = time::Duration::nanoseconds(counter);
+            let offset: time::Duration = time::Duration::nanoseconds(counter);
             counter += 1;
 
             let entry = History::import().timestamp(now - offset).command(cmd);

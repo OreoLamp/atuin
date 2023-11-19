@@ -57,7 +57,7 @@ impl Cmd {
                     return Ok(());
                 }
 
-                let shell = env::var("SHELL").unwrap_or_else(|_| String::from("NO_SHELL"));
+                let shell: String = env::var("SHELL").unwrap_or_else(|_| String::from("NO_SHELL"));
                 if shell.ends_with("/zsh") {
                     if ZshHistDb::histpath().is_ok() {
                         println!(
@@ -144,8 +144,8 @@ async fn import<I: Importer + Send, DB: Database>(db: &DB) -> Result<()> {
     println!("Importing history from {}", I::NAME);
 
     let mut importer = I::new().await?;
-    let len = importer.entries().await.unwrap();
-    let mut loader = HistoryImporter::new(db, len);
+    let len: usize = importer.entries().await.unwrap();
+    let mut loader: HistoryImporter<'_, DB> = HistoryImporter::new(db, len);
     importer.load(&mut loader).await?;
     loader.flush().await?;
 

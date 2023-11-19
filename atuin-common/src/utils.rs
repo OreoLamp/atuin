@@ -5,7 +5,7 @@ use rand::RngCore;
 use uuid::Uuid;
 
 pub fn random_bytes<const N: usize>() -> [u8; N] {
-    let mut ret = [0u8; N];
+    let mut ret: [u8; N] = [0u8; N];
 
     rand::thread_rng().fill_bytes(&mut ret);
 
@@ -14,13 +14,13 @@ pub fn random_bytes<const N: usize>() -> [u8; N] {
 
 // basically just ripped from the uuid crate. they have it as unstable, but we can use it fine.
 const fn encode_unix_timestamp_millis(millis: u64, random_bytes: &[u8; 10]) -> Uuid {
-    let millis_high = ((millis >> 16) & 0xFFFF_FFFF) as u32;
-    let millis_low = (millis & 0xFFFF) as u16;
+    let millis_high: u32 = ((millis >> 16) & 0xFFFF_FFFF) as u32;
+    let millis_low: u16 = (millis & 0xFFFF) as u16;
 
-    let random_and_version =
+    let random_and_version: u16 =
         (random_bytes[0] as u16 | ((random_bytes[1] as u16) << 8) & 0x0FFF) | (0x7 << 12);
 
-    let mut d4 = [0; 8];
+    let mut d4: [u8; 8] = [0; 8];
 
     d4[0] = (random_bytes[2] & 0x3F) | 0x80;
     d4[1] = random_bytes[3];
@@ -35,7 +35,7 @@ const fn encode_unix_timestamp_millis(millis: u64, random_bytes: &[u8; 10]) -> U
 }
 
 pub fn uuid_v7() -> Uuid {
-    let bytes = random_bytes();
+    let bytes: [u8; 10] = random_bytes();
     let now: u64 = u64::try_from(
         time::OffsetDateTime::now_utc().unix_timestamp_nanos() / 1_000_000,
     )
@@ -59,7 +59,7 @@ pub fn has_git_dir(path: &str) -> bool {
 // I really don't want to bring in libgit for something simple like this
 // If we start to do anything more advanced, then perhaps
 pub fn in_git_repo(path: &str) -> Option<PathBuf> {
-    let mut gitdir = PathBuf::from(path);
+    let mut gitdir: PathBuf = PathBuf::from(path);
 
     while gitdir.parent().is_some() && !has_git_dir(gitdir.to_str().unwrap()) {
         gitdir.pop();
@@ -79,7 +79,7 @@ pub fn in_git_repo(path: &str) -> Option<PathBuf> {
 
 #[cfg(not(target_os = "windows"))]
 pub fn home_dir() -> PathBuf {
-    let home = std::env::var("HOME").expect("$HOME not found");
+    let home: String = std::env::var("HOME").expect("$HOME not found");
     PathBuf::from(home)
 }
 
@@ -90,13 +90,13 @@ pub fn home_dir() -> PathBuf {
 }
 
 pub fn config_dir() -> PathBuf {
-    let config_dir =
+    let config_dir: PathBuf =
         std::env::var("XDG_CONFIG_HOME").map_or_else(|_| home_dir().join(".config"), PathBuf::from);
     config_dir.join("atuin")
 }
 
 pub fn data_dir() -> PathBuf {
-    let data_dir = std::env::var("XDG_DATA_HOME")
+    let data_dir: PathBuf = std::env::var("XDG_DATA_HOME")
         .map_or_else(|_| home_dir().join(".local").join("share"), PathBuf::from);
 
     data_dir.join("atuin")
@@ -205,7 +205,7 @@ mod tests {
 
         // there will be many in the same millisecond
         for _ in 0..how_many {
-            let uuid = uuid_v7();
+            let uuid: Uuid = uuid_v7();
             uuids.insert(uuid);
         }
 

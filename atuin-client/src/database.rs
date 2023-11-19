@@ -50,14 +50,14 @@ pub fn current_context() -> Context {
         eprintln!("ERROR: Failed to find $ATUIN_SESSION in the environment. Check that you have correctly set up your shell.");
         std::process::exit(1);
     };
-    let hostname = format!(
+    let hostname: String = format!(
         "{}:{}",
         env::var("ATUIN_HOST_NAME").unwrap_or_else(|_| whoami::hostname()),
         env::var("ATUIN_HOST_USER").unwrap_or_else(|_| whoami::username())
     );
-    let cwd = utils::get_current_dir();
-    let host_id = Settings::host_id().expect("failed to load host ID");
-    let git_root = utils::in_git_repo(cwd.as_str());
+    let cwd: String = utils::get_current_dir();
+    let host_id: atuin_common::record::HostId = Settings::host_id().expect("failed to load host ID");
+    let git_root: Option<PathBuf> = utils::in_git_repo(cwd.as_str());
 
     Context {
         session,
@@ -119,21 +119,21 @@ pub struct Sqlite {
 
 impl Sqlite {
     pub async fn new(path: impl AsRef<Path>) -> Result<Self> {
-        let path = path.as_ref();
+        let path: &Path = path.as_ref();
         debug!("opening sqlite database at {:?}", path);
 
-        let create = !path.exists();
+        let create: bool = !path.exists();
         if create {
             if let Some(dir) = path.parent() {
                 fs::create_dir_all(dir)?;
             }
         }
 
-        let opts = SqliteConnectOptions::from_str(path.as_os_str().to_str().unwrap())?
+        let opts: SqliteConnectOptions = SqliteConnectOptions::from_str(path.as_os_str().to_str().unwrap())?
             .journal_mode(SqliteJournalMode::Wal)
             .create_if_missing(true);
 
-        let pool = SqlitePoolOptions::new().connect_with(opts).await?;
+        let pool: sqlx::Pool<sqlx::Sqlite> = SqlitePoolOptions::new().connect_with(opts).await?;
 
         Self::setup_db(&pool).await?;
 
@@ -195,7 +195,7 @@ impl Sqlite {
 impl Database for Sqlite {
     async fn save(&self, h: &History) -> Result<()> {
         debug!("saving history to sqlite");
-        let mut tx = self.pool.begin().await?;
+        let mut tx: sqlx::Transaction<'_, sqlx::Sqlite> = self.pool.begin().await?;
         Self::save_raw(&mut tx, h).await?;
         tx.commit().await?;
 
@@ -205,7 +205,7 @@ impl Database for Sqlite {
     async fn save_bulk(&self, h: &[History]) -> Result<()> {
         debug!("saving history to sqlite");
 
-        let mut tx = self.pool.begin().await?;
+        let mut tx: sqlx::Transaction<'_, sqlx::Sqlite> = self.pool.begin().await?;
 
         for i in h {
             Self::save_raw(&mut tx, i).await?;
@@ -219,7 +219,7 @@ impl Database for Sqlite {
     async fn load(&self, id: &str) -> Result<Option<History>> {
         debug!("loading history item {}", id);
 
-        let res = sqlx::query("select * from history where id = ?1")
+        let res: Option<History> = sqlx::query("select * from history where id = ?1")
             .bind(id)
             .map(Self::query_history)
             .fetch_optional(&self.pool)
@@ -244,7 +244,7 @@ impl Database for Sqlite {
         .bind(h.cwd.as_str())
         .bind(h.session.as_str())
         .bind(h.hostname.as_str())
-        .bind(h.deleted_at.map(|t|t.unix_timestamp_nanos() as i64))
+        .bind(h.deleted_at.map(|t: OffsetDateTime|t.unix_timestamp_nanos() as i64))
         .execute(&self.pool)
         .await?;
 
@@ -262,13 +262,13 @@ impl Database for Sqlite {
     ) -> Result<Vec<History>> {
         debug!("listing history");
 
-        let mut query = SqlBuilder::select_from(SqlName::new("history").alias("h").baquoted());
+        let mut query: SqlBuilder = SqlBuilder::select_from(SqlName::new("history").alias("h").baquoted());
         query.field("*").order_desc("timestamp");
         if !include_deleted {
             query.and_where_is_null("deleted_at");
         }
 
-        let git_root = if let Some(git_root) = context.git_root.clone() {
+        let git_root: String = if let Some(git_root) = context.git_root.clone() {
             git_root.to_str().unwrap_or("/").to_string()
         } else {
             context.cwd.clone()
@@ -293,9 +293,9 @@ impl Database for Sqlite {
             query.limit(max);
         }
 
-        let query = query.sql().expect("bug in list query. please report");
+        let query: String = query.sql().expect("bug in list query. please report");
 
-        let res = sqlx::query(&query)
+        let res: Vec<History> = sqlx::query(&query)
             .map(Self::query_history)
             .fetch_all(&self.pool)
             .await?;
@@ -306,7 +306,7 @@ impl Database for Sqlite {
     async fn range(&self, from: OffsetDateTime, to: OffsetDateTime) -> Result<Vec<History>> {
         debug!("listing history from {:?} to {:?}", from, to);
 
-        let res = sqlx::query(
+        let res: Vec<History> = sqlx::query(
             "select * from history where timestamp >= ?1 and timestamp <= ?2 order by timestamp asc",
         )
         .bind(from.unix_timestamp_nanos() as i64)
@@ -319,7 +319,7 @@ impl Database for Sqlite {
     }
 
     async fn last(&self) -> Result<Option<History>> {
-        let res = sqlx::query(
+        let res: Option<History> = sqlx::query(
             "select * from history where duration >= 0 order by timestamp desc limit 1",
         )
         .map(Self::query_history)
@@ -330,7 +330,7 @@ impl Database for Sqlite {
     }
 
     async fn before(&self, timestamp: OffsetDateTime, count: i64) -> Result<Vec<History>> {
-        let res = sqlx::query(
+        let res: Vec<History> = sqlx::query(
             "select * from history where timestamp < ?1 order by timestamp desc limit ?2",
         )
         .bind(timestamp.unix_timestamp_nanos() as i64)
@@ -343,7 +343,7 @@ impl Database for Sqlite {
     }
 
     async fn deleted(&self) -> Result<Vec<History>> {
-        let res = sqlx::query("select * from history where deleted_at is not null")
+        let res: Vec<History> = sqlx::query("select * from history where deleted_at is not null")
             .map(Self::query_history)
             .fetch_all(&self.pool)
             .await?;
@@ -352,7 +352,7 @@ impl Database for Sqlite {
     }
 
     async fn history_count(&self, include_deleted: bool) -> Result<i64> {
-        let query = if include_deleted {
+        let query: &str = if include_deleted {
             "select count(1) from history"
         } else {
             "select count(1) from history where deleted_at is null"
@@ -370,7 +370,7 @@ impl Database for Sqlite {
         query: &str,
         filter_options: OptFilters,
     ) -> Result<Vec<History>> {
-        let mut sql = SqlBuilder::select_from("history");
+        let mut sql: SqlBuilder = SqlBuilder::select_from("history");
 
         sql.group_by("command").having("max(timestamp)");
 
@@ -388,7 +388,7 @@ impl Database for Sqlite {
             sql.order_desc("timestamp");
         }
 
-        let git_root = if let Some(git_root) = context.git_root.clone() {
+        let git_root: String = if let Some(git_root) = context.git_root.clone() {
             git_root.to_str().unwrap_or("/").to_string()
         } else {
             context.cwd.clone()
@@ -402,8 +402,8 @@ impl Database for Sqlite {
             FilterMode::Workspace => sql.and_where_like_left("cwd", git_root),
         };
 
-        let orig_query = query;
-        let query = query.replace('*', "%"); // allow wildcard char
+        let orig_query: &str = query;
+        let query: String = query.replace('*', "%"); // allow wildcard char
 
         match search_mode {
             SearchMode::Prefix => sql.and_where_like_left("command", query),
@@ -414,7 +414,7 @@ impl Database for Sqlite {
                     static ref SPLIT_REGEX: Regex = Regex::new(r" +").unwrap();
                 }
 
-                let mut is_or = false;
+                let mut is_or: bool = false;
                 for query_part in SPLIT_REGEX.split(query.as_str()) {
                     // TODO smart case mode could be made configurable like in fzf
                     let (is_glob, glob) = if query_part.contains(char::is_uppercase) {
@@ -428,7 +428,7 @@ impl Database for Sqlite {
                         None => (false, query_part),
                     };
 
-                    let param = if query_part == "|" {
+                    let param: String = if query_part == "|" {
                         if !is_or {
                             is_or = true;
                             continue;
@@ -456,45 +456,45 @@ impl Database for Sqlite {
 
         filter_options
             .exit
-            .map(|exit| sql.and_where_eq("exit", exit));
+            .map(|exit: i64| sql.and_where_eq("exit", exit));
 
         filter_options
             .exclude_exit
-            .map(|exclude_exit| sql.and_where_ne("exit", exclude_exit));
+            .map(|exclude_exit: i64| sql.and_where_ne("exit", exclude_exit));
 
         filter_options
             .cwd
-            .map(|cwd| sql.and_where_eq("cwd", quote(cwd)));
+            .map(|cwd: String| sql.and_where_eq("cwd", quote(cwd)));
 
         filter_options
             .exclude_cwd
-            .map(|exclude_cwd| sql.and_where_ne("cwd", quote(exclude_cwd)));
+            .map(|exclude_cwd: String| sql.and_where_ne("cwd", quote(exclude_cwd)));
 
-        filter_options.before.map(|before| {
+        filter_options.before.map(|before: String| {
             interim::parse_date_string(
                 before.as_str(),
                 OffsetDateTime::now_utc(),
                 interim::Dialect::Uk,
             )
-            .map(|before| {
+            .map(|before: OffsetDateTime| {
                 sql.and_where_lt("timestamp", quote(before.unix_timestamp_nanos() as i64))
             })
         });
 
-        filter_options.after.map(|after| {
+        filter_options.after.map(|after: String| {
             interim::parse_date_string(
                 after.as_str(),
                 OffsetDateTime::now_utc(),
                 interim::Dialect::Uk,
             )
-            .map(|after| sql.and_where_gt("timestamp", quote(after.unix_timestamp_nanos() as i64)))
+            .map(|after: OffsetDateTime| sql.and_where_gt("timestamp", quote(after.unix_timestamp_nanos() as i64)))
         });
 
         sql.and_where_is_null("deleted_at");
 
-        let query = sql.sql().expect("bug in search query. please report");
+        let query: String = sql.sql().expect("bug in search query. please report");
 
-        let res = sqlx::query(&query)
+        let res: Vec<History> = sqlx::query(&query)
             .map(Self::query_history)
             .fetch_all(&self.pool)
             .await?;
@@ -503,7 +503,7 @@ impl Database for Sqlite {
     }
 
     async fn query_history(&self, query: &str) -> Result<Vec<History>> {
-        let res = sqlx::query(query)
+        let res: Vec<History> = sqlx::query(query)
             .map(Self::query_history)
             .fetch_all(&self.pool)
             .await?;
@@ -514,7 +514,7 @@ impl Database for Sqlite {
     async fn all_with_count(&self) -> Result<Vec<(History, i32)>> {
         debug!("listing history");
 
-        let mut query = SqlBuilder::select_from(SqlName::new("history").alias("h").baquoted());
+        let mut query: SqlBuilder = SqlBuilder::select_from(SqlName::new("history").alias("h").baquoted());
 
         query
             .fields(&[
@@ -534,9 +534,9 @@ impl Database for Sqlite {
             .and_where("deleted_at is null")
             .order_desc("timestamp");
 
-        let query = query.sql().expect("bug in list query. please report");
+        let query: String = query.sql().expect("bug in list query. please report");
 
-        let res = sqlx::query(&query)
+        let res: Vec<(History, i32)> = sqlx::query(&query)
             .map(|row: SqliteRow| {
                 let count: i32 = row.get("count");
                 (Self::query_history(row), count)
@@ -550,7 +550,7 @@ impl Database for Sqlite {
     // deleted_at doesn't mean the actual time that the user deleted it,
     // but the time that the system marks it as deleted
     async fn delete(&self, mut h: History) -> Result<()> {
-        let now = OffsetDateTime::now_utc();
+        let now: OffsetDateTime = OffsetDateTime::now_utc();
         h.command = rand::thread_rng()
             .sample_iter(&Alphanumeric)
             .take(32)
@@ -576,7 +576,7 @@ mod test {
         query: &str,
         expected: usize,
     ) -> Result<Vec<History>> {
-        let context = Context {
+        let context: Context = Context {
             hostname: "test:host".to_string(),
             session: "beepboopiamasession".to_string(),
             cwd: "/home/ellie".to_string(),
@@ -584,7 +584,7 @@ mod test {
             git_root: None,
         };
 
-        let results = db
+        let results: Vec<History> = db
             .search(
                 mode,
                 filter_mode,
@@ -613,7 +613,7 @@ mod test {
         query: &str,
         expected_commands: Vec<&str>,
     ) {
-        let results = assert_search_eq(db, mode, filter_mode, query, expected_commands.len())
+        let results: Vec<History> = assert_search_eq(db, mode, filter_mode, query, expected_commands.len())
             .await
             .unwrap();
         let commands: Vec<&str> = results.iter().map(|a| a.command.as_str()).collect();
@@ -654,7 +654,7 @@ mod test {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn test_search_fulltext() {
-        let mut db = Sqlite::new("sqlite::memory:").await.unwrap();
+        let mut db: Sqlite = Sqlite::new("sqlite::memory:").await.unwrap();
         new_history_item(&mut db, "ls /home/ellie").await.unwrap();
 
         assert_search_eq(&db, SearchMode::FullText, FilterMode::Global, "ls", 1)
@@ -670,7 +670,7 @@ mod test {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn test_search_fuzzy() {
-        let mut db = Sqlite::new("sqlite::memory:").await.unwrap();
+        let mut db: Sqlite = Sqlite::new("sqlite::memory:").await.unwrap();
         new_history_item(&mut db, "ls /home/ellie").await.unwrap();
         new_history_item(&mut db, "ls /home/frank").await.unwrap();
         new_history_item(&mut db, "cd /home/Ellie").await.unwrap();
@@ -760,7 +760,7 @@ mod test {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn test_search_reordered_fuzzy() {
-        let mut db = Sqlite::new("sqlite::memory:").await.unwrap();
+        let mut db: Sqlite = Sqlite::new("sqlite::memory:").await.unwrap();
         // test ordering of results: we should choose the first, even though it happened longer ago.
 
         new_history_item(&mut db, "curl").await.unwrap();
@@ -786,7 +786,7 @@ mod test {
 
     #[tokio::test(flavor = "multi_thread")]
     async fn test_search_bench_dupes() {
-        let context = Context {
+        let context: Context = Context {
             hostname: "test:host".to_string(),
             session: "beepboopiamasession".to_string(),
             cwd: "/home/ellie".to_string(),
@@ -794,14 +794,14 @@ mod test {
             git_root: None,
         };
 
-        let mut db = Sqlite::new("sqlite::memory:").await.unwrap();
+        let mut db: Sqlite = Sqlite::new("sqlite::memory:").await.unwrap();
         for _i in 1..10000 {
             new_history_item(&mut db, "i am a duplicated command")
                 .await
                 .unwrap();
         }
-        let start = Instant::now();
-        let _results = db
+        let start: Instant = Instant::now();
+        let _results: Vec<History> = db
             .search(
                 SearchMode::Fuzzy,
                 FilterMode::Global,
@@ -813,7 +813,7 @@ mod test {
             )
             .await
             .unwrap();
-        let duration = start.elapsed();
+        let duration: Duration = start.elapsed();
 
         assert!(duration < Duration::from_secs(15));
     }
@@ -840,7 +840,7 @@ impl SqlBuilderExt for SqlBuilder {
         glob: bool,
         is_or: bool,
     ) -> &mut Self {
-        let mut cond = field.to_string();
+        let mut cond: String = field.to_string();
         if inverse {
             cond.push_str(" NOT");
         }

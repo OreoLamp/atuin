@@ -6,10 +6,10 @@ pub fn client_version_min(user_agent: &str, req: &str) -> Result<bool> {
         return Ok(false);
     }
 
-    let version = user_agent.replace("atuin/", "");
+    let version: String = user_agent.replace("atuin/", "");
 
-    let req = VersionReq::parse(req)?;
-    let version = Version::parse(version.as_str())?;
+    let req: VersionReq = VersionReq::parse(req)?;
+    let version: Version = Version::parse(version.as_str())?;
 
     Ok(req.matches(&version))
 }

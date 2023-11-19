@@ -27,7 +27,7 @@ pub enum Shell {
 
 impl Cmd {
     fn init_zsh(&self) {
-        let base = include_str!("../shell/atuin.zsh");
+        let base: &str = include_str!("../shell/atuin.zsh");
 
         println!("{base}");
 
@@ -54,7 +54,7 @@ bindkey -M vicmd 'k' _atuin_up_search_widget";
     }
 
     fn init_bash(&self) {
-        let base = include_str!("../shell/atuin.bash");
+        let base: &str = include_str!("../shell/atuin.bash");
         println!("{base}");
 
         if std::env::var("ATUIN_NOBIND").is_err() {
@@ -71,7 +71,7 @@ bind -x '"\eOA": __atuin_history --shell-up-key-binding'"#;
     }
 
     fn init_fish(&self) {
-        let full = include_str!("../shell/atuin.fish");
+        let full: &str = include_str!("../shell/atuin.fish");
         println!("{full}");
 
         if std::env::var("ATUIN_NOBIND").is_err() {
@@ -103,7 +103,7 @@ bind -M insert \e\[A _atuin_bind_up";
     }
 
     fn init_nu(&self) {
-        let full = include_str!("../shell/atuin.nu");
+        let full: &str = include_str!("../shell/atuin.nu");
         println!("{full}");
 
         if std::env::var("ATUIN_NOBIND").is_err() {

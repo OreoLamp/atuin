@@ -25,22 +25,22 @@ pub struct SqliteStore {
 
 impl SqliteStore {
     pub async fn new(path: impl AsRef<Path>) -> Result<Self> {
-        let path = path.as_ref();
+        let path: &Path = path.as_ref();
 
         debug!("opening sqlite database at {:?}", path);
 
-        let create = !path.exists();
+        let create: bool = !path.exists();
         if create {
             if let Some(dir) = path.parent() {
                 fs::create_dir_all(dir)?;
             }
         }
 
-        let opts = SqliteConnectOptions::from_str(path.as_os_str().to_str().unwrap())?
+        let opts: SqliteConnectOptions = SqliteConnectOptions::from_str(path.as_os_str().to_str().unwrap())?
             .journal_mode(SqliteJournalMode::Wal)
             .create_if_missing(true);
 
-        let pool = SqlitePoolOptions::new().connect_with(opts).await?;
+        let pool: sqlx::Pool<sqlx::Sqlite> = SqlitePoolOptions::new().connect_with(opts).await?;
 
         Self::setup_db(&pool).await?;
 
@@ -82,12 +82,12 @@ impl SqliteStore {
         let timestamp: i64 = row.get("timestamp");
 
         // tbh at this point things are pretty fucked so just panic
-        let id = Uuid::from_str(row.get("id")).expect("invalid id UUID format in sqlite DB");
-        let host = Uuid::from_str(row.get("host")).expect("invalid host UUID format in sqlite DB");
+        let id: Uuid = Uuid::from_str(row.get("id")).expect("invalid id UUID format in sqlite DB");
+        let host: Uuid = Uuid::from_str(row.get("host")).expect("invalid host UUID format in sqlite DB");
         let parent: Option<&str> = row.get("parent");
 
-        let parent = parent
-            .map(|parent| Uuid::from_str(parent).expect("invalid parent UUID format in sqlite DB"));
+        let parent: Option<Uuid> = parent
+            .map(|parent: &str| Uuid::from_str(parent).expect("invalid parent UUID format in sqlite DB"));
 
         Record {
             id: RecordId(id),
@@ -110,7 +110,7 @@ impl Store for SqliteStore {
         &self,
         records: impl Iterator<Item = &Record<EncryptedData>> + Send + Sync,
     ) -> Result<()> {
-        let mut tx = self.pool.begin().await?;
+        let mut tx: sqlx::Transaction<'_, sqlx::Sqlite> = self.pool.begin().await?;
 
         for record in records {
             Self::save_raw(&mut tx, record).await?;
@@ -122,7 +122,7 @@ impl Store for SqliteStore {
     }
 
     async fn get(&self, id: RecordId) -> Result<Record<EncryptedData>> {
-        let res = sqlx::query("select * from records where id = ?1")
+        let res: Record<EncryptedData> = sqlx::query("select * from records where id = ?1")
             .bind(id.0.as_simple().to_string())
             .map(Self::query_row)
             .fetch_one(&self.pool)
@@ -143,7 +143,7 @@ impl Store for SqliteStore {
     }
 
     async fn next(&self, record: &Record<EncryptedData>) -> Result<Option<Record<EncryptedData>>> {
-        let res = sqlx::query("select * from records where parent = ?1")
+        let res: std::prelude::v1::Result<Record<EncryptedData>, sqlx::Error> = sqlx::query("select * from records where parent = ?1")
             .bind(record.id.0.as_simple().to_string())
             .map(Self::query_row)
             .fetch_one(&self.pool)
@@ -157,7 +157,7 @@ impl Store for SqliteStore {
     }
 
     async fn head(&self, host: HostId, tag: &str) -> Result<Option<Record<EncryptedData>>> {
-        let res = sqlx::query(
+        let res: Option<Record<EncryptedData>> = sqlx::query(
             "select * from records where host = ?1 and tag = ?2 and parent is null limit 1",
         )
         .bind(host.0.as_simple().to_string())
@@ -170,7 +170,7 @@ impl Store for SqliteStore {
     }
 
     async fn tail(&self, host: HostId, tag: &str) -> Result<Option<Record<EncryptedData>>> {
-        let res = sqlx::query(
+        let res: Option<Record<EncryptedData>> = sqlx::query(
             "select * from records rp where tag=?1 and host=?2 and (select count(1) from records where parent=rp.id) = 0;",
         )
         .bind(tag)
@@ -183,7 +183,7 @@ impl Store for SqliteStore {
     }
 
     async fn tag_tails(&self, tag: &str) -> Result<Vec<Record<EncryptedData>>> {
-        let res = sqlx::query(
+        let res: Vec<Record<EncryptedData>> = sqlx::query(
             "select * from records rp where tag=?1 and (select count(1) from records where parent=rp.id) = 0;",
         )
         .bind(tag)
@@ -195,7 +195,7 @@ impl Store for SqliteStore {
     }
 
     async fn tail_records(&self) -> Result<RecordIndex> {
-        let res = sqlx::query(
+        let res: RecordIndex = sqlx::query(
             "select host, tag, id from records rp where (select count(1) from records where parent=rp.id) = 0;",
         )
         .map(|row: SqliteRow| {
@@ -235,7 +235,7 @@ mod tests {
 
     #[tokio::test]
     async fn create_db() {
-        let db = SqliteStore::new(":memory:").await;
+        let db: Result<SqliteStore, eyre::Error> = SqliteStore::new(":memory:").await;
 
         assert!(
             db.is_ok(),
@@ -246,30 +246,30 @@ mod tests {
 
     #[tokio::test]
     async fn push_record() {
-        let db = SqliteStore::new(":memory:").await.unwrap();
-        let record = test_record();
+        let db: SqliteStore = SqliteStore::new(":memory:").await.unwrap();
+        let record: Record<EncryptedData> = test_record();
 
         db.push(&record).await.expect("failed to insert record");
     }
 
     #[tokio::test]
     async fn get_record() {
-        let db = SqliteStore::new(":memory:").await.unwrap();
-        let record = test_record();
+        let db: SqliteStore = SqliteStore::new(":memory:").await.unwrap();
+        let record: Record<EncryptedData> = test_record();
         db.push(&record).await.unwrap();
 
-        let new_record = db.get(record.id).await.expect("failed to fetch record");
+        let new_record: Record<EncryptedData> = db.get(record.id).await.expect("failed to fetch record");
 
         assert_eq!(record, new_record, "records are not equal");
     }
 
     #[tokio::test]
     async fn len() {
-        let db = SqliteStore::new(":memory:").await.unwrap();
-        let record = test_record();
+        let db: SqliteStore = SqliteStore::new(":memory:").await.unwrap();
+        let record: Record<EncryptedData> = test_record();
         db.push(&record).await.unwrap();
 
-        let len = db
+        let len: u64 = db
             .len(record.host, record.tag.as_str())
             .await
             .expect("failed to get store len");
@@ -279,19 +279,19 @@ mod tests {
 
     #[tokio::test]
     async fn len_different_tags() {
-        let db = SqliteStore::new(":memory:").await.unwrap();
+        let db: SqliteStore = SqliteStore::new(":memory:").await.unwrap();
 
         // these have different tags, so the len should be the same
         // we model multiple stores within one database
         // new store = new tag = independent length
-        let first = test_record();
-        let second = test_record();
+        let first: Record<EncryptedData> = test_record();
+        let second: Record<EncryptedData> = test_record();
 
         db.push(&first).await.unwrap();
         db.push(&second).await.unwrap();
 
-        let first_len = db.len(first.host, first.tag.as_str()).await.unwrap();
-        let second_len = db.len(second.host, second.tag.as_str()).await.unwrap();
+        let first_len: u64 = db.len(first.host, first.tag.as_str()).await.unwrap();
+        let second_len: u64 = db.len(second.host, second.tag.as_str()).await.unwrap();
 
         assert_eq!(first_len, 1, "expected length of 1 after insert");
         assert_eq!(second_len, 1, "expected length of 1 after insert");
@@ -299,9 +299,9 @@ mod tests {
 
     #[tokio::test]
     async fn append_a_bunch() {
-        let db = SqliteStore::new(":memory:").await.unwrap();
+        let db: SqliteStore = SqliteStore::new(":memory:").await.unwrap();
 
-        let mut tail = test_record();
+        let mut tail: Record<EncryptedData> = test_record();
         db.push(&tail).await.expect("failed to push record");
 
         for _ in 1..100 {
@@ -320,11 +320,11 @@ mod tests {
 
     #[tokio::test]
     async fn append_a_big_bunch() {
-        let db = SqliteStore::new(":memory:").await.unwrap();
+        let db: SqliteStore = SqliteStore::new(":memory:").await.unwrap();
 
         let mut records: Vec<Record<EncryptedData>> = Vec::with_capacity(10000);
 
-        let mut tail = test_record();
+        let mut tail: Record<EncryptedData> = test_record();
         records.push(tail.clone());
 
         for _ in 1..10000 {
@@ -343,11 +343,11 @@ mod tests {
 
     #[tokio::test]
     async fn test_chain() {
-        let db = SqliteStore::new(":memory:").await.unwrap();
+        let db: SqliteStore = SqliteStore::new(":memory:").await.unwrap();
 
         let mut records: Vec<Record<EncryptedData>> = Vec::with_capacity(1000);
 
-        let mut tail = test_record();
+        let mut tail: Record<EncryptedData> = test_record();
         records.push(tail.clone());
 
         for _ in 1..1000 {
@@ -357,7 +357,7 @@ mod tests {
 
         db.push_batch(records.iter()).await.unwrap();
 
-        let mut record = db
+        let mut record: Record<EncryptedData> = db
             .head(tail.host, tail.tag.as_str())
             .await
             .expect("in memory sqlite should not fail")

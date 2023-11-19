@@ -41,28 +41,28 @@ async fn sync_download(
 ) -> Result<(i64, i64)> {
     debug!("starting sync download");
 
-    let remote_status = client.status().await?;
-    let remote_count = remote_status.count;
+    let remote_status: atuin_common::api::StatusResponse = client.status().await?;
+    let remote_count: i64 = remote_status.count;
 
     // useful to ensure we don't even save something that hasn't yet been synced + deleted
-    let remote_deleted =
+    let remote_deleted: HashSet<&str> =
         HashSet::<&str>::from_iter(remote_status.deleted.iter().map(String::as_str));
 
-    let initial_local = db.history_count(true).await?;
-    let mut local_count = initial_local;
+    let initial_local: i64 = db.history_count(true).await?;
+    let mut local_count: i64 = initial_local;
 
-    let mut last_sync = if force {
+    let mut last_sync: OffsetDateTime = if force {
         OffsetDateTime::UNIX_EPOCH
     } else {
         Settings::last_sync()?
     };
 
-    let mut last_timestamp = OffsetDateTime::UNIX_EPOCH;
+    let mut last_timestamp: OffsetDateTime = OffsetDateTime::UNIX_EPOCH;
 
-    let host = if force { Some(String::from("")) } else { None };
+    let host: Option<String> = if force { Some(String::from("")) } else { None };
 
     while remote_count > local_count {
-        let page = client
+        let page: atuin_common::api::SyncHistoryResponse = client
             .get_history(last_sync, last_timestamp, host.clone())
             .await?;
 
@@ -70,9 +70,9 @@ async fn sync_download(
             .history
             .iter()
             // TODO: handle deletion earlier in this chain
-            .map(|h| serde_json::from_str(h).expect("invalid base64"))
-            .map(|h| decrypt(h, key).expect("failed to decrypt history! check your key"))
-            .map(|mut h| {
+            .map(|h: &String| serde_json::from_str(h).expect("invalid base64"))
+            .map(|h: crate::encryption::EncryptedHistory| decrypt(h, key).expect("failed to decrypt history! check your key"))
+            .map(|mut h: crate::history::History| {
                 if remote_deleted.contains(h.id.as_str()) {
                     h.deleted_at = Some(time::OffsetDateTime::now_utc());
                     h.command = String::from("");
@@ -90,7 +90,7 @@ async fn sync_download(
             break;
         }
 
-        let page_last = history
+        let page_last: OffsetDateTime = history
             .last()
             .expect("could not get last element of page")
             .timestamp;
@@ -131,32 +131,32 @@ async fn sync_upload(
 ) -> Result<()> {
     debug!("starting sync upload");
 
-    let remote_status = client.status().await?;
+    let remote_status: atuin_common::api::StatusResponse = client.status().await?;
     let remote_deleted: HashSet<String> = HashSet::from_iter(remote_status.deleted.clone());
 
-    let initial_remote_count = client.count().await?;
-    let mut remote_count = initial_remote_count;
+    let initial_remote_count: i64 = client.count().await?;
+    let mut remote_count: i64 = initial_remote_count;
 
-    let local_count = db.history_count(true).await?;
+    let local_count: i64 = db.history_count(true).await?;
 
     debug!("remote has {}, we have {}", remote_count, local_count);
 
     // first just try the most recent set
-    let mut cursor = OffsetDateTime::now_utc();
+    let mut cursor: OffsetDateTime = OffsetDateTime::now_utc();
 
     while local_count > remote_count {
-        let last = db.before(cursor, remote_status.page_size).await?;
-        let mut buffer = Vec::new();
+        let last: Vec<crate::history::History> = db.before(cursor, remote_status.page_size).await?;
+        let mut buffer: Vec<AddHistoryRequest> = Vec::new();
 
         if last.is_empty() {
             break;
         }
 
         for i in last {
-            let data = encrypt(&i, key)?;
-            let data = serde_json::to_string(&data)?;
+            let data: crate::encryption::EncryptedHistory = encrypt(&i, key)?;
+            let data: String = serde_json::to_string(&data)?;
 
-            let add_hist = AddHistoryRequest {
+            let add_hist: AddHistoryRequest = AddHistoryRequest {
                 id: i.id,
                 timestamp: i.timestamp,
                 data,
@@ -174,7 +174,7 @@ async fn sync_upload(
         debug!("upload cursor: {:?}", cursor);
     }
 
-    let deleted = db.deleted().await?;
+    let deleted: Vec<crate::history::History> = db.deleted().await?;
 
     for i in deleted {
         if remote_deleted.contains(&i.id) {
@@ -189,18 +189,18 @@ async fn sync_upload(
 }
 
 pub async fn sync(settings: &Settings, force: bool, db: &(impl Database + Send)) -> Result<()> {
-    let client = api_client::Client::new(
+    let client: api_client::Client<'_> = api_client::Client::new(
         &settings.sync_address,
         &settings.session_token,
         settings.network_connect_timeout,
         settings.network_timeout,
     )?;
 
-    let key = load_key(settings)?; // encryption key
+    let key: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = load_key(settings)?; // encryption key
 
     sync_upload(&key, force, &client, db).await?;
 
-    let download = sync_download(&key, force, &client, db).await?;
+    let download: (i64, i64) = sync_download(&key, force, &client, db).await?;
 
     debug!("sync downloaded {}", download.0);
 

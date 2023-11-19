@@ -27,14 +27,14 @@ fn default_histpath() -> Result<PathBuf> {
 
     // fish supports multiple history sessions
     // If `fish_history` var is missing, or set to `default`, use `fish` as the session
-    let session = std::env::var("fish_history").unwrap_or_else(|_| String::from("fish"));
-    let session = if session == "default" {
+    let session: String = std::env::var("fish_history").unwrap_or_else(|_| String::from("fish"));
+    let session: String = if session == "default" {
         String::from("fish")
     } else {
         session
     };
 
-    let mut histpath = data.join("fish");
+    let mut histpath: PathBuf = data.join("fish");
     histpath.push(format!("{session}_history"));
 
     if histpath.exists() {
@@ -49,7 +49,7 @@ impl Importer for Fish {
     const NAME: &'static str = "fish";
 
     async fn new() -> Result<Self> {
-        let bytes = read_to_end(default_histpath()?)?;
+        let bytes: Vec<u8> = read_to_end(default_histpath()?)?;
         Ok(Self { bytes })
     }
 
@@ -58,12 +58,12 @@ impl Importer for Fish {
     }
 
     async fn load(self, loader: &mut impl Loader) -> Result<()> {
-        let now = OffsetDateTime::now_utc();
+        let now: OffsetDateTime = OffsetDateTime::now_utc();
         let mut time: Option<OffsetDateTime> = None;
         let mut cmd: Option<String> = None;
 
         for b in unix_byte_lines(&self.bytes) {
-            let s = match std::str::from_utf8(b) {
+            let s: &str = match std::str::from_utf8(b) {
                 Ok(s) => s,
                 Err(_) => continue, // we can skip past things like invalid utf8
             };
@@ -71,7 +71,7 @@ impl Importer for Fish {
             if let Some(c) = s.strip_prefix("- cmd: ") {
                 // first, we must deal with the prev cmd
                 if let Some(cmd) = cmd.take() {
-                    let time = time.unwrap_or(now);
+                    let time: OffsetDateTime = time.unwrap_or(now);
                     let entry = History::import().timestamp(time).command(cmd);
 
                     loader.push(entry.build().into()).await?;
@@ -79,9 +79,9 @@ impl Importer for Fish {
 
                 // using raw strings to avoid needing escaping.
                 // replaces double backslashes with single backslashes
-                let c = c.replace(r"\\", r"\");
+                let c: String = c.replace(r"\\", r"\");
                 // replaces escaped newlines
-                let c = c.replace(r"\n", "\n");
+                let c: String = c.replace(r"\n", "\n");
                 // TODO: any other escape characters?
 
                 cmd = Some(c);
@@ -97,7 +97,7 @@ impl Importer for Fish {
 
         // we might have a trailing cmd
         if let Some(cmd) = cmd.take() {
-            let time = time.unwrap_or(now);
+            let time: OffsetDateTime = time.unwrap_or(now);
             let entry = History::import().timestamp(time).command(cmd);
 
             loader.push(entry.build().into()).await?;
@@ -117,7 +117,7 @@ mod test {
     #[tokio::test]
     async fn parse_complex() {
         // complicated input with varying contents and escaped strings.
-        let bytes = r#"- cmd: history --help
+        let bytes: Vec<u8> = r#"- cmd: history --help
   when: 1639162832
 - cmd: cat ~/.bash_history
   when: 1639162851
@@ -152,11 +152,11 @@ ERROR
         .as_bytes()
         .to_owned();
 
-        let fish = Fish { bytes };
+        let fish: Fish = Fish { bytes };
 
-        let mut loader = TestLoader::default();
+        let mut loader: TestLoader = TestLoader::default();
         fish.load(&mut loader).await.unwrap();
-        let mut history = loader.buf.into_iter();
+        let mut history: std::vec::IntoIter<crate::history::History> = loader.buf.into_iter();
 
         // simple wrapper for fish history entry
         macro_rules! fishtory {

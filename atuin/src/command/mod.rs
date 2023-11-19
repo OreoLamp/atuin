@@ -65,7 +65,7 @@ impl AtuinCmd {
                 Ok(())
             }
             Self::GenCompletions { shell, out_dir } => {
-                let mut cli = crate::Atuin::command();
+                let mut cli: clap::Command = crate::Atuin::command();
 
                 match out_dir {
                     Some(out_dir) => {

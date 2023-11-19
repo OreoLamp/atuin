@@ -15,20 +15,20 @@ pub fn format_duration_into(dur: Duration, f: &mut fmt::Formatter<'_>) -> fmt::R
     // https://github.com/tailhook/humantime/blob/master/src/duration.rs#L295-L331
     // Copyright (c) 2016 The humantime Developers
     fn fmt(f: Duration) -> ControlFlow<(&'static str, u64), ()> {
-        let secs = f.as_secs();
-        let nanos = f.subsec_nanos();
+        let secs: u64 = f.as_secs();
+        let nanos: u32 = f.subsec_nanos();
 
-        let years = secs / 31_557_600; // 365.25d
-        let year_days = secs % 31_557_600;
-        let months = year_days / 2_630_016; // 30.44d
-        let month_days = year_days % 2_630_016;
-        let days = month_days / 86400;
-        let day_secs = month_days % 86400;
-        let hours = day_secs / 3600;
-        let minutes = day_secs % 3600 / 60;
-        let seconds = day_secs % 60;
+        let years: u64 = secs / 31_557_600; // 365.25d
+        let year_days: u64 = secs % 31_557_600;
+        let months: u64 = year_days / 2_630_016; // 30.44d
+        let month_days: u64 = year_days % 2_630_016;
+        let days: u64 = month_days / 86400;
+        let day_secs: u64 = month_days % 86400;
+        let hours: u64 = day_secs / 3600;
+        let minutes: u64 = day_secs % 3600 / 60;
+        let seconds: u64 = day_secs % 60;
 
-        let millis = nanos / 1_000_000;
+        let millis: u32 = nanos / 1_000_000;
 
         // a difference from our impl than the original is that
         // we only care about the most-significant segment of the duration.

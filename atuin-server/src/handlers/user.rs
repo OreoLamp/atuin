@@ -27,7 +27,7 @@ use reqwest::header::CONTENT_TYPE;
 use atuin_common::api::*;
 
 pub fn verify_str(hash: &str, password: &str) -> bool {
-    let arg2 = Argon2::new(Algorithm::Argon2id, Version::V0x13, Params::default());
+    let arg2: Argon2<'_> = Argon2::new(Algorithm::Argon2id, Version::V0x13, Params::default());
     let Ok(hash) = PasswordHash::new(hash) else {
         return false;
     };
@@ -37,14 +37,14 @@ pub fn verify_str(hash: &str, password: &str) -> bool {
 // Try to send a Discord webhook once - if it fails, we don't retry. "At most once", and best effort.
 // Don't return the status because if this fails, we don't really care.
 async fn send_register_hook(url: &str, username: String, registered: String) {
-    let hook = HashMap::from([
+    let hook: HashMap<&str, String> = HashMap::from([
         ("username", username),
         ("content", format!("{registered} has just signed up!")),
     ]);
 
-    let client = reqwest::Client::new();
+    let client: reqwest::Client = reqwest::Client::new();
 
-    let resp = client
+    let resp: Result<reqwest::Response, reqwest::Error> = client
         .post(url)
         .timeout(Duration::new(5, 0))
         .header(CONTENT_TYPE, "application/json")
@@ -63,8 +63,8 @@ pub async fn get<DB: Database>(
     Path(username): Path<String>,
     state: State<AppState<DB>>,
 ) -> Result<Json<UserResponse>, ErrorResponseStatus<'static>> {
-    let db = &state.0.database;
-    let user = match db.get_user(username.as_ref()).await {
+    let db: &DB = &state.0.database;
+    let user: atuin_server_database::models::User = match db.get_user(username.as_ref()).await {
         Ok(user) => user,
         Err(DbError::NotFound) => {
             debug!("user not found: {}", username);
@@ -106,16 +106,16 @@ pub async fn register<DB: Database>(
         }
     }
 
-    let hashed = hash_secret(&register.password);
+    let hashed: String = hash_secret(&register.password);
 
-    let new_user = NewUser {
+    let new_user: NewUser = NewUser {
         email: register.email.clone(),
         username: register.username.clone(),
         password: hashed,
     };
 
-    let db = &state.0.database;
-    let user_id = match db.add_user(&new_user).await {
+    let db: &DB = &state.0.database;
+    let user_id: i64 = match db.add_user(&new_user).await {
         Ok(id) => id,
         Err(e) => {
             error!("failed to add user: {}", e);
@@ -125,9 +125,9 @@ pub async fn register<DB: Database>(
         }
     };
 
-    let token = Uuid::new_v4().as_simple().to_string();
+    let token: String = Uuid::new_v4().as_simple().to_string();
 
-    let new_session = NewSession {
+    let new_session: NewSession = NewSession {
         user_id,
         token: (&token).into(),
     };
@@ -159,7 +159,7 @@ pub async fn delete<DB: Database>(
 ) -> Result<Json<DeleteUserResponse>, ErrorResponseStatus<'static>> {
     debug!("request to delete user {}", user.id);
 
-    let db = &state.0.database;
+    let db: &DB = &state.0.database;
     if let Err(e) = db.delete_user(&user).await {
         error!("failed to delete user: {}", e);
 
@@ -174,8 +174,8 @@ pub async fn login<DB: Database>(
     state: State<AppState<DB>>,
     login: Json<LoginRequest>,
 ) -> Result<Json<LoginResponse>, ErrorResponseStatus<'static>> {
-    let db = &state.0.database;
-    let user = match db.get_user(login.username.borrow()).await {
+    let db: &DB = &state.0.database;
+    let user: atuin_server_database::models::User = match db.get_user(login.username.borrow()).await {
         Ok(u) => u,
         Err(DbError::NotFound) => {
             return Err(ErrorResponse::reply("user not found").with_status(StatusCode::NOT_FOUND));
@@ -188,7 +188,7 @@ pub async fn login<DB: Database>(
         }
     };
 
-    let session = match db.get_user_session(&user).await {
+    let session: atuin_server_database::models::Session = match db.get_user_session(&user).await {
         Ok(u) => u,
         Err(DbError::NotFound) => {
             debug!("user session not found for user id={}", user.id);
@@ -201,7 +201,7 @@ pub async fn login<DB: Database>(
         }
     };
 
-    let verified = verify_str(user.password.as_str(), login.password.borrow());
+    let verified: bool = verify_str(user.password.as_str(), login.password.borrow());
 
     if !verified {
         return Err(
@@ -215,8 +215,8 @@ pub async fn login<DB: Database>(
 }
 
 fn hash_secret(password: &str) -> String {
-    let arg2 = Argon2::new(Algorithm::Argon2id, Version::V0x13, Params::default());
-    let salt = SaltString::generate(&mut OsRng);
-    let hash = arg2.hash_password(password.as_bytes(), &salt).unwrap();
+    let arg2: Argon2<'_> = Argon2::new(Algorithm::Argon2id, Version::V0x13, Params::default());
+    let salt: SaltString = SaltString::generate(&mut OsRng);
+    let hash: PasswordHash<'_> = arg2.hash_password(password.as_bytes(), &salt).unwrap();
     hash.to_string()
 }

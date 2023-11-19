@@ -43,11 +43,11 @@ pub struct Settings<DbSettings> {
 
 impl<DbSettings: DeserializeOwned> Settings<DbSettings> {
     pub fn new() -> Result<Self> {
-        let mut config_file = if let Ok(p) = std::env::var("ATUIN_CONFIG_DIR") {
+        let mut config_file: PathBuf = if let Ok(p) = std::env::var("ATUIN_CONFIG_DIR") {
             PathBuf::from(p)
         } else {
-            let mut config_file = PathBuf::new();
-            let config_dir = atuin_common::utils::config_dir();
+            let mut config_file: PathBuf = PathBuf::new();
+            let config_dir: PathBuf = atuin_common::utils::config_dir();
             config_file.push(config_dir);
             config_file
         };
@@ -55,7 +55,7 @@ impl<DbSettings: DeserializeOwned> Settings<DbSettings> {
         config_file.push("server.toml");
 
         // create the config file if it does not exist
-        let mut config_builder = Config::builder()
+        let mut config_builder: config::ConfigBuilder<config::builder::DefaultState> = Config::builder()
             .set_default("host", "127.0.0.1")?
             .set_default("port", 8888)?
             .set_default("open_registration", false)?
@@ -80,17 +80,17 @@ impl<DbSettings: DeserializeOwned> Settings<DbSettings> {
             ))
         } else {
             create_dir_all(config_file.parent().unwrap())?;
-            let mut file = File::create(config_file)?;
+            let mut file: File = File::create(config_file)?;
             file.write_all(EXAMPLE_CONFIG.as_bytes())?;
 
             config_builder
         };
 
-        let config = config_builder.build()?;
+        let config: Config = config_builder.build()?;
 
         config
             .try_deserialize()
-            .map_err(|e| eyre!("failed to deserialize: {}", e))
+            .map_err(|e: config::ConfigError| eyre!("failed to deserialize: {}", e))
     }
 }
 

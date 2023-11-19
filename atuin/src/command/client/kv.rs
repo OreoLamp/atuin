@@ -40,7 +40,7 @@ impl Cmd {
         settings: &Settings,
         store: &mut (impl Store + Send + Sync),
     ) -> Result<()> {
-        let kv_store = KvStore::new();
+        let kv_store: KvStore = KvStore::new();
 
         let encryption_key: [u8; 32] = encryption::load_key(settings)
             .context("could not load encryption key")?
@@ -60,7 +60,7 @@ impl Cmd {
             }
 
             Self::Get { key, namespace } => {
-                let val = kv_store.get(store, &encryption_key, namespace, key).await?;
+                let val: Option<atuin_client::kv::KvRecord> = kv_store.get(store, &encryption_key, namespace, key).await?;
 
                 if let Some(kv) = val {
                     println!("{}", kv.value);
@@ -74,7 +74,7 @@ impl Cmd {
                 all_namespaces,
             } => {
                 // TODO: don't rebuild this every time lol
-                let map = kv_store.build_kv(store, &encryption_key).await?;
+                let map: std::collections::BTreeMap<String, std::collections::BTreeMap<String, String>> = kv_store.build_kv(store, &encryption_key).await?;
 
                 // slower, but sorting is probably useful
                 if *all_namespaces {
@@ -84,7 +84,7 @@ impl Cmd {
                         }
                     }
                 } else {
-                    let ns = map.get(namespace);
+                    let ns: Option<&std::collections::BTreeMap<String, String>> = map.get(namespace);
 
                     if let Some(ns) = ns {
                         for k in ns.keys() {

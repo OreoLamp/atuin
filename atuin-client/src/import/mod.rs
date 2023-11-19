@@ -47,8 +47,8 @@ impl<'a> Iterator for UnixByteLines<'a> {
     type Item = &'a [u8];
 
     fn next(&mut self) -> Option<Self::Item> {
-        let j = self.iter.next()?;
-        let out = &self.bytes[self.i..j];
+        let j: usize = self.iter.next()?;
+        let out: &[u8] = &self.bytes[self.i..j];
         self.i = j + 1;
         Some(out)
     }
@@ -77,8 +77,8 @@ where
 }
 
 fn read_to_end(path: PathBuf) -> Result<Vec<u8>> {
-    let mut bytes = Vec::new();
-    let mut f = File::open(path)?;
+    let mut bytes: Vec<u8> = Vec::new();
+    let mut f: File = File::open(path)?;
     f.read_to_end(&mut bytes)?;
     Ok(bytes)
 }

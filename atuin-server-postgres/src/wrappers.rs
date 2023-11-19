@@ -52,7 +52,7 @@ impl<'a> ::sqlx::FromRow<'a, PgRow> for DbRecord {
     fn from_row(row: &'a PgRow) -> ::sqlx::Result<Self> {
         let timestamp: i64 = row.try_get("timestamp")?;
 
-        let data = EncryptedData {
+        let data: EncryptedData = EncryptedData {
             data: row.try_get("data")?,
             content_encryption_key: row.try_get("cek")?,
         };

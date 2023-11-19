@@ -61,13 +61,13 @@ impl Cmd {
 
         tracing::trace!(command = ?self, "client command");
 
-        let mut settings = Settings::new().wrap_err("could not load client settings")?;
+        let mut settings: Settings = Settings::new().wrap_err("could not load client settings")?;
 
-        let db_path = PathBuf::from(settings.db_path.as_str());
-        let record_store_path = PathBuf::from(settings.record_store_path.as_str());
+        let db_path: PathBuf = PathBuf::from(settings.db_path.as_str());
+        let record_store_path: PathBuf = PathBuf::from(settings.record_store_path.as_str());
 
-        let db = Sqlite::new(db_path).await?;
-        let mut store = SqliteStore::new(record_store_path).await?;
+        let db: Sqlite = Sqlite::new(db_path).await?;
+        let mut store: SqliteStore = SqliteStore::new(record_store_path).await?;
 
         match self {
             Self::History(history) => history.run(&settings, &db).await,

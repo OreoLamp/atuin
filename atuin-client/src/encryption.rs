@@ -31,12 +31,12 @@ pub struct EncryptedHistory {
 }
 
 pub fn new_key(settings: &Settings) -> Result<Key> {
-    let path = settings.key_path.as_str();
+    let path: &str = settings.key_path.as_str();
 
-    let key = XSalsa20Poly1305::generate_key(&mut OsRng);
-    let encoded = encode_key(&key)?;
+    let key: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = XSalsa20Poly1305::generate_key(&mut OsRng);
+    let encoded: String = encode_key(&key)?;
 
-    let mut file = fs::File::create(path)?;
+    let mut file: fs::File = fs::File::create(path)?;
     file.write_all(encoded.as_bytes())?;
 
     Ok(key)
@@ -44,10 +44,10 @@ pub fn new_key(settings: &Settings) -> Result<Key> {
 
 // Loads the secret key, will create + save if it doesn't exist
 pub fn load_key(settings: &Settings) -> Result<Key> {
-    let path = settings.key_path.as_str();
+    let path: &str = settings.key_path.as_str();
 
-    let key = if PathBuf::from(path).exists() {
-        let key = fs_err::read_to_string(path)?;
+    let key: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = if PathBuf::from(path).exists() {
+        let key: String = fs_err::read_to_string(path)?;
         decode_key(key)?
     } else {
         new_key(settings)?
@@ -57,14 +57,14 @@ pub fn load_key(settings: &Settings) -> Result<Key> {
 }
 
 pub fn encode_key(key: &Key) -> Result<String> {
-    let mut buf = vec![];
+    let mut buf: Vec<u8> = vec![];
     rmp::encode::write_array_len(&mut buf, key.len() as u32)
         .wrap_err("could not encode key to message pack")?;
     for b in key {
         rmp::encode::write_uint(&mut buf, *b as u64)
             .wrap_err("could not encode key to message pack")?;
     }
-    let buf = BASE64_STANDARD.encode(buf);
+    let buf: String = BASE64_STANDARD.encode(buf);
 
     Ok(buf)
 }
@@ -72,7 +72,7 @@ pub fn encode_key(key: &Key) -> Result<String> {
 pub fn decode_key(key: String) -> Result<Key> {
     use rmp::decode;
 
-    let buf = BASE64_STANDARD
+    let buf: Vec<u8> = BASE64_STANDARD
         .decode(key.trim_end())
         .wrap_err("encryption key is not a valid base64 encoding")?;
 
@@ -81,23 +81,23 @@ pub fn decode_key(key: String) -> Result<Key> {
     match <[u8; 32]>::try_from(&*buf) {
         Ok(key) => Ok(key.into()),
         Err(_) => {
-            let mut bytes = rmp::decode::Bytes::new(&buf);
+            let mut bytes: Bytes<'_> = rmp::decode::Bytes::new(&buf);
 
             match Marker::from_u8(buf[0]) {
                 Marker::Bin8 => {
-                    let len = decode::read_bin_len(&mut bytes).map_err(|err| eyre!("{err:?}"))?;
+                    let len: u32 = decode::read_bin_len(&mut bytes).map_err(|err: decode::ValueReadError<decode::bytes::BytesReadError>| eyre!("{err:?}"))?;
                     ensure!(len == 32, "encryption key is not the correct size");
-                    let key = <[u8; 32]>::try_from(bytes.remaining_slice())
+                    let key: [u8; 32] = <[u8; 32]>::try_from(bytes.remaining_slice())
                         .context("could not decode encryption key")?;
                     Ok(key.into())
                 }
                 Marker::Array16 => {
-                    let len = decode::read_array_len(&mut bytes).map_err(|err| eyre!("{err:?}"))?;
+                    let len: u32 = decode::read_array_len(&mut bytes).map_err(|err: decode::ValueReadError<decode::bytes::BytesReadError>| eyre!("{err:?}"))?;
                     ensure!(len == 32, "encryption key is not the correct size");
 
-                    let mut key = Key::default();
+                    let mut key: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = Key::default();
                     for i in &mut key {
-                        *i = rmp::decode::read_int(&mut bytes).map_err(|err| eyre!("{err:?}"))?;
+                        *i = rmp::decode::read_int(&mut bytes).map_err(|err: decode::NumValueReadError<decode::bytes::BytesReadError>| eyre!("{err:?}"))?;
                     }
                     Ok(key)
                 }
@@ -109,9 +109,9 @@ pub fn decode_key(key: String) -> Result<Key> {
 
 pub fn encrypt(history: &History, key: &Key) -> Result<EncryptedHistory> {
     // serialize with msgpack
-    let mut buf = encode(history)?;
+    let mut buf: Vec<u8> = encode(history)?;
 
-    let nonce = XSalsa20Poly1305::generate_nonce(&mut OsRng);
+    let nonce: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = XSalsa20Poly1305::generate_nonce(&mut OsRng);
     XSalsa20Poly1305::new(key)
         .encrypt_in_place(&nonce, &[], &mut buf)
         .map_err(|_| eyre!("could not encrypt"))?;
@@ -130,9 +130,9 @@ pub fn decrypt(mut encrypted_history: EncryptedHistory, key: &Key) -> Result<His
             &mut encrypted_history.ciphertext,
         )
         .map_err(|_| eyre!("could not encrypt"))?;
-    let plaintext = encrypted_history.ciphertext;
+    let plaintext: Vec<u8> = encrypted_history.ciphertext;
 
-    let history = decode(&plaintext)?;
+    let history: History = decode(&plaintext)?;
 
     Ok(history)
 }
@@ -149,7 +149,7 @@ fn format_rfc3339(ts: OffsetDateTime) -> Result<String> {
     static PARTIAL_RFC3339_9: &[time::format_description::FormatItem<'static>] =
         format_description!("[year]-[month]-[day]T[hour]:[minute]:[second].[subsecond digits:9]Z");
 
-    let fmt = match ts.nanosecond() {
+    let fmt: &[time::format_description::FormatItem<'_>] = match ts.nanosecond() {
         0 => PARTIAL_RFC3339_0,
         ns if ns % 1_000_000 == 0 => PARTIAL_RFC3339_3,
         ns if ns % 1_000 == 0 => PARTIAL_RFC3339_6,
@@ -162,7 +162,7 @@ fn format_rfc3339(ts: OffsetDateTime) -> Result<String> {
 fn encode(h: &History) -> Result<Vec<u8>> {
     use rmp::encode;
 
-    let mut output = vec![];
+    let mut output: Vec<u8> = vec![];
     // INFO: ensure this is updated when adding new fields
     encode::write_array_len(&mut output, 9)?;
 
@@ -185,9 +185,9 @@ fn encode(h: &History) -> Result<Vec<u8>> {
 fn decode(bytes: &[u8]) -> Result<History> {
     use rmp::decode::{self, DecodeStringError};
 
-    let mut bytes = Bytes::new(bytes);
+    let mut bytes: Bytes<'_> = Bytes::new(bytes);
 
-    let nfields = decode::read_array_len(&mut bytes).map_err(error_report)?;
+    let nfields: u32 = decode::read_array_len(&mut bytes).map_err(error_report)?;
     if nfields < 8 {
         bail!("malformed decrypted history")
     }
@@ -195,23 +195,23 @@ fn decode(bytes: &[u8]) -> Result<History> {
         bail!("cannot decrypt history from a newer version of atuin");
     }
 
-    let bytes = bytes.remaining_slice();
+    let bytes: &[u8] = bytes.remaining_slice();
     let (id, bytes) = decode::read_str_from_slice(bytes).map_err(error_report)?;
     let (timestamp, bytes) = decode::read_str_from_slice(bytes).map_err(error_report)?;
 
-    let mut bytes = Bytes::new(bytes);
-    let duration = decode::read_int(&mut bytes).map_err(error_report)?;
-    let exit = decode::read_int(&mut bytes).map_err(error_report)?;
+    let mut bytes: Bytes<'_> = Bytes::new(bytes);
+    let duration: i64 = decode::read_int(&mut bytes).map_err(error_report)?;
+    let exit: i64 = decode::read_int(&mut bytes).map_err(error_report)?;
 
-    let bytes = bytes.remaining_slice();
+    let bytes: &[u8] = bytes.remaining_slice();
     let (command, bytes) = decode::read_str_from_slice(bytes).map_err(error_report)?;
     let (cwd, bytes) = decode::read_str_from_slice(bytes).map_err(error_report)?;
     let (session, bytes) = decode::read_str_from_slice(bytes).map_err(error_report)?;
     let (hostname, bytes) = decode::read_str_from_slice(bytes).map_err(error_report)?;
 
     // if we have more fields, try and get the deleted_at
-    let mut deleted_at = None;
-    let mut bytes = bytes;
+    let mut deleted_at: Option<&str> = None;
+    let mut bytes: &[u8] = bytes;
     if nfields > 8 {
         bytes = match decode::read_str_from_slice(bytes) {
             Ok((d, b)) => {
@@ -221,7 +221,7 @@ fn decode(bytes: &[u8]) -> Result<History> {
             // we accept null here
             Err(DecodeStringError::TypeMismatch(Marker::Null)) => {
                 // consume the null marker
-                let mut c = Bytes::new(bytes);
+                let mut c: Bytes<'_> = Bytes::new(bytes);
                 decode::read_nil(&mut c).map_err(error_report)?;
                 c.remaining_slice()
             }
@@ -243,7 +243,7 @@ fn decode(bytes: &[u8]) -> Result<History> {
         session: session.to_owned(),
         hostname: hostname.to_owned(),
         deleted_at: deleted_at
-            .map(|t| OffsetDateTime::parse(t, &Rfc3339))
+            .map(|t: &str| OffsetDateTime::parse(t, &Rfc3339))
             .transpose()?,
     })
 }
@@ -264,10 +264,10 @@ mod test {
 
     #[test]
     fn test_encrypt_decrypt() {
-        let key1 = XSalsa20Poly1305::generate_key(&mut OsRng);
-        let key2 = XSalsa20Poly1305::generate_key(&mut OsRng);
+        let key1: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = XSalsa20Poly1305::generate_key(&mut OsRng);
+        let key2: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = XSalsa20Poly1305::generate_key(&mut OsRng);
 
-        let history = History::from_db()
+        let history: History = History::from_db()
             .id("1".into())
             .timestamp(OffsetDateTime::now_utc())
             .command("ls".into())
@@ -280,8 +280,8 @@ mod test {
             .build()
             .into();
 
-        let e1 = encrypt(&history, &key1).unwrap();
-        let e2 = encrypt(&history, &key2).unwrap();
+        let e1: crate::encryption::EncryptedHistory = encrypt(&history, &key1).unwrap();
+        let e2: crate::encryption::EncryptedHistory = encrypt(&history, &key2).unwrap();
 
         assert_ne!(e1.ciphertext, e2.ciphertext);
         assert_ne!(e1.nonce, e2.nonce);
@@ -299,7 +299,7 @@ mod test {
 
     #[test]
     fn test_decode() {
-        let bytes = [
+        let bytes: [u8; 187] = [
             0x99, 0xD9, 32, 54, 54, 100, 49, 54, 99, 98, 101, 101, 55, 99, 100, 52, 55, 53, 51, 56,
             101, 53, 99, 53, 98, 56, 98, 52, 52, 101, 57, 48, 48, 54, 101, 187, 50, 48, 50, 51, 45,
             48, 53, 45, 50, 56, 84, 49, 56, 58, 51, 53, 58, 52, 48, 46, 54, 51, 51, 56, 55, 50, 90,
@@ -311,7 +311,7 @@ mod test {
             118, 102, 103, 57, 51, 54, 99, 48, 107, 112, 102, 58, 99, 111, 110, 114, 97, 100, 46,
             108, 117, 100, 103, 97, 116, 101, 192,
         ];
-        let history = History {
+        let history: History = History {
             id: "66d16cbee7cd47538e5c5b8b44e9006e".to_owned(),
             timestamp: datetime!(2023-05-28 18:35:40.633872 +00:00),
             duration: 49206000,
@@ -323,16 +323,16 @@ mod test {
             deleted_at: None,
         };
 
-        let h = decode(&bytes).unwrap();
+        let h: History = decode(&bytes).unwrap();
         assert_eq!(history, h);
 
-        let b = encode(&h).unwrap();
+        let b: Vec<u8> = encode(&h).unwrap();
         assert_eq!(&bytes, &*b);
     }
 
     #[test]
     fn test_decode_deleted() {
-        let history = History {
+        let history: History = History {
             id: "66d16cbee7cd47538e5c5b8b44e9006e".to_owned(),
             timestamp: datetime!(2023-05-28 18:35:40.633872 +00:00),
             duration: 49206000,
@@ -344,14 +344,14 @@ mod test {
             deleted_at: Some(datetime!(2023-05-28 18:35:40.633872 +00:00)),
         };
 
-        let b = encode(&history).unwrap();
-        let h = decode(&b).unwrap();
+        let b: Vec<u8> = encode(&history).unwrap();
+        let h: History = decode(&b).unwrap();
         assert_eq!(history, h);
     }
 
     #[test]
     fn test_decode_old() {
-        let bytes = [
+        let bytes: [u8; 186] = [
             0x98, 0xD9, 32, 54, 54, 100, 49, 54, 99, 98, 101, 101, 55, 99, 100, 52, 55, 53, 51, 56,
             101, 53, 99, 53, 98, 56, 98, 52, 52, 101, 57, 48, 48, 54, 101, 187, 50, 48, 50, 51, 45,
             48, 53, 45, 50, 56, 84, 49, 56, 58, 51, 53, 58, 52, 48, 46, 54, 51, 51, 56, 55, 50, 90,
@@ -363,7 +363,7 @@ mod test {
             118, 102, 103, 57, 51, 54, 99, 48, 107, 112, 102, 58, 99, 111, 110, 114, 97, 100, 46,
             108, 117, 100, 103, 97, 116, 101,
         ];
-        let history = History {
+        let history: History = History {
             id: "66d16cbee7cd47538e5c5b8b44e9006e".to_owned(),
             timestamp: datetime!(2023-05-28 18:35:40.633872 +00:00),
             duration: 49206000,
@@ -375,7 +375,7 @@ mod test {
             deleted_at: None,
         };
 
-        let h = decode(&bytes).unwrap();
+        let h: History = decode(&bytes).unwrap();
         assert_eq!(history, h);
     }
 
@@ -396,7 +396,7 @@ mod test {
         // b8b57c8 xCAbWypb0msJ2Kq+8j4GVEWUlDX7deKnrTRSIopuqXxc5Q==                     (https://github.com/ellie/atuin/pull/1057)
         // 8c94d79 3AAgG1sqW8zSawnM2MyqzL7M8j4GVEXMlMyUNcz7dczizKfMrTRSIsyKbsypfFzM5Q== (https://github.com/ellie/atuin/pull/1089)
 
-        let key = Key::from([
+        let key: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = Key::from([
             27, 91, 42, 91, 210, 107, 9, 216, 170, 190, 242, 62, 6, 84, 69, 148, 148, 53, 251, 117,
             226, 167, 173, 52, 82, 34, 138, 110, 169, 124, 92, 229,
         ]);

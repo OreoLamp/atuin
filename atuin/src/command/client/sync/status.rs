@@ -4,17 +4,17 @@ use colored::Colorize;
 use eyre::Result;
 
 pub async fn run(settings: &Settings, db: &impl Database) -> Result<()> {
-    let client = api_client::Client::new(
+    let client: api_client::Client<'_> = api_client::Client::new(
         &settings.sync_address,
         &settings.session_token,
         settings.network_connect_timeout,
         settings.network_timeout,
     )?;
 
-    let status = client.status().await?;
-    let last_sync = Settings::last_sync()?;
-    let local_count = db.history_count(false).await?;
-    let deleted_count = db.history_count(true).await? - local_count;
+    let status: atuin_common::api::StatusResponse = client.status().await?;
+    let last_sync: time::OffsetDateTime = Settings::last_sync()?;
+    let local_count: i64 = db.history_count(false).await?;
+    let deleted_count: i64 = db.history_count(true).await? - local_count;
 
     println!("Atuin v{VERSION} - Build rev {SHA}\n");
 

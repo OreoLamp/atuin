@@ -111,10 +111,10 @@ pub fn print_list(
     print0: bool,
     reverse: bool,
 ) {
-    let w = std::io::stdout();
-    let mut w = w.lock();
+    let w: io::Stdout = std::io::stdout();
+    let mut w: io::StdoutLock<'_> = w.lock();
 
-    let fmt_str = match list_mode {
+    let fmt_str: String = match list_mode {
         ListMode::Human => format
             .unwrap_or("{time} · {duration}\t{command}")
             .replace("\\t", "\t"),
@@ -125,12 +125,12 @@ pub fn print_list(
         ListMode::CmdOnly => String::new(),
     };
 
-    let parsed_fmt = match list_mode {
+    let parsed_fmt: ParsedFmt<'_> = match list_mode {
         ListMode::Human | ListMode::Regular => parse_fmt(&fmt_str),
         ListMode::CmdOnly => std::iter::once(ParseSegment::Key("command")).collect(),
     };
 
-    let iterator = if reverse {
+    let iterator: Box<dyn Iterator<Item = &History>> = if reverse {
         Box::new(h.iter().rev()) as Box<dyn Iterator<Item = &History>>
     } else {
         Box::new(h.iter()) as Box<dyn Iterator<Item = &History>>
@@ -208,8 +208,8 @@ impl FormatKey for FmtHistory<'_> {
                     .fmt(f)?;
             }
             "relativetime" => {
-                let since = OffsetDateTime::now_utc() - self.0.timestamp;
-                let d = Duration::try_from(since).unwrap_or_default();
+                let since: time::Duration = OffsetDateTime::now_utc() - self.0.timestamp;
+                let d: Duration = Duration::try_from(since).unwrap_or_default();
                 format_duration_into(d, f)?;
             }
             "host" => f.write_str(
@@ -243,11 +243,11 @@ impl Cmd {
         settings: &Settings,
         command: &[String],
     ) -> Result<()> {
-        let command = command.join(" ");
+        let command: String = command.join(" ");
 
         // It's better for atuin to silently fail here and attempt to
         // store whatever is ran, than to throw an error to the terminal
-        let cwd = utils::get_current_dir();
+        let cwd: String = utils::get_current_dir();
 
         let h: History = History::capture()
             .timestamp(OffsetDateTime::now_utc())
@@ -324,32 +324,32 @@ impl Cmd {
         print0: bool,
         reverse: bool,
     ) -> Result<()> {
-        let session = if session {
+        let session: Option<String> = if session {
             Some(env::var("ATUIN_SESSION")?)
         } else {
             None
         };
-        let cwd = if cwd {
+        let cwd: Option<String> = if cwd {
             Some(utils::get_current_dir())
         } else {
             None
         };
 
-        let history = match (session, cwd) {
+        let history: Vec<History> = match (session, cwd) {
             (None, None) => {
                 db.list(settings.filter_mode, &context, None, false, include_deleted)
                     .await?
             }
             (None, Some(cwd)) => {
-                let query = format!("select * from history where cwd = '{cwd}';");
+                let query: String = format!("select * from history where cwd = '{cwd}';");
                 db.query_history(&query).await?
             }
             (Some(session), None) => {
-                let query = format!("select * from history where session = '{session}';");
+                let query: String = format!("select * from history where session = '{session}';");
                 db.query_history(&query).await?
             }
             (Some(session), Some(cwd)) => {
-                let query = format!(
+                let query: String = format!(
                     "select * from history where cwd = '{cwd}' and session = '{session}';",
                 );
                 db.query_history(&query).await?
@@ -362,7 +362,7 @@ impl Cmd {
     }
 
     pub async fn run(self, settings: &Settings, db: &impl Database) -> Result<()> {
-        let context = current_context();
+        let context: atuin_client::database::Context = current_context();
 
         match self {
             Self::Start { command } => Self::handle_start(db, settings, &command).await,
@@ -376,7 +376,7 @@ impl Cmd {
                 reverse,
                 format,
             } => {
-                let mode = ListMode::from_flags(human, cmd_only);
+                let mode: ListMode = ListMode::from_flags(human, cmd_only);
                 Self::handle_list(
                     db, settings, context, session, cwd, mode, format, false, print0, reverse,
                 )
@@ -388,8 +388,8 @@ impl Cmd {
                 cmd_only,
                 format,
             } => {
-                let last = db.last().await?;
-                let last = last.as_ref().map(std::slice::from_ref).unwrap_or_default();
+                let last: Option<History> = db.last().await?;
+                let last: &[History] = last.as_ref().map(std::slice::from_ref).unwrap_or_default();
                 print_list(
                     last,
                     ListMode::from_flags(human, cmd_only),

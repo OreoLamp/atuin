@@ -74,8 +74,8 @@ pub struct Resh {
 }
 
 fn default_histpath() -> Result<PathBuf> {
-    let user_dirs = UserDirs::new().ok_or_else(|| eyre!("could not find user directories"))?;
-    let home_dir = user_dirs.home_dir();
+    let user_dirs: UserDirs = UserDirs::new().ok_or_else(|| eyre!("could not find user directories"))?;
+    let home_dir: &std::path::Path = user_dirs.home_dir();
 
     Ok(home_dir.join(".resh_history.json"))
 }
@@ -85,7 +85,7 @@ impl Importer for Resh {
     const NAME: &'static str = "resh";
 
     async fn new() -> Result<Self> {
-        let bytes = read_to_end(get_histpath(default_histpath)?)?;
+        let bytes: Vec<u8> = read_to_end(get_histpath(default_histpath)?)?;
         Ok(Self { bytes })
     }
 
@@ -95,30 +95,30 @@ impl Importer for Resh {
 
     async fn load(self, h: &mut impl Loader) -> Result<()> {
         for b in unix_byte_lines(&self.bytes) {
-            let s = match std::str::from_utf8(b) {
+            let s: &str = match std::str::from_utf8(b) {
                 Ok(s) => s,
                 Err(_) => continue, // we can skip past things like invalid utf8
             };
-            let entry = match serde_json::from_str::<ReshEntry>(s) {
+            let entry: ReshEntry = match serde_json::from_str::<ReshEntry>(s) {
                 Ok(e) => e,
                 Err(_) => continue, // skip invalid json :shrug:
             };
 
             #[allow(clippy::cast_possible_truncation)]
             #[allow(clippy::cast_sign_loss)]
-            let timestamp = {
-                let secs = entry.realtime_before.floor() as i64;
-                let nanosecs = (entry.realtime_before.fract() * 1_000_000_000_f64).round() as i64;
+            let timestamp: OffsetDateTime = {
+                let secs: i64 = entry.realtime_before.floor() as i64;
+                let nanosecs: i64 = (entry.realtime_before.fract() * 1_000_000_000_f64).round() as i64;
                 OffsetDateTime::from_unix_timestamp(secs)? + time::Duration::nanoseconds(nanosecs)
             };
             #[allow(clippy::cast_possible_truncation)]
             #[allow(clippy::cast_sign_loss)]
-            let duration = {
-                let secs = entry.realtime_after.floor() as i64;
-                let nanosecs = (entry.realtime_after.fract() * 1_000_000_000_f64).round() as i64;
-                let base = OffsetDateTime::from_unix_timestamp(secs)?
+            let duration: i64 = {
+                let secs: i64 = entry.realtime_after.floor() as i64;
+                let nanosecs: i64 = (entry.realtime_after.fract() * 1_000_000_000_f64).round() as i64;
+                let base: OffsetDateTime = OffsetDateTime::from_unix_timestamp(secs)?
                     + time::Duration::nanoseconds(nanosecs);
-                let difference = base - timestamp;
+                let difference: time::Duration = base - timestamp;
                 difference.whole_nanoseconds() as i64
             };
 

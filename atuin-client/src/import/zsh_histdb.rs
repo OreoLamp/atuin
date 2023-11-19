@@ -65,20 +65,20 @@ impl From<HistDbEntry> for History {
             .timestamp(histdb_item.start_time.assume_utc())
             .command(
                 String::from_utf8(histdb_item.argv)
-                    .unwrap_or_else(|_e| String::from(""))
+                    .unwrap_or_else(|_e: std::string::FromUtf8Error| String::from(""))
                     .trim_end()
                     .to_string(),
             )
             .cwd(
                 String::from_utf8(histdb_item.dir)
-                    .unwrap_or_else(|_e| String::from(""))
+                    .unwrap_or_else(|_e: std::string::FromUtf8Error| String::from(""))
                     .trim_end()
                     .to_string(),
             )
             .duration(histdb_item.duration)
             .hostname(
                 String::from_utf8(histdb_item.host)
-                    .unwrap_or_else(|_e| String::from(""))
+                    .unwrap_or_else(|_e: std::string::FromUtf8Error| String::from(""))
                     .trim_end()
                     .to_string(),
             );
@@ -94,12 +94,12 @@ pub struct ZshHistDb {
 
 /// Read db at given file, return vector of entries.
 async fn hist_from_db(dbpath: PathBuf) -> Result<Vec<HistDbEntry>> {
-    let pool = SqlitePool::connect(dbpath.to_str().unwrap()).await?;
+    let pool: Pool<sqlx::Sqlite> = SqlitePool::connect(dbpath.to_str().unwrap()).await?;
     hist_from_db_conn(pool).await
 }
 
 async fn hist_from_db_conn(pool: Pool<sqlx::Sqlite>) -> Result<Vec<HistDbEntry>> {
-    let query = "select history.id,history.start_time,history.duration,places.host,places.dir,commands.argv from history left join commands on history.command_id = commands.rowid left join places on history.place_id = places.rowid order by history.start_time";
+    let query: &str = "select history.id,history.start_time,history.duration,places.host,places.dir,commands.argv from history left join commands on history.command_id = commands.rowid left join places on history.place_id = places.rowid order by history.start_time";
     let histdb_vec: Vec<HistDbEntry> = sqlx::query_as::<_, HistDbEntry>(query)
         .fetch_all(&pool)
         .await?;
@@ -113,15 +113,15 @@ impl ZshHistDb {
         //
         //  if [[ -z ${HISTDB_FILE} ]]; then
         //      typeset -g HISTDB_FILE="${HOME}/.histdb/zsh-history.db"
-        let user_dirs = UserDirs::new().unwrap(); // should catch error here?
-        let home_dir = user_dirs.home_dir();
+        let user_dirs: UserDirs = UserDirs::new().unwrap(); // should catch error here?
+        let home_dir: &Path = user_dirs.home_dir();
         std::env::var("HISTDB_FILE")
             .as_ref()
-            .map(|x| Path::new(x).to_path_buf())
-            .unwrap_or_else(|_err| home_dir.join(".histdb/zsh-history.db"))
+            .map(|x: &String| Path::new(x).to_path_buf())
+            .unwrap_or_else(|_err: &std::env::VarError| home_dir.join(".histdb/zsh-history.db"))
     }
     pub fn histpath() -> Result<PathBuf> {
-        let histdb_path = ZshHistDb::histpath_candidate();
+        let histdb_path: PathBuf = ZshHistDb::histpath_candidate();
         if histdb_path.exists() {
             Ok(histdb_path)
         } else {
@@ -140,8 +140,8 @@ impl Importer for ZshHistDb {
     /// Creates a new ZshHistDb and populates the history based on the pre-populated data
     /// structure.
     async fn new() -> Result<Self> {
-        let dbpath = ZshHistDb::histpath()?;
-        let histdb_entry_vec = hist_from_db(dbpath).await?;
+        let dbpath: PathBuf = ZshHistDb::histpath()?;
+        let histdb_entry_vec: Vec<HistDbEntry> = hist_from_db(dbpath).await?;
         Ok(Self {
             histdb: histdb_entry_vec,
         })
@@ -165,15 +165,15 @@ mod test {
     use std::env;
     #[tokio::test(flavor = "multi_thread")]
     async fn test_env_vars() {
-        let test_env_db = "nonstd-zsh-history.db";
-        let key = "HISTDB_FILE";
+        let test_env_db: &str = "nonstd-zsh-history.db";
+        let key: &str = "HISTDB_FILE";
         env::set_var(key, test_env_db);
 
         // test the env got set
         assert_eq!(env::var(key).unwrap(), test_env_db.to_string());
 
         // test histdb returns the proper db from previous step
-        let histdb_path = ZshHistDb::histpath_candidate();
+        let histdb_path: PathBuf = ZshHistDb::histpath_candidate();
         assert_eq!(histdb_path.to_str().unwrap(), test_env_db);
     }
 
@@ -186,7 +186,7 @@ mod test {
             .unwrap();
 
         // sql dump directly from a test database.
-        let db_sql = r#"
+        let db_sql: &str = r#"
         PRAGMA foreign_keys=OFF;
         BEGIN TRANSACTION;
         CREATE TABLE commands (id integer primary key autoincrement, argv text, unique(argv) on conflict ignore);
@@ -218,8 +218,8 @@ mod test {
         sqlx::query(db_sql).execute(&pool).await.unwrap();
 
         // test histdb iterator
-        let histdb_vec = hist_from_db_conn(pool).await.unwrap();
-        let histdb = ZshHistDb { histdb: histdb_vec };
+        let histdb_vec: Vec<HistDbEntry> = hist_from_db_conn(pool).await.unwrap();
+        let histdb: ZshHistDb = ZshHistDb { histdb: histdb_vec };
 
         println!("h: {:#?}", histdb.histdb);
         println!("counter: {:?}", histdb.histdb.len());

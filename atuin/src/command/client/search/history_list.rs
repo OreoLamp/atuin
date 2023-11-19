@@ -42,8 +42,8 @@ impl<'a> StatefulWidget for HistoryList<'a> {
     type State = ListState;
 
     fn render(mut self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
-        let list_area = self.block.take().map_or(area, |b| {
-            let inner_area = b.inner(area);
+        let list_area: Rect = self.block.take().map_or(area, |b: Block<'_>| {
+            let inner_area: Rect = b.inner(area);
             b.render(area, buf);
             inner_area
         });
@@ -51,13 +51,13 @@ impl<'a> StatefulWidget for HistoryList<'a> {
         if list_area.width < 1 || list_area.height < 1 || self.history.is_empty() {
             return;
         }
-        let list_height = list_area.height as usize;
+        let list_height: usize = list_area.height as usize;
 
         let (start, end) = self.get_items_bounds(state.selected, state.offset, list_height);
         state.offset = start;
         state.max_entries = end - start;
 
-        let mut s = DrawState {
+        let mut s: DrawState<'_> = DrawState {
             buf,
             list_area,
             x: 0,
@@ -94,11 +94,11 @@ impl<'a> HistoryList<'a> {
     }
 
     fn get_items_bounds(&self, selected: usize, offset: usize, height: usize) -> (usize, usize) {
-        let offset = offset.min(self.history.len().saturating_sub(1));
+        let offset: usize = offset.min(self.history.len().saturating_sub(1));
 
-        let max_scroll_space = height.min(10);
+        let max_scroll_space: usize = height.min(10);
         if offset + height < selected + max_scroll_space {
-            let end = selected + max_scroll_space;
+            let end: usize = selected + max_scroll_space;
             (end - height, end)
         } else if selected < offset {
             (selected, selected + height)
@@ -127,33 +127,33 @@ impl DrawState<'_> {
         // Yes, this is a hack, but it makes me feel happy
         static SLICES: &str = " > 1 2 3 4 5 6 7 8 9   ";
 
-        let i = self.y as usize + self.state.offset;
-        let i = i.checked_sub(self.state.selected);
-        let i = i.unwrap_or(10).min(10) * 2;
+        let i: usize = self.y as usize + self.state.offset;
+        let i: Option<usize> = i.checked_sub(self.state.selected);
+        let i: usize = i.unwrap_or(10).min(10) * 2;
         self.draw(&SLICES[i..i + 3], Style::default());
     }
 
     fn duration(&mut self, h: &History) {
-        let status = Style::default().fg(if h.success() {
+        let status: Style = Style::default().fg(if h.success() {
             Color::Green
         } else {
             Color::Red
         });
-        let duration = Duration::from_nanos(u64::try_from(h.duration).unwrap_or(0));
+        let duration: Duration = Duration::from_nanos(u64::try_from(h.duration).unwrap_or(0));
         self.draw(&format_duration(duration), status);
     }
 
     #[allow(clippy::cast_possible_truncation)] // we know that time.len() will be <6
     fn time(&mut self, h: &History) {
-        let style = Style::default().fg(Color::Blue);
+        let style: Style = Style::default().fg(Color::Blue);
 
         // Account for the chance that h.timestamp is "in the future"
         // This would mean that "since" is negative, and the unwrap here
         // would fail.
         // If the timestamp would otherwise be in the future, display
         // the time since as 0.
-        let since = OffsetDateTime::now_utc() - h.timestamp;
-        let time = format_duration(since.try_into().unwrap_or_default());
+        let since: time::Duration = OffsetDateTime::now_utc() - h.timestamp;
+        let time: String = format_duration(since.try_into().unwrap_or_default());
 
         // pad the time a little bit before we write. this aligns things nicely
         self.x = PREFIX_LENGTH - 4 - time.len() as u16;
@@ -163,7 +163,7 @@ impl DrawState<'_> {
     }
 
     fn command(&mut self, h: &History) {
-        let mut style = Style::default();
+        let mut style: Style = Style::default();
         if self.y as usize + self.state.offset == self.state.selected {
             style = style.fg(Color::Red).add_modifier(Modifier::BOLD);
         }
@@ -180,15 +180,15 @@ impl DrawState<'_> {
     }
 
     fn draw(&mut self, s: &str, style: Style) {
-        let cx = self.list_area.left() + self.x;
+        let cx: u16 = self.list_area.left() + self.x;
 
-        let cy = if self.inverted {
+        let cy: u16 = if self.inverted {
             self.list_area.top() + self.y
         } else {
             self.list_area.bottom() - self.y - 1
         };
 
-        let w = (self.list_area.width - self.x) as usize;
+        let w: usize = (self.list_area.width - self.x) as usize;
         self.x += self.buf.set_stringn(cx, cy, s, w, style).0 - cx;
     }
 }

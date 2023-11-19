@@ -22,7 +22,7 @@ impl KvRecord {
     pub fn serialize(&self) -> Result<DecryptedData> {
         use rmp::encode;
 
-        let mut output = vec![];
+        let mut output: Vec<u8> = vec![];
 
         // INFO: ensure this is updated when adding new fields
         encode::write_array_len(&mut output, 3)?;
@@ -43,12 +43,12 @@ impl KvRecord {
 
         match version {
             KV_VERSION => {
-                let mut bytes = decode::Bytes::new(&data.0);
+                let mut bytes: decode::Bytes<'_> = decode::Bytes::new(&data.0);
 
-                let nfields = decode::read_array_len(&mut bytes).map_err(error_report)?;
+                let nfields: u32 = decode::read_array_len(&mut bytes).map_err(error_report)?;
                 ensure!(nfields == 3, "too many entries in v0 kv record");
 
-                let bytes = bytes.remaining_slice();
+                let bytes: &[u8] = bytes.remaining_slice();
 
                 let (namespace, bytes) =
                     decode::read_str_from_slice(bytes).map_err(error_report)?;
@@ -103,17 +103,17 @@ impl KvStore {
             ));
         }
 
-        let record = KvRecord {
+        let record: KvRecord = KvRecord {
             namespace: namespace.to_string(),
             key: key.to_string(),
             value: value.to_string(),
         };
 
-        let bytes = record.serialize()?;
+        let bytes: DecryptedData = record.serialize()?;
 
-        let parent = store.tail(host_id, KV_TAG).await?.map(|entry| entry.id);
+        let parent: Option<atuin_common::record::RecordId> = store.tail(host_id, KV_TAG).await?.map(|entry: atuin_common::record::Record<atuin_common::record::EncryptedData>| entry.id);
 
-        let record = atuin_common::record::Record::builder()
+        let record: atuin_common::record::Record<DecryptedData> = atuin_common::record::Record::builder()
             .host(host_id)
             .version(KV_VERSION.to_string())
             .tag(KV_TAG.to_string())
@@ -142,7 +142,7 @@ impl KvStore {
 
         // iterate records to find the value we want
         // start at the end, so we get the most recent version
-        let tails = store.tag_tails(KV_TAG).await?;
+        let tails: Vec<atuin_common::record::Record<atuin_common::record::EncryptedData>> = store.tag_tails(KV_TAG).await?;
 
         if tails.is_empty() {
             return Ok(None);
@@ -152,15 +152,15 @@ impl KvStore {
         // try getting the newest first
         // we always need a way of deciding the "winner" of a write
         // TODO(ellie): something better than last-write-wins, what if two write at the same time?
-        let mut record = tails.iter().max_by_key(|r| r.timestamp).unwrap().clone();
+        let mut record: atuin_common::record::Record<atuin_common::record::EncryptedData> = tails.iter().max_by_key(|r: &&atuin_common::record::Record<atuin_common::record::EncryptedData>| r.timestamp).unwrap().clone();
 
         loop {
-            let decrypted = match record.version.as_str() {
+            let decrypted: atuin_common::record::Record<DecryptedData> = match record.version.as_str() {
                 KV_VERSION => record.decrypt::<PASETO_V4>(encryption_key)?,
                 version => bail!("unknown version {version:?}"),
             };
 
-            let kv = KvRecord::deserialize(&decrypted.data, &decrypted.version)?;
+            let kv: KvRecord = KvRecord::deserialize(&decrypted.data, &decrypted.version)?;
             if kv.key == key && kv.namespace == namespace {
                 return Ok(Some(kv));
             }
@@ -185,24 +185,24 @@ impl KvStore {
         store: &impl Store,
         encryption_key: &[u8; 32],
     ) -> Result<BTreeMap<String, BTreeMap<String, String>>> {
-        let mut map = BTreeMap::new();
-        let tails = store.tag_tails(KV_TAG).await?;
+        let mut map: BTreeMap<String, BTreeMap<String, String>> = BTreeMap::new();
+        let tails: Vec<atuin_common::record::Record<atuin_common::record::EncryptedData>> = store.tag_tails(KV_TAG).await?;
 
         if tails.is_empty() {
             return Ok(map);
         }
 
-        let mut record = tails.iter().max_by_key(|r| r.timestamp).unwrap().clone();
+        let mut record: atuin_common::record::Record<atuin_common::record::EncryptedData> = tails.iter().max_by_key(|r: &&atuin_common::record::Record<atuin_common::record::EncryptedData>| r.timestamp).unwrap().clone();
 
         loop {
-            let decrypted = match record.version.as_str() {
+            let decrypted: atuin_common::record::Record<DecryptedData> = match record.version.as_str() {
                 KV_VERSION => record.decrypt::<PASETO_V4>(encryption_key)?,
                 version => bail!("unknown version {version:?}"),
             };
 
-            let kv = KvRecord::deserialize(&decrypted.data, &decrypted.version)?;
+            let kv: KvRecord = KvRecord::deserialize(&decrypted.data, &decrypted.version)?;
 
-            let ns = map.entry(kv.namespace).or_insert_with(BTreeMap::new);
+            let ns: &mut BTreeMap<String, String> = map.entry(kv.namespace).or_insert_with(BTreeMap::new);
             ns.entry(kv.key).or_insert_with(|| kv.value);
 
             if let Some(parent) = decrypted.parent {
@@ -227,17 +227,17 @@ mod tests {
 
     #[test]
     fn encode_decode() {
-        let kv = KvRecord {
+        let kv: KvRecord = KvRecord {
             namespace: "foo".to_owned(),
             key: "bar".to_owned(),
             value: "baz".to_owned(),
         };
-        let snapshot = [
+        let snapshot: [u8; 13] = [
             0x93, 0xa3, b'f', b'o', b'o', 0xa3, b'b', b'a', b'r', 0xa3, b'b', b'a', b'z',
         ];
 
-        let encoded = kv.serialize().unwrap();
-        let decoded = KvRecord::deserialize(&encoded, KV_VERSION).unwrap();
+        let encoded: atuin_common::record::DecryptedData = kv.serialize().unwrap();
+        let decoded: KvRecord = KvRecord::deserialize(&encoded, KV_VERSION).unwrap();
 
         assert_eq!(encoded.0, &snapshot);
         assert_eq!(decoded, kv);
@@ -245,10 +245,10 @@ mod tests {
 
     #[tokio::test]
     async fn build_kv() {
-        let mut store = SqliteStore::new(":memory:").await.unwrap();
-        let kv = KvStore::new();
+        let mut store: SqliteStore = SqliteStore::new(":memory:").await.unwrap();
+        let kv: KvStore = KvStore::new();
         let key: [u8; 32] = XSalsa20Poly1305::generate_key(&mut OsRng).into();
-        let host_id = atuin_common::record::HostId(atuin_common::utils::uuid_v7());
+        let host_id: atuin_common::record::HostId = atuin_common::record::HostId(atuin_common::utils::uuid_v7());
 
         kv.set(&mut store, &key, host_id, "test-kv", "foo", "bar")
             .await
@@ -258,7 +258,7 @@ mod tests {
             .await
             .unwrap();
 
-        let map = kv.build_kv(&store, &key).await.unwrap();
+        let map: std::collections::BTreeMap<String, std::collections::BTreeMap<String, String>> = kv.build_kv(&store, &key).await.unwrap();
 
         assert_eq!(
             map.get("test-kv")

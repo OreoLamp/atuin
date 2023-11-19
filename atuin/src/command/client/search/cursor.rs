@@ -25,7 +25,7 @@ impl WordJumper<'_> {
     }
 
     fn emacs_get_next_word_pos(&self, source: &str, index: usize) -> usize {
-        let index = (index + 1..source.len().saturating_sub(1))
+        let index: usize = (index + 1..source.len().saturating_sub(1))
             .find(|&i| self.word_chars.contains(source.chars().nth(i).unwrap()))
             .unwrap_or(source.len());
         (index + 1..source.len().saturating_sub(1))
@@ -34,18 +34,18 @@ impl WordJumper<'_> {
     }
 
     fn emacs_get_prev_word_pos(&self, source: &str, index: usize) -> usize {
-        let index = (1..index)
+        let index: usize = (1..index)
             .rev()
             .find(|&i| self.word_chars.contains(source.chars().nth(i).unwrap()))
             .unwrap_or(0);
         (1..index)
             .rev()
             .find(|&i| !self.word_chars.contains(source.chars().nth(i).unwrap()))
-            .map_or(0, |i| i + 1)
+            .map_or(0, |i: usize| i + 1)
     }
 
     fn subl_get_next_word_pos(&self, source: &str, index: usize) -> usize {
-        let index = (index..source.len().saturating_sub(1)).find(|&i| {
+        let index: Option<usize> = (index..source.len().saturating_sub(1)).find(|&i| {
             self.is_word_boundary(
                 source.chars().nth(i).unwrap(),
                 source.chars().nth(i + 1).unwrap(),
@@ -60,7 +60,7 @@ impl WordJumper<'_> {
     }
 
     fn subl_get_prev_word_pos(&self, source: &str, index: usize) -> usize {
-        let index = (1..index)
+        let index: Option<usize> = (1..index)
             .rev()
             .find(|&i| !source.chars().nth(i).unwrap().is_whitespace());
         if index.is_none() {
@@ -136,7 +136,7 @@ impl Cursor {
     }
 
     pub fn next_word(&mut self, word_chars: &str, word_jump_mode: WordJumpMode) {
-        let word_jumper = WordJumper {
+        let word_jumper: WordJumper<'_> = WordJumper {
             word_chars,
             word_jump_mode,
         };
@@ -144,7 +144,7 @@ impl Cursor {
     }
 
     pub fn prev_word(&mut self, word_chars: &str, word_jump_mode: WordJumpMode) {
-        let word_jumper = WordJumper {
+        let word_jumper: WordJumper<'_> = WordJumper {
             word_chars,
             word_jump_mode,
         };
@@ -165,20 +165,20 @@ impl Cursor {
     }
 
     pub fn remove_next_word(&mut self, word_chars: &str, word_jump_mode: WordJumpMode) {
-        let word_jumper = WordJumper {
+        let word_jumper: WordJumper<'_> = WordJumper {
             word_chars,
             word_jump_mode,
         };
-        let next_index = word_jumper.get_next_word_pos(&self.source, self.index);
+        let next_index: usize = word_jumper.get_next_word_pos(&self.source, self.index);
         self.source.replace_range(self.index..next_index, "");
     }
 
     pub fn remove_prev_word(&mut self, word_chars: &str, word_jump_mode: WordJumpMode) {
-        let word_jumper = WordJumper {
+        let word_jumper: WordJumper<'_> = WordJumper {
             word_chars,
             word_jump_mode,
         };
-        let next_index = word_jumper.get_prev_word_pos(&self.source, self.index);
+        let next_index: usize = word_jumper.get_prev_word_pos(&self.source, self.index);
         self.source.replace_range(next_index..self.index, "");
         self.index = next_index;
     }
@@ -223,8 +223,8 @@ mod cursor_tests {
     #[test]
     fn right() {
         // ö is 2 bytes
-        let mut c = Cursor::from(String::from("öaöböcödöeöfö"));
-        let indices = [0, 2, 3, 5, 6, 8, 9, 11, 12, 14, 15, 17, 18, 20, 20, 20, 20];
+        let mut c: Cursor = Cursor::from(String::from("öaöböcödöeöfö"));
+        let indices: [usize; 17] = [0, 2, 3, 5, 6, 8, 9, 11, 12, 14, 15, 17, 18, 20, 20, 20, 20];
         for i in indices {
             assert_eq!(c.index, i);
             c.right();
@@ -234,9 +234,9 @@ mod cursor_tests {
     #[test]
     fn left() {
         // ö is 2 bytes
-        let mut c = Cursor::from(String::from("öaöböcödöeöfö"));
+        let mut c: Cursor = Cursor::from(String::from("öaöböcödöeöfö"));
         c.end();
-        let indices = [20, 18, 17, 15, 14, 12, 11, 9, 8, 6, 5, 3, 2, 0, 0, 0, 0];
+        let indices: [usize; 17] = [20, 18, 17, 15, 14, 12, 11, 9, 8, 6, 5, 3, 2, 0, 0, 0, 0];
         for i in indices {
             assert_eq!(c.index, i);
             c.left();
@@ -245,8 +245,8 @@ mod cursor_tests {
 
     #[test]
     fn test_emacs_get_next_word_pos() {
-        let s = String::from("   aaa   ((()))bbb   ((()))   ");
-        let indices = [(0, 6), (3, 6), (7, 18), (19, 30)];
+        let s: String = String::from("   aaa   ((()))bbb   ((()))   ");
+        let indices: [(usize, usize); 4] = [(0, 6), (3, 6), (7, 18), (19, 30)];
         for (i_src, i_dest) in indices {
             assert_eq!(EMACS_WORD_JUMPER.get_next_word_pos(&s, i_src), i_dest);
         }
@@ -255,8 +255,8 @@ mod cursor_tests {
 
     #[test]
     fn test_emacs_get_prev_word_pos() {
-        let s = String::from("   aaa   ((()))bbb   ((()))   ");
-        let indices = [(30, 15), (29, 15), (15, 3), (3, 0)];
+        let s: String = String::from("   aaa   ((()))bbb   ((()))   ");
+        let indices: [(usize, usize); 4] = [(30, 15), (29, 15), (15, 3), (3, 0)];
         for (i_src, i_dest) in indices {
             assert_eq!(EMACS_WORD_JUMPER.get_prev_word_pos(&s, i_src), i_dest);
         }
@@ -265,8 +265,8 @@ mod cursor_tests {
 
     #[test]
     fn test_subl_get_next_word_pos() {
-        let s = String::from("   aaa   ((()))bbb   ((()))   ");
-        let indices = [(0, 3), (1, 3), (3, 9), (9, 15), (15, 21), (21, 30)];
+        let s: String = String::from("   aaa   ((()))bbb   ((()))   ");
+        let indices: [(usize, usize); 6] = [(0, 3), (1, 3), (3, 9), (9, 15), (15, 21), (21, 30)];
         for (i_src, i_dest) in indices {
             assert_eq!(SUBL_WORD_JUMPER.get_next_word_pos(&s, i_src), i_dest);
         }
@@ -275,8 +275,8 @@ mod cursor_tests {
 
     #[test]
     fn test_subl_get_prev_word_pos() {
-        let s = String::from("   aaa   ((()))bbb   ((()))   ");
-        let indices = [(30, 21), (21, 15), (15, 9), (9, 3), (3, 0)];
+        let s: String = String::from("   aaa   ((()))bbb   ((()))   ");
+        let indices: [(usize, usize); 5] = [(30, 21), (21, 15), (15, 9), (9, 3), (3, 0)];
         for (i_src, i_dest) in indices {
             assert_eq!(SUBL_WORD_JUMPER.get_prev_word_pos(&s, i_src), i_dest);
         }
@@ -285,23 +285,23 @@ mod cursor_tests {
 
     #[test]
     fn pop() {
-        let mut s = String::from("öaöböcödöeöfö");
-        let mut c = Cursor::from(s.clone());
+        let mut s: String = String::from("öaöböcödöeöfö");
+        let mut c: Cursor = Cursor::from(s.clone());
         c.end();
         while !s.is_empty() {
-            let c1 = s.pop();
-            let c2 = c.back();
+            let c1: Option<char> = s.pop();
+            let c2: Option<char> = c.back();
             assert_eq!(c1, c2);
             assert_eq!(s.as_str(), c.substring());
         }
-        let c1 = s.pop();
-        let c2 = c.back();
+        let c1: Option<char> = s.pop();
+        let c2: Option<char> = c.back();
         assert_eq!(c1, c2);
     }
 
     #[test]
     fn back() {
-        let mut c = Cursor::from(String::from("öaöböcödöeöfö"));
+        let mut c: Cursor = Cursor::from(String::from("öaöböcödöeöfö"));
         // move to                                 ^
         for _ in 0..4 {
             c.right();
@@ -317,7 +317,7 @@ mod cursor_tests {
 
     #[test]
     fn insert() {
-        let mut c = Cursor::from(String::from("öaöböcödöeöfö"));
+        let mut c: Cursor = Cursor::from(String::from("öaöböcödöeöfö"));
         // move to                                 ^
         for _ in 0..4 {
             c.right();

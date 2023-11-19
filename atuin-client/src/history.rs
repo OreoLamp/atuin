@@ -57,10 +57,10 @@ impl History {
         hostname: Option<String>,
         deleted_at: Option<OffsetDateTime>,
     ) -> Self {
-        let session = session
+        let session: String = session
             .or_else(|| env::var("ATUIN_SESSION").ok())
             .unwrap_or_else(|| uuid_v7().as_simple().to_string());
-        let hostname = hostname.unwrap_or_else(|| {
+        let hostname: String = hostname.unwrap_or_else(|| {
             format!(
                 "{}:{}",
                 env::var("ATUIN_HOST_NAME").unwrap_or_else(|_| whoami::hostname()),
@@ -189,7 +189,7 @@ impl History {
     }
 
     pub fn should_save(&self, settings: &Settings) -> bool {
-        let secret_regex = SECRET_PATTERNS.iter().map(|f| f.1);
+        let secret_regex = SECRET_PATTERNS.iter().map(|f: &(&str, &str, &str)| f.1);
         let secret_regex = RegexSet::new(secret_regex).expect("Failed to build secrets regex");
 
         !(self.command.starts_with(' ')
@@ -210,7 +210,7 @@ mod tests {
     // Test that we don't save history where necessary
     #[test]
     fn privacy_test() {
-        let settings = Settings {
+        let settings: Settings = Settings {
             cwd_filter: RegexSet::new(["^/supasecret"]).unwrap(),
             history_filter: RegexSet::new(["^psql"]).unwrap(),
             ..Settings::default()
@@ -260,7 +260,7 @@ mod tests {
 
     #[test]
     fn disable_secrets() {
-        let settings = Settings {
+        let settings: Settings = Settings {
             secrets_filter: false,
             ..Settings::default()
         };

@@ -21,9 +21,9 @@ use tokio::signal;
 
 #[cfg(target_family = "unix")]
 async fn shutdown_signal() {
-    let mut term = signal::unix::signal(signal::unix::SignalKind::terminate())
+    let mut term: signal::unix::Signal = signal::unix::signal(signal::unix::SignalKind::terminate())
         .expect("failed to register signal handler");
-    let mut interrupt = signal::unix::signal(signal::unix::SignalKind::interrupt())
+    let mut interrupt: signal::unix::Signal = signal::unix::signal(signal::unix::SignalKind::interrupt())
         .expect("failed to register signal handler");
 
     tokio::select! {
@@ -60,7 +60,7 @@ pub async fn launch_with_listener<Db: Database>(
     listener: TcpListener,
     shutdown: impl Future<Output = ()>,
 ) -> Result<()> {
-    let db = Db::new(&settings.db_settings)
+    let db: Db = Db::new(&settings.db_settings)
         .await
         .wrap_err_with(|| format!("failed to connect to db: {:?}", settings.db_settings))?;
 
@@ -78,11 +78,11 @@ pub async fn launch_with_listener<Db: Database>(
 // The separate listener means it's much easier to ensure metrics are not accidentally exposed to
 // the public.
 pub async fn launch_metrics_server(host: String, port: u16) -> Result<()> {
-    let listener = TcpListener::bind((host, port)).context("failed to bind metrics tcp")?;
+    let listener: TcpListener = TcpListener::bind((host, port)).context("failed to bind metrics tcp")?;
 
-    let recorder_handle = metrics::setup_metrics_recorder();
+    let recorder_handle: metrics_exporter_prometheus::PrometheusHandle = metrics::setup_metrics_recorder();
 
-    let router = Router::new().route(
+    let router: Router = Router::new().route(
         "/metrics",
         axum::routing::get(move || std::future::ready(recorder_handle.render())),
     );

@@ -188,10 +188,10 @@ pub struct Settings {
 
 impl Settings {
     fn save_to_data_dir(filename: &str, value: &str) -> Result<()> {
-        let data_dir = atuin_common::utils::data_dir();
-        let data_dir = data_dir.as_path();
+        let data_dir: PathBuf = atuin_common::utils::data_dir();
+        let data_dir: &Path = data_dir.as_path();
 
-        let path = data_dir.join(filename);
+        let path: PathBuf = data_dir.join(filename);
 
         fs_err::write(path, value)?;
 
@@ -199,16 +199,16 @@ impl Settings {
     }
 
     fn read_from_data_dir(filename: &str) -> Option<String> {
-        let data_dir = atuin_common::utils::data_dir();
-        let data_dir = data_dir.as_path();
+        let data_dir: PathBuf = atuin_common::utils::data_dir();
+        let data_dir: &Path = data_dir.as_path();
 
-        let path = data_dir.join(filename);
+        let path: PathBuf = data_dir.join(filename);
 
         if !path.exists() {
             return None;
         }
 
-        let value = fs_err::read_to_string(path);
+        let value: std::prelude::v1::Result<String, std::io::Error> = fs_err::read_to_string(path);
 
         value.ok()
     }
@@ -223,7 +223,7 @@ impl Settings {
     }
 
     fn load_time_from_file(filename: &str) -> Result<OffsetDateTime> {
-        let value = Settings::read_from_data_dir(filename);
+        let value: Option<String> = Settings::read_from_data_dir(filename);
 
         match value {
             Some(v) => Ok(OffsetDateTime::parse(v.as_str(), &Rfc3339)?),
@@ -248,15 +248,15 @@ impl Settings {
     }
 
     pub fn host_id() -> Option<HostId> {
-        let id = Settings::read_from_data_dir(HOST_ID_FILENAME);
+        let id: Option<String> = Settings::read_from_data_dir(HOST_ID_FILENAME);
 
         if let Some(id) = id {
-            let parsed =
+            let parsed: Uuid =
                 Uuid::from_str(id.as_str()).expect("failed to parse host ID from local directory");
             return Some(HostId(parsed));
         }
 
-        let uuid = atuin_common::utils::uuid_v7();
+        let uuid: Uuid = atuin_common::utils::uuid_v7();
 
         Settings::save_to_data_dir(HOST_ID_FILENAME, uuid.as_simple().to_string().as_ref())
             .expect("Could not write host ID to data dir");
@@ -271,7 +271,7 @@ impl Settings {
 
         match parse(self.sync_frequency.as_str()) {
             Ok(d) => {
-                let d = time::Duration::try_from(d).unwrap();
+                let d: time::Duration = time::Duration::try_from(d).unwrap();
                 Ok(OffsetDateTime::now_utc() - Settings::last_sync()? >= d)
             }
             Err(e) => Err(eyre!("failed to check sync: {}", e)),
@@ -279,8 +279,8 @@ impl Settings {
     }
 
     fn needs_update_check(&self) -> Result<bool> {
-        let last_check = Settings::last_version_check()?;
-        let diff = OffsetDateTime::now_utc() - last_check;
+        let last_check: OffsetDateTime = Settings::last_version_check()?;
+        let diff: time::Duration = OffsetDateTime::now_utc() - last_check;
 
         // Check a max of once per hour
         Ok(diff.whole_hours() >= 1)
@@ -289,13 +289,13 @@ impl Settings {
     async fn latest_version(&self) -> Result<Version> {
         // Default to the current version, and if that doesn't parse, a version so high it's unlikely to ever
         // suggest upgrading.
-        let current =
+        let current: Version =
             Version::parse(env!("CARGO_PKG_VERSION")).unwrap_or(Version::new(100000, 0, 0));
 
         if !self.needs_update_check()? {
             // Worst case, we don't want Atuin to fail to start because something funky is going on with
             // version checking.
-            let version = match Settings::read_from_data_dir(LATEST_VERSION_FILENAME) {
+            let version: Version = match Settings::read_from_data_dir(LATEST_VERSION_FILENAME) {
                 Some(v) => Version::parse(&v).unwrap_or(current),
                 None => current,
             };
@@ -304,7 +304,7 @@ impl Settings {
         }
 
         #[cfg(feature = "sync")]
-        let latest = crate::api_client::latest_version().await.unwrap_or(current);
+        let latest: Version = crate::api_client::latest_version().await.unwrap_or(current);
 
         #[cfg(not(feature = "sync"))]
         let latest = current;
@@ -321,16 +321,16 @@ impl Settings {
             return None;
         }
 
-        let current =
+        let current: Version =
             Version::parse(env!("CARGO_PKG_VERSION")).unwrap_or(Version::new(100000, 0, 0));
 
-        let latest = self.latest_version().await;
+        let latest: std::prelude::v1::Result<Version, eyre::Error> = self.latest_version().await;
 
         if latest.is_err() {
             return None;
         }
 
-        let latest = latest.unwrap();
+        let latest: Version = latest.unwrap();
 
         if latest > current {
             return Some(latest);
@@ -340,12 +340,12 @@ impl Settings {
     }
 
     pub fn builder() -> Result<ConfigBuilder<DefaultState>> {
-        let data_dir = atuin_common::utils::data_dir();
-        let db_path = data_dir.join("history.db");
-        let record_store_path = data_dir.join("records.db");
+        let data_dir: PathBuf = atuin_common::utils::data_dir();
+        let db_path: PathBuf = data_dir.join("history.db");
+        let record_store_path: PathBuf = data_dir.join("records.db");
 
-        let key_path = data_dir.join("key");
-        let session_path = data_dir.join("session");
+        let key_path: PathBuf = data_dir.join("key");
+        let session_path: PathBuf = data_dir.join("session");
 
         Ok(Config::builder()
             .set_default("db_path", db_path.to_str())?
@@ -393,25 +393,25 @@ impl Settings {
     }
 
     pub fn new() -> Result<Self> {
-        let config_dir = atuin_common::utils::config_dir();
-        let data_dir = atuin_common::utils::data_dir();
+        let config_dir: PathBuf = atuin_common::utils::config_dir();
+        let data_dir: PathBuf = atuin_common::utils::data_dir();
 
         create_dir_all(&config_dir)
             .wrap_err_with(|| format!("could not create dir {config_dir:?}"))?;
 
         create_dir_all(&data_dir).wrap_err_with(|| format!("could not create dir {data_dir:?}"))?;
 
-        let mut config_file = if let Ok(p) = std::env::var("ATUIN_CONFIG_DIR") {
+        let mut config_file: PathBuf = if let Ok(p) = std::env::var("ATUIN_CONFIG_DIR") {
             PathBuf::from(p)
         } else {
-            let mut config_file = PathBuf::new();
+            let mut config_file: PathBuf = PathBuf::new();
             config_file.push(config_dir);
             config_file
         };
 
         config_file.push("config.toml");
 
-        let mut config_builder = Self::builder()?;
+        let mut config_builder: ConfigBuilder<DefaultState> = Self::builder()?;
 
         config_builder = if config_file.exists() {
             config_builder.add_source(ConfigFile::new(
@@ -419,34 +419,34 @@ impl Settings {
                 FileFormat::Toml,
             ))
         } else {
-            let mut file = File::create(config_file).wrap_err("could not create config file")?;
+            let mut file: File = File::create(config_file).wrap_err("could not create config file")?;
             file.write_all(EXAMPLE_CONFIG.as_bytes())
                 .wrap_err("could not write default config file")?;
 
             config_builder
         };
 
-        let config = config_builder.build()?;
+        let config: Config = config_builder.build()?;
         let mut settings: Settings = config
             .try_deserialize()
             .map_err(|e| eyre!("failed to deserialize: {}", e))?;
 
         // all paths should be expanded
-        let db_path = settings.db_path;
-        let db_path = shellexpand::full(&db_path)?;
+        let db_path: String = settings.db_path;
+        let db_path: std::borrow::Cow<'_, str> = shellexpand::full(&db_path)?;
         settings.db_path = db_path.to_string();
 
-        let key_path = settings.key_path;
-        let key_path = shellexpand::full(&key_path)?;
+        let key_path: String = settings.key_path;
+        let key_path: std::borrow::Cow<'_, str> = shellexpand::full(&key_path)?;
         settings.key_path = key_path.to_string();
 
-        let session_path = settings.session_path;
-        let session_path = shellexpand::full(&session_path)?;
+        let session_path: String = settings.session_path;
+        let session_path: std::borrow::Cow<'_, str> = shellexpand::full(&session_path)?;
         settings.session_path = session_path.to_string();
 
         // Finally, set the auth token
         if Path::new(session_path.to_string().as_str()).exists() {
-            let token = fs_err::read_to_string(session_path.to_string())?;
+            let token: String = fs_err::read_to_string(session_path.to_string())?;
             settings.session_token = token.trim().to_string();
         } else {
             settings.session_token = String::from("not logged in");

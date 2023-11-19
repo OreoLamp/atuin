@@ -129,12 +129,12 @@ impl Cmd {
         settings.shell_up_key_binding = self.shell_up_key_binding;
 
         if self.interactive {
-            let item = interactive::history(&self.query, settings, db).await?;
+            let item: String = interactive::history(&self.query, settings, db).await?;
             eprintln!("{item}");
         } else {
-            let list_mode = ListMode::from_flags(self.human, self.cmd_only);
+            let list_mode: ListMode = ListMode::from_flags(self.human, self.cmd_only);
 
-            let opt_filter = OptFilters {
+            let opt_filter: OptFilters = OptFilters {
                 exit: self.exit,
                 exclude_exit: self.exclude_exit,
                 cwd: self.cwd,
@@ -146,7 +146,7 @@ impl Cmd {
                 reverse: self.reverse,
             };
 
-            let mut entries =
+            let mut entries: Vec<History> =
                 run_non_interactive(settings, opt_filter.clone(), &self.query, &db).await?;
 
             if entries.is_empty() {
@@ -190,27 +190,27 @@ async fn run_non_interactive(
     query: &[String],
     db: &impl Database,
 ) -> Result<Vec<History>> {
-    let dir = if filter_options.cwd.as_deref() == Some(".") {
+    let dir: Option<String> = if filter_options.cwd.as_deref() == Some(".") {
         Some(utils::get_current_dir())
     } else {
         filter_options.cwd
     };
 
-    let context = current_context();
+    let context: atuin_client::database::Context = current_context();
 
-    let opt_filter = OptFilters {
+    let opt_filter: OptFilters = OptFilters {
         cwd: dir.clone(),
         ..filter_options
     };
 
-    let dir = dir.unwrap_or_else(|| "/".to_string());
-    let filter_mode = if settings.workspaces && utils::has_git_dir(dir.as_str()) {
+    let dir: String = dir.unwrap_or_else(|| "/".to_string());
+    let filter_mode: FilterMode = if settings.workspaces && utils::has_git_dir(dir.as_str()) {
         FilterMode::Workspace
     } else {
         settings.filter_mode
     };
 
-    let results = db
+    let results: Vec<History> = db
         .search(
             settings.search_mode,
             filter_mode,

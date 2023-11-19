@@ -28,8 +28,8 @@ pub struct HistDbEntry {
 
 impl From<HistDbEntry> for History {
     fn from(histdb_item: HistDbEntry) -> Self {
-        let ts_secs = histdb_item.start_timestamp / 1000;
-        let ts_ns = (histdb_item.start_timestamp % 1000) * 1_000_000;
+        let ts_secs: i64 = histdb_item.start_timestamp / 1000;
+        let ts_ns: i64 = (histdb_item.start_timestamp % 1000) * 1_000_000;
         let imported = History::import()
             .timestamp(
                 OffsetDateTime::from_unix_timestamp(ts_secs).unwrap()
@@ -53,12 +53,12 @@ pub struct NuHistDb {
 
 /// Read db at given file, return vector of entries.
 async fn hist_from_db(dbpath: PathBuf) -> Result<Vec<HistDbEntry>> {
-    let pool = SqlitePool::connect(dbpath.to_str().unwrap()).await?;
+    let pool: Pool<sqlx::Sqlite> = SqlitePool::connect(dbpath.to_str().unwrap()).await?;
     hist_from_db_conn(pool).await
 }
 
 async fn hist_from_db_conn(pool: Pool<sqlx::Sqlite>) -> Result<Vec<HistDbEntry>> {
-    let query = r#"
+    let query: &str = r#"
         SELECT
             id, command_line, start_timestamp, session_id, hostname, cwd, duration_ms, exit_status,
             more_info
@@ -73,10 +73,10 @@ async fn hist_from_db_conn(pool: Pool<sqlx::Sqlite>) -> Result<Vec<HistDbEntry>>
 
 impl NuHistDb {
     pub fn histpath() -> Result<PathBuf> {
-        let base = BaseDirs::new().ok_or_else(|| eyre!("could not determine data directory"))?;
-        let config_dir = base.config_dir().join("nushell");
+        let base: BaseDirs = BaseDirs::new().ok_or_else(|| eyre!("could not determine data directory"))?;
+        let config_dir: PathBuf = base.config_dir().join("nushell");
 
-        let histdb_path = config_dir.join("history.sqlite3");
+        let histdb_path: PathBuf = config_dir.join("history.sqlite3");
         if histdb_path.exists() {
             Ok(histdb_path)
         } else {
@@ -93,8 +93,8 @@ impl Importer for NuHistDb {
     /// Creates a new NuHistDb and populates the history based on the pre-populated data
     /// structure.
     async fn new() -> Result<Self> {
-        let dbpath = NuHistDb::histpath()?;
-        let histdb_entry_vec = hist_from_db(dbpath).await?;
+        let dbpath: PathBuf = NuHistDb::histpath()?;
+        let histdb_entry_vec: Vec<HistDbEntry> = hist_from_db(dbpath).await?;
         Ok(Self {
             histdb: histdb_entry_vec,
         })

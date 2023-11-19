@@ -26,9 +26,9 @@ pub async fn post<DB: Database>(
 
     counter!("atuin_record_uploaded", records.len() as u64);
 
-    let too_big = records
+    let too_big: bool = records
         .iter()
-        .any(|r| r.data.data.len() >= settings.max_record_size || settings.max_record_size == 0);
+        .any(|r: &Record<EncryptedData>| r.data.data.len() >= settings.max_record_size || settings.max_record_size == 0);
 
     if too_big {
         counter!("atuin_record_too_large", 1);
@@ -59,7 +59,7 @@ pub async fn index<DB: Database>(
         settings: _,
     }) = state;
 
-    let record_index = match database.tail_records(&user).await {
+    let record_index: RecordIndex = match database.tail_records(&user).await {
         Ok(index) => index,
         Err(e) => {
             error!("failed to get record index: {}", e);
@@ -90,9 +90,9 @@ pub async fn next<DB: Database>(
         database,
         settings: _,
     }) = state;
-    let params = params.0;
+    let params: NextParams = params.0;
 
-    let records = match database
+    let records: Vec<Record<EncryptedData>> = match database
         .next_records(&user, params.host, params.tag, params.start, params.count)
         .await
     {

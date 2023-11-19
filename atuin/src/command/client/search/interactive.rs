@@ -63,7 +63,7 @@ struct StyleState {
 
 impl State {
     async fn query_results(&mut self, db: &mut dyn Database) -> Result<Vec<History>> {
-        let results = self.engine.query(&self.search, db).await?;
+        let results: Vec<History> = self.engine.query(&self.search, db).await?;
 
         self.results_state.select(0);
         self.results_len = results.len();
@@ -81,7 +81,7 @@ impl State {
         W: Write,
     {
         execute!(w, EnableMouseCapture)?;
-        let r = match input {
+        let r: Option<usize> = match input {
             Event::Key(k) => self.handle_key_input(settings, k),
             Event::Mouse(m) => self.handle_mouse_input(*m),
             Event::Paste(d) => self.handle_paste_input(d),
@@ -118,11 +118,11 @@ impl State {
             return None;
         }
 
-        let ctrl = input.modifiers.contains(KeyModifiers::CONTROL);
-        let alt = input.modifiers.contains(KeyModifiers::ALT);
+        let ctrl: bool = input.modifiers.contains(KeyModifiers::CONTROL);
+        let alt: bool = input.modifiers.contains(KeyModifiers::ALT);
 
         // Use Ctrl-n instead of Alt-n?
-        let modfr = if settings.ctrl_n_shortcuts { ctrl } else { alt };
+        let modfr: bool = if settings.ctrl_n_shortcuts { ctrl } else { alt };
 
         // reset the state, will be set to true later if user really did change it
         self.switched_search_mode = false;
@@ -148,7 +148,7 @@ impl State {
                 return Some(COPY_QUERY);
             }
             KeyCode::Char(c @ '1'..='9') if modfr => {
-                let c = c.to_digit(10)? as usize;
+                let c: usize = c.to_digit(10)? as usize;
                 return Some(self.results_state.selected() + c);
             }
             KeyCode::Left if ctrl => self
@@ -216,7 +216,7 @@ impl State {
             }
             KeyCode::Char('u') if ctrl => self.search.input.clear(),
             KeyCode::Char('r') if ctrl => {
-                let filter_modes = if settings.workspaces && self.search.context.git_root.is_some()
+                let filter_modes: Vec<FilterMode> = if settings.workspaces && self.search.context.git_root.is_some()
                 {
                     vec![
                         FilterMode::Global,
@@ -234,8 +234,8 @@ impl State {
                     ]
                 };
 
-                let i = self.search.filter_mode as usize;
-                let i = (i + 1) % filter_modes.len();
+                let i: usize = self.search.filter_mode as usize;
+                let i: usize = (i + 1) % filter_modes.len();
                 self.search.filter_mode = filter_modes[i];
             }
             KeyCode::Char('s') if ctrl => {
@@ -281,19 +281,19 @@ impl State {
             }
             KeyCode::Char(c) => self.search.input.insert(c),
             KeyCode::PageDown if !settings.invert => {
-                let scroll_len = self.results_state.max_entries() - settings.scroll_context_lines;
+                let scroll_len: usize = self.results_state.max_entries() - settings.scroll_context_lines;
                 self.scroll_down(scroll_len);
             }
             KeyCode::PageDown if settings.invert => {
-                let scroll_len = self.results_state.max_entries() - settings.scroll_context_lines;
+                let scroll_len: usize = self.results_state.max_entries() - settings.scroll_context_lines;
                 self.scroll_up(scroll_len);
             }
             KeyCode::PageUp if !settings.invert => {
-                let scroll_len = self.results_state.max_entries() - settings.scroll_context_lines;
+                let scroll_len: usize = self.results_state.max_entries() - settings.scroll_context_lines;
                 self.scroll_up(scroll_len);
             }
             KeyCode::PageUp if settings.invert => {
-                let scroll_len = self.results_state.max_entries() - settings.scroll_context_lines;
+                let scroll_len: usize = self.results_state.max_entries() - settings.scroll_context_lines;
                 self.scroll_down(scroll_len);
             }
             _ => {}
@@ -303,36 +303,36 @@ impl State {
     }
 
     fn scroll_down(&mut self, scroll_len: usize) {
-        let i = self.results_state.selected().saturating_sub(scroll_len);
+        let i: usize = self.results_state.selected().saturating_sub(scroll_len);
         self.results_state.select(i);
     }
 
     fn scroll_up(&mut self, scroll_len: usize) {
-        let i = self.results_state.selected() + scroll_len;
+        let i: usize = self.results_state.selected() + scroll_len;
         self.results_state.select(i.min(self.results_len - 1));
     }
 
     #[allow(clippy::cast_possible_truncation)]
     #[allow(clippy::bool_to_int_with_if)]
     fn draw(&mut self, f: &mut Frame, results: &[History], settings: &Settings) {
-        let compact = match settings.style {
+        let compact: bool = match settings.style {
             atuin_client::settings::Style::Auto => f.size().height < 14,
             atuin_client::settings::Style::Compact => true,
             atuin_client::settings::Style::Full => false,
         };
-        let invert = settings.invert;
-        let border_size = if compact { 0 } else { 1 };
-        let preview_width = f.size().width - 2;
-        let preview_height = if settings.show_preview {
-            let longest_command = results
+        let invert: bool = settings.invert;
+        let border_size: u16 = if compact { 0 } else { 1 };
+        let preview_width: u16 = f.size().width - 2;
+        let preview_height: u16 = if settings.show_preview {
+            let longest_command: Option<&History> = results
                 .iter()
-                .max_by(|h1, h2| h1.command.len().cmp(&h2.command.len()));
-            longest_command.map_or(0, |v| {
+                .max_by(|h1: &&History, h2: &&History| h1.command.len().cmp(&h2.command.len()));
+            longest_command.map_or(0, |v: &History| {
                 std::cmp::min(
                     settings.max_preview_height,
                     v.command
                         .split('\n')
-                        .map(|line| {
+                        .map(|line: &str| {
                             (line.len() as u16 + preview_width - 1 - border_size)
                                 / (preview_width - border_size)
                         })
@@ -344,8 +344,8 @@ impl State {
         } else {
             1
         };
-        let show_help = settings.show_help && (!compact || f.size().height > 1);
-        let chunks = Layout::default()
+        let show_help: bool = settings.show_help && (!compact || f.size().height > 1);
+        let chunks: std::rc::Rc<[ratatui::prelude::Rect]> = Layout::default()
             .direction(Direction::Vertical)
             .margin(0)
             .horizontal_margin(1)
@@ -368,18 +368,18 @@ impl State {
                 .as_ref(),
             )
             .split(f.size());
-        let input_chunk = if invert { chunks[0] } else { chunks[2] };
-        let results_list_chunk = chunks[1];
-        let preview_chunk = if invert { chunks[2] } else { chunks[3] };
-        let header_chunk = if invert { chunks[3] } else { chunks[0] };
+        let input_chunk: ratatui::prelude::Rect = if invert { chunks[0] } else { chunks[2] };
+        let results_list_chunk: ratatui::prelude::Rect = chunks[1];
+        let preview_chunk: ratatui::prelude::Rect = if invert { chunks[2] } else { chunks[3] };
+        let header_chunk: ratatui::prelude::Rect = if invert { chunks[3] } else { chunks[0] };
 
-        let style = StyleState {
+        let style: StyleState = StyleState {
             compact,
             invert,
             inner_width: input_chunk.width.into(),
         };
 
-        let header_chunks = Layout::default()
+        let header_chunks: std::rc::Rc<[ratatui::prelude::Rect]> = Layout::default()
             .direction(Direction::Horizontal)
             .constraints(
                 [
@@ -391,28 +391,28 @@ impl State {
             )
             .split(header_chunk);
 
-        let title = self.build_title();
+        let title: Paragraph<'_> = self.build_title();
         f.render_widget(title, header_chunks[0]);
 
-        let help = self.build_help();
+        let help: Paragraph<'_> = self.build_help();
         f.render_widget(help, header_chunks[1]);
 
-        let stats = self.build_stats();
+        let stats: Paragraph<'_> = self.build_stats();
         f.render_widget(stats, header_chunks[2]);
 
-        let results_list = Self::build_results_list(style, results);
+        let results_list: HistoryList<'_> = Self::build_results_list(style, results);
         f.render_stateful_widget(results_list, results_list_chunk, &mut self.results_state);
 
-        let input = self.build_input(style);
+        let input: Paragraph<'_> = self.build_input(style);
         f.render_widget(input, input_chunk);
 
-        let preview =
+        let preview: Paragraph<'_> =
             self.build_preview(results, compact, preview_width, preview_chunk.width.into());
         f.render_widget(preview, preview_chunk);
 
-        let extra_width = UnicodeWidthStr::width(self.search.input.substring());
+        let extra_width: usize = UnicodeWidthStr::width(self.search.input.substring());
 
-        let cursor_offset = if compact { 0 } else { 1 };
+        let cursor_offset: u16 = if compact { 0 } else { 1 };
         f.set_cursor(
             // Put cursor past the end of the input text
             input_chunk.x + extra_width as u16 + PREFIX_LENGTH + 1 + cursor_offset,
@@ -421,8 +421,8 @@ impl State {
     }
 
     fn build_title(&mut self) -> Paragraph {
-        let title = if self.update_needed.is_some() {
-            let version = self.update_needed.clone().unwrap();
+        let title: Paragraph<'_> = if self.update_needed.is_some() {
+            let version: Version = self.update_needed.clone().unwrap();
 
             Paragraph::new(Text::from(Span::styled(
                 format!(" Atuin v{VERSION} - UPDATE AVAILABLE {version}"),
@@ -439,7 +439,7 @@ impl State {
 
     #[allow(clippy::unused_self)]
     fn build_help(&mut self) -> Paragraph {
-        let help = Paragraph::new(Text::from(Line::from(vec![
+        let help: Paragraph<'_> = Paragraph::new(Text::from(Line::from(vec![
             Span::styled("Esc", Style::default().add_modifier(Modifier::BOLD)),
             Span::raw(" to exit"),
         ])))
@@ -449,7 +449,7 @@ impl State {
     }
 
     fn build_stats(&mut self) -> Paragraph {
-        let stats = Paragraph::new(Text::from(Span::raw(format!(
+        let stats: Paragraph<'_> = Paragraph::new(Text::from(Span::raw(format!(
             "history count: {}",
             self.history_count,
         ))))
@@ -459,7 +459,7 @@ impl State {
     }
 
     fn build_results_list(style: StyleState, results: &[History]) -> HistoryList {
-        let results_list = HistoryList::new(results, style.invert);
+        let results_list: HistoryList<'_> = HistoryList::new(results, style.invert);
         if style.compact {
             results_list
         } else if style.invert {
@@ -486,11 +486,11 @@ impl State {
         } else {
             ("", self.search.filter_mode.as_str())
         };
-        let mode_width = MAX_WIDTH - pref.len();
+        let mode_width: usize = MAX_WIDTH - pref.len();
         // sanity check to ensure we don't exceed the layout limits
         debug_assert!(mode_width >= mode.len(), "mode name '{mode}' is too long!");
-        let input = format!("[{pref}{mode:^mode_width$}] {}", self.search.input.as_str(),);
-        let input = Paragraph::new(input);
+        let input: String = format!("[{pref}{mode:^mode_width$}] {}", self.search.input.as_str(),);
+        let input: Paragraph<'_> = Paragraph::new(input);
         if style.compact {
             input
         } else if style.invert {
@@ -516,14 +516,14 @@ impl State {
         preview_width: u16,
         chunk_width: usize,
     ) -> Paragraph {
-        let selected = self.results_state.selected();
-        let command = if results.is_empty() {
+        let selected: usize = self.results_state.selected();
+        let command: String = if results.is_empty() {
             String::new()
         } else {
             use itertools::Itertools as _;
-            let s = &results[selected].command;
+            let s: &String = &results[selected].command;
             s.split('\n')
-                .flat_map(|line| {
+                .flat_map(|line: &str| {
                     line.char_indices()
                         .step_by(preview_width.into())
                         .map(|(i, _)| i)
@@ -533,7 +533,7 @@ impl State {
                 })
                 .join("\n")
         };
-        let preview = if compact {
+        let preview: Paragraph<'_> = if compact {
             Paragraph::new(command).style(Style::default().fg(Color::DarkGray))
         } else {
             Paragraph::new(command).block(
@@ -555,7 +555,7 @@ struct Stdout {
 impl Stdout {
     pub fn new(inline_mode: bool) -> std::io::Result<Self> {
         terminal::enable_raw_mode()?;
-        let mut stdout = stdout();
+        let mut stdout: std::io::Stdout = stdout();
         if !inline_mode {
             execute!(stdout, terminal::EnterAlternateScreen)?;
         }
@@ -605,9 +605,9 @@ pub async fn history(
     settings: &Settings,
     mut db: impl Database,
 ) -> Result<String> {
-    let stdout = Stdout::new(settings.inline_height > 0)?;
-    let backend = CrosstermBackend::new(stdout);
-    let mut terminal = Terminal::with_options(
+    let stdout: Stdout = Stdout::new(settings.inline_height > 0)?;
+    let backend: CrosstermBackend<Stdout> = CrosstermBackend::new(stdout);
+    let mut terminal: Terminal<CrosstermBackend<Stdout>> = Terminal::with_options(
         backend,
         TerminalOptions {
             viewport: if settings.inline_height > 0 {
@@ -618,25 +618,25 @@ pub async fn history(
         },
     )?;
 
-    let mut input = Cursor::from(query.join(" "));
+    let mut input: Cursor = Cursor::from(query.join(" "));
     // Put the cursor at the end of the query by default
     input.end();
 
-    let settings2 = settings.clone();
-    let update_needed = tokio::spawn(async move { settings2.needs_update().await }).fuse();
+    let settings2: Settings = settings.clone();
+    let update_needed: futures_util::future::Fuse<tokio::task::JoinHandle<Option<Version>>> = tokio::spawn(async move { settings2.needs_update().await }).fuse();
     tokio::pin!(update_needed);
 
-    let context = current_context();
+    let context: atuin_client::database::Context = current_context();
 
-    let history_count = db.history_count(false).await?;
-    let search_mode = if settings.shell_up_key_binding {
+    let history_count: i64 = db.history_count(false).await?;
+    let search_mode: SearchMode = if settings.shell_up_key_binding {
         settings
             .search_mode_shell_up_key_binding
             .unwrap_or(settings.search_mode)
     } else {
         settings.search_mode
     };
-    let mut app = State {
+    let mut app: State = State {
         history_count,
         results_state: ListState::default(),
         update_needed: None,
@@ -660,17 +660,17 @@ pub async fn history(
         accept: false,
     };
 
-    let mut results = app.query_results(&mut db).await?;
+    let mut results: Vec<History> = app.query_results(&mut db).await?;
 
-    let accept;
-    let index = 'render: loop {
-        terminal.draw(|f| app.draw(f, &results, settings))?;
+    let accept: bool;
+    let index: usize = 'render: loop {
+        terminal.draw(|f: &mut Frame<'_>| app.draw(f, &results, settings))?;
 
-        let initial_input = app.search.input.as_str().to_owned();
-        let initial_filter_mode = app.search.filter_mode;
-        let initial_search_mode = app.search_mode;
+        let initial_input: String = app.search.input.as_str().to_owned();
+        let initial_filter_mode: FilterMode = app.search.filter_mode;
+        let initial_search_mode: SearchMode = app.search_mode;
 
-        let event_ready = tokio::task::spawn_blocking(|| event::poll(Duration::from_millis(250)));
+        let event_ready: tokio::task::JoinHandle<std::prelude::v1::Result<bool, std::io::Error>> = tokio::task::spawn_blocking(|| event::poll(Duration::from_millis(250)));
 
         tokio::select! {
             event_ready = event_ready => {
@@ -704,7 +704,7 @@ pub async fn history(
     }
 
     if index < results.len() {
-        let mut command = results.swap_remove(index).command;
+        let mut command: String = results.swap_remove(index).command;
         if accept && (utils::is_zsh() || utils::is_fish()) {
             command = String::from("__atuin_accept__:") + &command;
         }
@@ -714,7 +714,7 @@ pub async fn history(
     } else if index == RETURN_ORIGINAL {
         Ok(String::new())
     } else if index == COPY_QUERY {
-        let cmd = results.swap_remove(app.results_state.selected()).command;
+        let cmd: String = results.swap_remove(app.results_state.selected()).command;
         cli_clipboard::set_contents(cmd).unwrap();
         Ok(String::new())
     } else {

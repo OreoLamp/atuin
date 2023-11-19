@@ -22,17 +22,17 @@ pub enum Operation {
 }
 
 pub async fn diff(settings: &Settings, store: &mut impl Store) -> Result<(Vec<Diff>, RecordIndex)> {
-    let client = Client::new(
+    let client: Client<'_> = Client::new(
         &settings.sync_address,
         &settings.session_token,
         settings.network_connect_timeout,
         settings.network_timeout,
     )?;
 
-    let local_index = store.tail_records().await?;
-    let remote_index = client.record_index().await?;
+    let local_index: RecordIndex = store.tail_records().await?;
+    let remote_index: RecordIndex = client.record_index().await?;
 
-    let diff = local_index.diff(&remote_index);
+    let diff: Vec<Diff> = local_index.diff(&remote_index);
 
     Ok((diff, remote_index))
 }
@@ -42,7 +42,7 @@ pub async fn diff(settings: &Settings, store: &mut impl Store) -> Result<(Vec<Di
 // In theory this could be done as a part of the diffing stage, but it's easier to reason
 // about and test this way
 pub async fn operations(diffs: Vec<Diff>, store: &impl Store) -> Result<Vec<Operation>> {
-    let mut operations = Vec::with_capacity(diffs.len());
+    let mut operations: Vec<Operation> = Vec::with_capacity(diffs.len());
 
     for diff in diffs {
         // First, try to fetch the tail
@@ -50,12 +50,12 @@ pub async fn operations(diffs: Vec<Diff>, store: &impl Store) -> Result<Vec<Oper
         // host until it has the same tail. Ie, upload.
         // If it does not exist locally, that means remote is ahead of us.
         // Therefore, we need to download until our local tail matches
-        let record = store.get(diff.tail).await;
+        let record: std::prelude::v1::Result<atuin_common::record::Record<atuin_common::record::EncryptedData>, eyre::Error> = store.get(diff.tail).await;
 
-        let op = if record.is_ok() {
+        let op: Operation = if record.is_ok() {
             // if local has the ID, then we should find the actual tail of this
             // store, so we know what we need to update the remote to.
-            let tail = store
+            let tail: atuin_common::record::Record<atuin_common::record::EncryptedData> = store
                 .tail(diff.host, diff.tag.as_str())
                 .await?
                 .expect("failed to fetch last record, expected tag/host to exist");
@@ -85,7 +85,7 @@ pub async fn operations(diffs: Vec<Diff>, store: &impl Store) -> Result<Vec<Oper
     // We can sort by ID so long as we continue to use UUIDv7 or something
     // with the same properties
 
-    operations.sort_by_key(|op| match op {
+    operations.sort_by_key(|op: &Operation| match op {
         Operation::Upload { tail, host, .. } => ("upload", *host, *tail),
         Operation::Download { tail, host, .. } => ("download", *host, *tail),
     });
@@ -99,19 +99,19 @@ async fn sync_upload(
     client: &Client<'_>,
     op: (HostId, String, RecordId),
 ) -> Result<i64> {
-    let upload_page_size = 100;
-    let mut total = 0;
+    let upload_page_size: usize = 100;
+    let mut total: i64 = 0;
 
     // so. we have an upload operation, with the tail representing the state
     // we want to get the remote to
-    let current_tail = remote_index.get(op.0, op.1.clone());
+    let current_tail: Option<RecordId> = remote_index.get(op.0, op.1.clone());
 
     println!(
         "Syncing local {:?}/{}/{:?}, remote has {:?}",
         op.0, op.1, op.2, current_tail
     );
 
-    let start = if let Some(current_tail) = current_tail {
+    let start: RecordId = if let Some(current_tail) = current_tail {
         current_tail
     } else {
         store
@@ -129,14 +129,14 @@ async fn sync_upload(
     // we need to iterate from the remote tail, and keep going until
     // remote tail = current local tail
 
-    let mut record = if current_tail.is_some() {
-        let r = store.get(start).await.unwrap();
+    let mut record: Option<atuin_common::record::Record<atuin_common::record::EncryptedData>> = if current_tail.is_some() {
+        let r: atuin_common::record::Record<atuin_common::record::EncryptedData> = store.get(start).await.unwrap();
         store.next(&r).await?
     } else {
         Some(store.get(start).await.unwrap())
     };
 
-    let mut buf = Vec::with_capacity(upload_page_size);
+    let mut buf: Vec<atuin_common::record::Record<atuin_common::record::EncryptedData>> = Vec::with_capacity(upload_page_size);
 
     while let Some(r) = record {
         if buf.len() < upload_page_size {
@@ -166,9 +166,9 @@ async fn sync_download(
     op: (HostId, String, RecordId),
 ) -> Result<i64> {
     // TODO(ellie): implement variable page sizing like on history sync
-    let download_page_size = 1000;
+    let download_page_size: u64 = 1000;
 
-    let mut total = 0;
+    let mut total: u64 = 0;
 
     // We know that the remote is ahead of us, so let's keep downloading until both
     // 1) The remote stops returning full pages
@@ -176,10 +176,10 @@ async fn sync_download(
     //
     // If (1) occurs without (2), then something is wrong with our index calculation
     // and we should bail.
-    let remote_tail = remote_index
+    let remote_tail: RecordId = remote_index
         .get(op.0, op.1.clone())
         .expect("remote index does not contain expected tail during download");
-    let local_tail = store.tail(op.0, op.1.as_str()).await?;
+    let local_tail: Option<atuin_common::record::Record<atuin_common::record::EncryptedData>> = store.tail(op.0, op.1.as_str()).await?;
     //
     // We expect that the operations diff will represent the desired state
     // In this case, that contains the remote tail.
@@ -187,11 +187,11 @@ async fn sync_download(
 
     println!("Downloading {:?}/{}/{:?} to local", op.0, op.1, op.2);
 
-    let mut records = client
+    let mut records: Vec<atuin_common::record::Record<atuin_common::record::EncryptedData>> = client
         .next_records(
             op.0,
             op.1.clone(),
-            local_tail.map(|r| r.id),
+            local_tail.map(|r: atuin_common::record::Record<atuin_common::record::EncryptedData>| r.id),
             download_page_size,
         )
         .await?;
@@ -208,7 +208,7 @@ async fn sync_download(
             .next_records(
                 op.0,
                 op.1.clone(),
-                records.last().map(|r| r.id),
+                records.last().map(|r: &atuin_common::record::Record<atuin_common::record::EncryptedData>| r.id),
                 download_page_size,
             )
             .await?;
@@ -223,15 +223,15 @@ pub async fn sync_remote(
     local_store: &mut impl Store,
     settings: &Settings,
 ) -> Result<(i64, i64)> {
-    let client = Client::new(
+    let client: Client<'_> = Client::new(
         &settings.sync_address,
         &settings.session_token,
         settings.network_connect_timeout,
         settings.network_timeout,
     )?;
 
-    let mut uploaded = 0;
-    let mut downloaded = 0;
+    let mut uploaded: i64 = 0;
+    let mut downloaded: i64 = 0;
 
     // this can totally run in parallel, but lets get it working first
     for i in operations {
@@ -281,10 +281,10 @@ mod tests {
         local_records: Vec<Record<EncryptedData>>,
         remote_records: Vec<Record<EncryptedData>>,
     ) -> (SqliteStore, Vec<Diff>) {
-        let local_store = SqliteStore::new(":memory:")
+        let local_store: SqliteStore = SqliteStore::new(":memory:")
             .await
             .expect("failed to open in memory sqlite");
-        let remote_store = SqliteStore::new(":memory:")
+        let remote_store: SqliteStore = SqliteStore::new(":memory:")
             .await
             .expect("failed to open in memory sqlite"); // "remote"
 
@@ -296,10 +296,10 @@ mod tests {
             remote_store.push(&i).await.unwrap();
         }
 
-        let local_index = local_store.tail_records().await.unwrap();
-        let remote_index = remote_store.tail_records().await.unwrap();
+        let local_index: atuin_common::record::RecordIndex = local_store.tail_records().await.unwrap();
+        let remote_index: atuin_common::record::RecordIndex = remote_store.tail_records().await.unwrap();
 
-        let diff = local_index.diff(&remote_index);
+        let diff: Vec<Diff> = local_index.diff(&remote_index);
 
         (local_store, diff)
     }
@@ -308,12 +308,12 @@ mod tests {
     async fn test_basic_diff() {
         // a diff where local is ahead of remote. nothing else.
 
-        let record = test_record();
+        let record: Record<EncryptedData> = test_record();
         let (store, diff) = build_test_diff(vec![record.clone()], vec![]).await;
 
         assert_eq!(diff.len(), 1);
 
-        let operations = sync::operations(diff, &store).await.unwrap();
+        let operations: Vec<Operation> = sync::operations(diff, &store).await.unwrap();
 
         assert_eq!(operations.len(), 1);
 
@@ -332,18 +332,18 @@ mod tests {
         // a diff where local is ahead of remote for one, and remote for
         // another. One upload, one download
 
-        let shared_record = test_record();
+        let shared_record: Record<EncryptedData> = test_record();
 
-        let remote_ahead = test_record();
-        let local_ahead = shared_record
+        let remote_ahead: Record<EncryptedData> = test_record();
+        let local_ahead: Record<EncryptedData> = shared_record
             .new_child(vec![1, 2, 3])
             .encrypt::<PASETO_V4>(&[0; 32]);
 
-        let local = vec![shared_record.clone(), local_ahead.clone()]; // local knows about the already synced, and something newer in the same store
-        let remote = vec![shared_record.clone(), remote_ahead.clone()]; // remote knows about the already-synced, and one new record in a new store
+        let local: Vec<Record<EncryptedData>> = vec![shared_record.clone(), local_ahead.clone()]; // local knows about the already synced, and something newer in the same store
+        let remote: Vec<Record<EncryptedData>> = vec![shared_record.clone(), remote_ahead.clone()]; // remote knows about the already-synced, and one new record in a new store
 
         let (store, diff) = build_test_diff(local, remote).await;
-        let operations = sync::operations(diff, &store).await.unwrap();
+        let operations: Vec<Operation> = sync::operations(diff, &store).await.unwrap();
 
         assert_eq!(operations.len(), 2);
 
@@ -370,28 +370,28 @@ mod tests {
         // One known only by local
         // One known only by remote
 
-        let shared_record = test_record();
+        let shared_record: Record<EncryptedData> = test_record();
 
-        let remote_known = test_record();
-        let local_known = test_record();
+        let remote_known: Record<EncryptedData> = test_record();
+        let local_known: Record<EncryptedData> = test_record();
 
-        let second_shared = test_record();
-        let second_shared_remote_ahead = second_shared
+        let second_shared: Record<EncryptedData> = test_record();
+        let second_shared_remote_ahead: Record<EncryptedData> = second_shared
             .new_child(vec![1, 2, 3])
             .encrypt::<PASETO_V4>(&[0; 32]);
 
-        let local_ahead = shared_record
+        let local_ahead: Record<EncryptedData> = shared_record
             .new_child(vec![1, 2, 3])
             .encrypt::<PASETO_V4>(&[0; 32]);
 
-        let local = vec![
+        let local: Vec<Record<EncryptedData>> = vec![
             shared_record.clone(),
             second_shared.clone(),
             local_known.clone(),
             local_ahead.clone(),
         ];
 
-        let remote = vec![
+        let remote: Vec<Record<EncryptedData>> = vec![
             shared_record.clone(),
             second_shared.clone(),
             second_shared_remote_ahead.clone(),
@@ -399,11 +399,11 @@ mod tests {
         ]; // remote knows about the already-synced, and one new record in a new store
 
         let (store, diff) = build_test_diff(local, remote).await;
-        let operations = sync::operations(diff, &store).await.unwrap();
+        let operations: Vec<Operation> = sync::operations(diff, &store).await.unwrap();
 
         assert_eq!(operations.len(), 4);
 
-        let mut result_ops = vec![
+        let mut result_ops: Vec<Operation> = vec![
             Operation::Download {
                 tail: remote_known.id,
                 host: remote_known.host,
@@ -426,7 +426,7 @@ mod tests {
             },
         ];
 
-        result_ops.sort_by_key(|op| match op {
+        result_ops.sort_by_key(|op: &Operation| match op {
             Operation::Upload { tail, host, .. } => ("upload", *host, *tail),
             Operation::Download { tail, host, .. } => ("download", *host, *tail),
         });
