@@ -1,0 +1,14 @@
+{
+	"files": [
+		{
+			"path": "atuin/src/main.rs",
+			"bookmarks": [
+				{
+					"line": 0,
+					"column": 0,
+					"label": "Verify clippy settings"
+				}
+			]
+		}
+	]
+}
