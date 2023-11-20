@@ -1,4 +1,4 @@
-#![warn(clippy::pedantic, clippy::nursery)]
+#![warn(clippy::all, clippy::pedantic, clippy::nursery)]
 #![allow(clippy::use_self, clippy::missing_const_for_fn)] // not 100% reliable
 // TODO: Fix the reliability error lol
 
@@ -8,6 +8,8 @@ use eyre::Result;
 use command::AtuinCmd;
 mod command;
 
+
+// Info about the program
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 const SHA: &str = env!("GIT_HASH");
 
@@ -21,6 +23,7 @@ static HELP_TEMPLATE: &str = "\
 
 {all-args}{after-help}";
 
+
 /// Magical shell history
 #[derive(Parser)]
 #[command(
@@ -33,11 +36,13 @@ struct Atuin {
     atuin: AtuinCmd,
 }
 
+
 impl Atuin {
     fn run(self) -> Result<()> {
         self.atuin.run()
     }
 }
+
 
 fn main() -> Result<()> {
     Atuin::parse().run()

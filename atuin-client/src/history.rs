@@ -51,7 +51,7 @@ impl History {
         timestamp: OffsetDateTime,
         command: String,
         cwd: String,
-        exit: i64,
+        exit: i64, // TODO: Check whether this can be made an u8, as return codes should be 0-255
         duration: i64,
         session: Option<String>,
         hostname: Option<String>,
