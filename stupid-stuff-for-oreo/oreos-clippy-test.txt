@@ -1,0 +1,3294 @@
+warning: /media/2tbSSD/Projects/atuin/Cargo.toml: unused manifest key: workspace.package.name
+warning: /media/2tbSSD/Projects/atuin/Cargo.toml: unused manifest key: workspace.package.name
+warning: casting `i128` to `u64` may truncate the value
+  --> atuin-common/src/record.rs:45:25
+   |
+45 |     #[builder(default = time::OffsetDateTime::now_utc().unix_timestamp_nanos() as u64)]
+   |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+   = note: `-W clippy::cast-possible-truncation` implied by `-W clippy::pedantic`
+help: ... or use `try_from` and handle the error accordingly
+   |
+45 |     #[builder(default = u64::try_from(time::OffsetDateTime::now_utc().unix_timestamp_nanos()))]
+   |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `u64` may truncate the value
+  --> atuin-common/src/record.rs:45:25
+   |
+45 |     #[builder(default = time::OffsetDateTime::now_utc().unix_timestamp_nanos() as u64)]
+   |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+   = note: `-W clippy::cast-possible-truncation` implied by `-W clippy::pedantic`
+help: ... or use `try_from` and handle the error accordingly
+   |
+45 |     #[builder(default = u64::try_from(time::OffsetDateTime::now_utc().unix_timestamp_nanos()))]
+   |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `u64` may lose the sign of the value
+  --> atuin-common/src/record.rs:45:25
+   |
+45 |     #[builder(default = time::OffsetDateTime::now_utc().unix_timestamp_nanos() as u64)]
+   |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_sign_loss
+   = note: `-W clippy::cast-sign-loss` implied by `-W clippy::pedantic`
+
+warning: item name starts with its containing module's name
+  --> atuin-common/src/record.rs:87:12
+   |
+87 | pub struct RecordIndex {
+   |            ^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#module_name_repetitions
+   = note: `-W clippy::module-name-repetitions` implied by `-W clippy::pedantic`
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-common/src/record.rs:107:5
+    |
+107 |     pub fn new() -> RecordIndex {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn new() -> RecordIndex`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+    = note: `-W clippy::must-use-candidate` implied by `-W clippy::pedantic`
+
+warning: casting `i128` to `u64` may lose the sign of the value
+  --> atuin-common/src/record.rs:45:25
+   |
+45 |     #[builder(default = time::OffsetDateTime::now_utc().unix_timestamp_nanos() as u64)]
+   |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_sign_loss
+   = note: `-W clippy::cast-sign-loss` implied by `-W clippy::pedantic`
+
+warning: item name starts with its containing module's name
+  --> atuin-common/src/record.rs:87:12
+   |
+87 | pub struct RecordIndex {
+   |            ^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#module_name_repetitions
+   = note: `-W clippy::module-name-repetitions` implied by `-W clippy::pedantic`
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-common/src/record.rs:107:5
+    |
+107 |     pub fn new() -> RecordIndex {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn new() -> RecordIndex`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+    = note: `-W clippy::must-use-candidate` implied by `-W clippy::pedantic`
+
+warning: consider adding a `;` to the last statement for consistent formatting
+   --> atuin-common/src/record.rs:115:9
+    |
+115 |         self.set_raw(tail.host, tail.tag, tail.id)
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add a `;` here: `self.set_raw(tail.host, tail.tag, tail.id);`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#semicolon_if_nothing_returned
+    = note: `-W clippy::semicolon-if-nothing-returned` implied by `-W clippy::pedantic`
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-common/src/record.rs:122:5
+    |
+122 |     pub fn get(&self, host: HostId, tag: String) -> Option<RecordId> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn get(&self, host: HostId, tag: String) -> Option<RecordId>`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: consider adding a `;` to the last statement for consistent formatting
+   --> atuin-common/src/record.rs:115:9
+    |
+115 |         self.set_raw(tail.host, tail.tag, tail.id)
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add a `;` here: `self.set_raw(tail.host, tail.tag, tail.id);`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#semicolon_if_nothing_returned
+    = note: `-W clippy::semicolon-if-nothing-returned` implied by `-W clippy::pedantic`
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-common/src/record.rs:122:5
+    |
+122 |     pub fn get(&self, host: HostId, tag: String) -> Option<RecordId> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn get(&self, host: HostId, tag: String) -> Option<RecordId>`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> atuin-common/src/record.rs:122:42
+    |
+122 |     pub fn get(&self, host: HostId, tag: String) -> Option<RecordId> {
+    |                                          ^^^^^^ help: consider changing the type to: `&str`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_pass_by_value
+    = note: `-W clippy::needless-pass-by-value` implied by `-W clippy::pedantic`
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> atuin-common/src/record.rs:122:42
+    |
+122 |     pub fn get(&self, host: HostId, tag: String) -> Option<RecordId> {
+    |                                          ^^^^^^ help: consider changing the type to: `&str`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_pass_by_value
+    = note: `-W clippy::needless-pass-by-value` implied by `-W clippy::pedantic`
+
+warning: used `cloned` where `copied` could be used instead
+   --> atuin-common/src/record.rs:123:57
+    |
+123 |         self.hosts.get(&host).and_then(|v| v.get(&tag)).cloned()
+    |                                                         ^^^^^^ help: try: `copied`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cloned_instead_of_copied
+    = note: `-W clippy::cloned-instead-of-copied` implied by `-W clippy::pedantic`
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-common/src/record.rs:133:5
+    |
+133 |     pub fn diff(&self, other: &Self) -> Vec<Diff> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn diff(&self, other: &Self) -> Vec<Diff>`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: used `cloned` where `copied` could be used instead
+   --> atuin-common/src/record.rs:123:57
+    |
+123 |         self.hosts.get(&host).and_then(|v| v.get(&tag)).cloned()
+    |                                                         ^^^^^^ help: try: `copied`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cloned_instead_of_copied
+    = note: `-W clippy::cloned-instead-of-copied` implied by `-W clippy::pedantic`
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-common/src/record.rs:133:5
+    |
+133 |     pub fn diff(&self, other: &Self) -> Vec<Diff> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn diff(&self, other: &Self) -> Vec<Diff>`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: it is more concise to loop over references to containers instead of using explicit iteration methods
+   --> atuin-common/src/record.rs:137:32
+    |
+137 |         for (host, tag_map) in self.hosts.iter() {
+    |                                ^^^^^^^^^^^^^^^^^ help: to write this more concisely, try: `&self.hosts`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#explicit_iter_loop
+    = note: `-W clippy::explicit-iter-loop` implied by `-W clippy::pedantic`
+
+warning: it is more concise to loop over references to containers instead of using explicit iteration methods
+   --> atuin-common/src/record.rs:164:32
+    |
+164 |         for (host, tag_map) in other.hosts.iter() {
+    |                                ^^^^^^^^^^^^^^^^^^ help: to write this more concisely, try: `&other.hosts`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#explicit_iter_loop
+
+warning: it is more concise to loop over references to containers instead of using explicit iteration methods
+   --> atuin-common/src/record.rs:137:32
+    |
+137 |         for (host, tag_map) in self.hosts.iter() {
+    |                                ^^^^^^^^^^^^^^^^^ help: to write this more concisely, try: `&self.hosts`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#explicit_iter_loop
+    = note: `-W clippy::explicit-iter-loop` implied by `-W clippy::pedantic`
+
+warning: it is more concise to loop over references to containers instead of using explicit iteration methods
+   --> atuin-common/src/record.rs:164:32
+    |
+164 |         for (host, tag_map) in other.hosts.iter() {
+    |                                ^^^^^^^^^^^^^^^^^^ help: to write this more concisely, try: `&other.hosts`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#explicit_iter_loop
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-common/src/record.rs:185:5
+    |
+185 | /     fn re_encrypt(
+186 | |         data: EncryptedData,
+187 | |         ad: AdditionalData,
+188 | |         old_key: &[u8; 32],
+189 | |         new_key: &[u8; 32],
+190 | |     ) -> Result<EncryptedData> {
+    | |______________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+    = note: `-W clippy::missing-errors-doc` implied by `-W clippy::pedantic`
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-common/src/record.rs:185:5
+    |
+185 | /     fn re_encrypt(
+186 | |         data: EncryptedData,
+187 | |         ad: AdditionalData,
+188 | |         old_key: &[u8; 32],
+189 | |         new_key: &[u8; 32],
+190 | |     ) -> Result<EncryptedData> {
+    | |______________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+    = note: `-W clippy::missing-errors-doc` implied by `-W clippy::pedantic`
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-common/src/record.rs:195:5
+    |
+195 |     fn decrypt(data: EncryptedData, ad: AdditionalData, key: &[u8; 32]) -> Result<DecryptedData>;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-common/src/record.rs:199:5
+    |
+199 |     pub fn encrypt<E: Encryption>(self, key: &[u8; 32]) -> Record<EncryptedData> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn encrypt<E: Encryption>(self, key: &[u8; 32]) -> Record<EncryptedData>`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-common/src/record.rs:195:5
+    |
+195 |     fn decrypt(data: EncryptedData, ad: AdditionalData, key: &[u8; 32]) -> Result<DecryptedData>;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-common/src/record.rs:199:5
+    |
+199 |     pub fn encrypt<E: Encryption>(self, key: &[u8; 32]) -> Record<EncryptedData> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn encrypt<E: Encryption>(self, key: &[u8; 32]) -> Record<EncryptedData>`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-common/src/record.rs:220:5
+    |
+220 |     pub fn decrypt<E: Encryption>(self, key: &[u8; 32]) -> Result<Record<DecryptedData>> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-common/src/record.rs:220:5
+    |
+220 |     pub fn decrypt<E: Encryption>(self, key: &[u8; 32]) -> Result<Record<DecryptedData>> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-common/src/record.rs:239:5
+    |
+239 | /     pub fn re_encrypt<E: Encryption>(
+240 | |         self,
+241 | |         old_key: &[u8; 32],
+242 | |         new_key: &[u8; 32],
+243 | |     ) -> Result<Record<EncryptedData>> {
+    | |______________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: this function could have a `#[must_use]` attribute
+ --> atuin-common/src/utils.rs:7:1
+  |
+7 | pub fn random_bytes<const N: usize>() -> [u8; N] {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn random_bytes<const N: usize>() -> [u8; N]`
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-common/src/record.rs:239:5
+    |
+239 | /     pub fn re_encrypt<E: Encryption>(
+240 | |         self,
+241 | |         old_key: &[u8; 32],
+242 | |         new_key: &[u8; 32],
+243 | |     ) -> Result<Record<EncryptedData>> {
+    | |______________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: this function could have a `#[must_use]` attribute
+ --> atuin-common/src/utils.rs:7:1
+  |
+7 | pub fn random_bytes<const N: usize>() -> [u8; N] {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn random_bytes<const N: usize>() -> [u8; N]`
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-common/src/utils.rs:37:1
+   |
+37 | pub fn uuid_v7() -> Uuid {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn uuid_v7() -> Uuid`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-common/src/utils.rs:47:1
+   |
+47 | pub fn uuid_v4() -> String {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn uuid_v4() -> String`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-common/src/utils.rs:37:1
+   |
+37 | pub fn uuid_v7() -> Uuid {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn uuid_v7() -> Uuid`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-common/src/utils.rs:47:1
+   |
+47 | pub fn uuid_v4() -> String {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn uuid_v4() -> String`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-common/src/utils.rs:51:1
+   |
+51 | pub fn has_git_dir(path: &str) -> bool {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn has_git_dir(path: &str) -> bool`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-common/src/utils.rs:61:1
+   |
+61 | pub fn in_git_repo(path: &str) -> Option<PathBuf> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn in_git_repo(path: &str) -> Option<PathBuf>`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-common/src/utils.rs:51:1
+   |
+51 | pub fn has_git_dir(path: &str) -> bool {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn has_git_dir(path: &str) -> bool`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-common/src/utils.rs:61:1
+   |
+61 | pub fn in_git_repo(path: &str) -> Option<PathBuf> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn in_git_repo(path: &str) -> Option<PathBuf>`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: docs for function which may panic missing `# Panics` section
+  --> atuin-common/src/utils.rs:61:1
+   |
+61 | pub fn in_git_repo(path: &str) -> Option<PathBuf> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: first possible panic found here
+  --> atuin-common/src/utils.rs:64:53
+   |
+64 |     while gitdir.parent().is_some() && !has_git_dir(gitdir.to_str().unwrap()) {
+   |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+   = note: `-W clippy::missing-panics-doc` implied by `-W clippy::pedantic`
+
+warning: docs for function which may panic missing `# Panics` section
+  --> atuin-common/src/utils.rs:61:1
+   |
+61 | pub fn in_git_repo(path: &str) -> Option<PathBuf> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: first possible panic found here
+  --> atuin-common/src/utils.rs:64:53
+   |
+64 |     while gitdir.parent().is_some() && !has_git_dir(gitdir.to_str().unwrap()) {
+   |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+   = note: `-W clippy::missing-panics-doc` implied by `-W clippy::pedantic`
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-common/src/utils.rs:81:1
+   |
+81 | pub fn home_dir() -> PathBuf {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn home_dir() -> PathBuf`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+   --> atuin-common/src/utils.rs:105:1
+    |
+105 | pub fn get_current_dir() -> String {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn get_current_dir() -> String`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-common/src/utils.rs:81:1
+   |
+81 | pub fn home_dir() -> PathBuf {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn home_dir() -> PathBuf`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+   --> atuin-common/src/utils.rs:105:1
+    |
+105 | pub fn get_current_dir() -> String {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn get_current_dir() -> String`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: empty String is being created manually
+   --> atuin-common/src/utils.rs:111:23
+    |
+111 |             Err(_) => String::from(""),
+    |                       ^^^^^^^^^^^^^^^^ help: consider using: `String::new()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+    = note: `-W clippy::manual-string-new` implied by `-W clippy::pedantic`
+
+warning: empty String is being created manually
+   --> atuin-common/src/utils.rs:111:23
+    |
+111 |             Err(_) => String::from(""),
+    |                       ^^^^^^^^^^^^^^^^ help: consider using: `String::new()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+    = note: `-W clippy::manual-string-new` implied by `-W clippy::pedantic`
+
+warning: this function could have a `#[must_use]` attribute
+   --> atuin-common/src/utils.rs:116:1
+    |
+116 | pub fn is_zsh() -> bool {
+    | ^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn is_zsh() -> bool`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+   --> atuin-common/src/utils.rs:116:1
+    |
+116 | pub fn is_zsh() -> bool {
+    | ^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn is_zsh() -> bool`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+   --> atuin-common/src/utils.rs:121:1
+    |
+121 | pub fn is_fish() -> bool {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn is_fish() -> bool`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+   --> atuin-common/src/utils.rs:126:1
+    |
+126 | pub fn is_bash() -> bool {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn is_bash() -> bool`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+   --> atuin-common/src/utils.rs:121:1
+    |
+121 | pub fn is_fish() -> bool {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn is_fish() -> bool`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+   --> atuin-common/src/utils.rs:126:1
+    |
+126 | pub fn is_bash() -> bool {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn is_bash() -> bool`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: `atuin-common` (lib) generated 28 warnings (run `cargo clippy --fix --lib -p atuin-common` to apply 18 suggestions)warning: `atuin-common` (lib) generated 28 warnings (run `cargo clippy --fix --lib -p atuin-common` to apply 18 suggestions)
+
+warning: an inclusive range would be more readable
+   --> atuin-server-database/src/lib.rs:116:41
+    |
+116 |                 let years: Range<i32> = oldest..current_year + 1;
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^ help: use: `oldest..=current_year`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#range_plus_one
+    = note: `-W clippy::range-plus-one` implied by `-W clippy::pedantic`
+
+warning: an inclusive range would be more readable
+   --> atuin-server-database/src/lib.rs:116:41
+    |
+116 |                 let years: Range<i32> = oldest..current_year + 1;
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^ help: use: `oldest..=current_year`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#range_plus_one
+    = note: `-W clippy::range-plus-one` implied by `-W clippy::pedantic`
+
+warning: casting `i32` to `u64` may lose the sign of the value
+   --> atuin-server-database/src/lib.rs:122:25
+    |
+122 |                     Ok((year as u64, start..end))
+    |                         ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_sign_loss
+    = note: `-W clippy::cast-sign-loss` implied by `-W clippy::pedantic`
+
+warning: casting `i32` to `u64` may lose the sign of the value
+   --> atuin-server-database/src/lib.rs:122:25
+    |
+122 |                     Ok((year as u64, start..end))
+    |                         ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_sign_loss
+    = note: `-W clippy::cast-sign-loss` implied by `-W clippy::pedantic`
+
+warning: casting `u8` to `i64` may become silently lossy if you later change the type
+   --> atuin-server-database/src/lib.rs:133:60
+    |
+133 |                     let end: Date = start + Duration::days(days as i64);
+    |                                                            ^^^^^^^^^^^ help: try: `i64::from(days)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless
+    = note: `-W clippy::cast-lossless` implied by `-W clippy::pedantic`
+
+warning: casting `u8` to `i64` may become silently lossy if you later change the type
+   --> atuin-server-database/src/lib.rs:133:60
+    |
+133 |                     let end: Date = start + Duration::days(days as i64);
+    |                                                            ^^^^^^^^^^^ help: try: `i64::from(days)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless
+    = note: `-W clippy::cast-lossless` implied by `-W clippy::pedantic`
+
+warning: casting `u8` to `u64` may become silently lossy if you later change the type
+   --> atuin-server-database/src/lib.rs:147:25
+    |
+147 |                     Ok((day as u64, start..end))
+    |                         ^^^^^^^^^^ help: try: `u64::from(day)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless
+
+warning: casting `i64` to `u64` may lose the sign of the value
+   --> atuin-server-database/src/lib.rs:163:28
+    |
+163 |                     count: count as u64,
+    |                            ^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_sign_loss
+
+warning: casting `u8` to `u64` may become silently lossy if you later change the type
+   --> atuin-server-database/src/lib.rs:147:25
+    |
+147 |                     Ok((day as u64, start..end))
+    |                         ^^^^^^^^^^ help: try: `u64::from(day)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless
+
+warning: casting `i64` to `u64` may lose the sign of the value
+   --> atuin-server-database/src/lib.rs:163:28
+    |
+163 |                     count: count as u64,
+    |                            ^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_sign_loss
+
+warning: empty String is being created manually
+   --> atuin-server-database/src/lib.rs:164:27
+    |
+164 |                     hash: "".to_string(),
+    |                           ^^^^^^^^^^^^^^ help: consider using: `String::new()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+    = note: `-W clippy::manual-string-new` implied by `-W clippy::pedantic`
+
+warning: empty String is being created manually
+   --> atuin-server-database/src/lib.rs:164:27
+    |
+164 |                     hash: "".to_string(),
+    |                           ^^^^^^^^^^^^^^ help: consider using: `String::new()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+    = note: `-W clippy::manual-string-new` implied by `-W clippy::pedantic`
+
+warning: warning: `atuin-server-database` (lib) generated 6 warnings (run `cargo clippy --fix --lib -p atuin-server-database` to apply 4 suggestions)
+`atuin-server-database` (lib) generated 6 warnings (run `cargo clippy --fix --lib -p atuin-server-database` to apply 4 suggestions)
+warning: variables can be used directly in the `format!` string
+  --> atuin/build.rs:10:5
+   |
+10 |     println!("cargo:rustc-env=GIT_HASH={}", sha);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args
+   = note: `-W clippy::uninlined-format-args` implied by `-W clippy::pedantic`
+help: change this to
+   |
+10 -     println!("cargo:rustc-env=GIT_HASH={}", sha);
+10 +     println!("cargo:rustc-env=GIT_HASH={sha}");
+   |
+
+warning: variables can be used directly in the `format!` string
+  --> atuin/build.rs:10:5
+   |
+10 |     println!("cargo:rustc-env=GIT_HASH={}", sha);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#uninlined_format_args
+   = note: `-W clippy::uninlined-format-args` implied by `-W clippy::pedantic`
+help: change this to
+   |
+10 -     println!("cargo:rustc-env=GIT_HASH={}", sha);
+10 +     println!("cargo:rustc-env=GIT_HASH={sha}");
+   |
+
+warning: casting `i64` to `u64` may lose the sign of the value
+  --> atuin-server-postgres/src/wrappers.rs:64:24
+   |
+64 |             timestamp: timestamp as u64,
+   |                        ^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_sign_loss
+   = note: `-W clippy::cast-sign-loss` implied by `-W clippy::pedantic`
+
+warning: casting `i64` to `u64` may lose the sign of the value
+  --> atuin-server-postgres/src/wrappers.rs:64:24
+   |
+64 |             timestamp: timestamp as u64,
+   |                        ^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_sign_loss
+   = note: `-W clippy::cast-sign-loss` implied by `-W clippy::pedantic`
+
+warning: casting `i32` to `i64` may become silently lossy if you later change the type
+   --> atuin-server-postgres/src/lib.rs:132:12
+    |
+132 |         Ok(res.0 as i64)
+    |            ^^^^^^^^^^^^ help: try: `i64::from(res.0)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless
+    = note: `-W clippy::cast-lossless` implied by `-W clippy::pedantic`
+
+warning: casting `i32` to `i64` may become silently lossy if you later change the type
+   --> atuin-server-postgres/src/lib.rs:132:12
+    |
+132 |         Ok(res.0 as i64)
+    |            ^^^^^^^^^^^^ help: try: `i64::from(res.0)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless
+    = note: `-W clippy::cast-lossless` implied by `-W clippy::pedantic`
+
+warning: casting `u64` to `i64` may wrap around the value
+   --> atuin-server-postgres/src/lib.rs:374:19
+    |
+374 |             .bind(i.timestamp as i64) // throwing away some data, but i64 is still big in terms of time
+    |                   ^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_wrap
+    = note: `-W clippy::cast-possible-wrap` implied by `-W clippy::pedantic`
+
+warning: casting `u64` to `i64` may wrap around the value
+   --> atuin-server-postgres/src/lib.rs:374:19
+    |
+374 |             .bind(i.timestamp as i64) // throwing away some data, but i64 is still big in terms of time
+    |                   ^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_wrap
+    = note: `-W clippy::cast-possible-wrap` implied by `-W clippy::pedantic`
+
+warning: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> atuin-server-postgres/src/lib.rs:400:70
+    |
+400 |         let mut ret: Vec<Record<EncryptedData>> = Vec::with_capacity(count as usize);
+    |                                                                      ^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+    = note: `-W clippy::cast-possible-truncation` implied by `-W clippy::pedantic`
+help: ... or use `try_from` and handle the error accordingly
+    |
+400 |         let mut ret: Vec<Record<EncryptedData>> = Vec::with_capacity(usize::try_from(count));
+    |                                                                      ~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `u64` to `usize` may truncate the value on targets with 32-bit wide pointers
+   --> atuin-server-postgres/src/lib.rs:400:70
+    |
+400 |         let mut ret: Vec<Record<EncryptedData>> = Vec::with_capacity(count as usize);
+    |                                                                      ^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+    = note: `-W clippy::cast-possible-truncation` implied by `-W clippy::pedantic`
+help: ... or use `try_from` and handle the error accordingly
+    |
+400 |         let mut ret: Vec<Record<EncryptedData>> = Vec::with_capacity(usize::try_from(count));
+    |                                                                      ~~~~~~~~~~~~~~~~~~~~~~
+
+warning: usage of wildcard import
+  --> atuin-server/src/handlers/history.rs:24:5
+   |
+24 | use atuin_common::api::*;
+   |     ^^^^^^^^^^^^^^^^^^^^ help: try: `atuin_common::api::{AddHistoryRequest, CountResponse, DeleteHistoryRequest, MessageResponse, SyncHistoryRequest, SyncHistoryResponse}`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#wildcard_imports
+   = note: `-W clippy::wildcard-imports` implied by `-W clippy::pedantic`
+
+warning: usage of wildcard import
+  --> atuin-server/src/handlers/history.rs:24:5
+   |
+24 | use atuin_common::api::*;
+   |     ^^^^^^^^^^^^^^^^^^^^ help: try: `atuin_common::api::{AddHistoryRequest, CountResponse, DeleteHistoryRequest, MessageResponse, SyncHistoryRequest, SyncHistoryResponse}`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#wildcard_imports
+   = note: `-W clippy::wildcard-imports` implied by `-W clippy::pedantic`
+
+warning: usage of wildcard import
+ --> atuin-server/src/handlers/status.rs:9:5
+  |
+9 | use atuin_common::api::*;
+  |     ^^^^^^^^^^^^^^^^^^^^ help: try: `atuin_common::api::StatusResponse`
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#wildcard_imports
+
+warning: usage of wildcard import
+ --> atuin-server/src/handlers/status.rs:9:5
+  |
+9 | use atuin_common::api::*;
+  |     ^^^^^^^^^^^^^^^^^^^^ help: try: `atuin_common::api::StatusResponse`
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#wildcard_imports
+
+warning: usage of wildcard import
+  --> atuin-server/src/handlers/user.rs:27:5
+   |
+27 | use atuin_common::api::*;
+   |     ^^^^^^^^^^^^^^^^^^^^ help: try: `atuin_common::api::{DeleteUserResponse, LoginRequest, LoginResponse, RegisterRequest, RegisterResponse, UserResponse}`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#wildcard_imports
+
+warning: usage of wildcard import
+  --> atuin-server/src/handlers/user.rs:27:5
+   |
+27 | use atuin_common::api::*;
+   |     ^^^^^^^^^^^^^^^^^^^^ help: try: `atuin_common::api::{DeleteUserResponse, LoginRequest, LoginResponse, RegisterRequest, RegisterResponse, UserResponse}`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#wildcard_imports
+
+warning: you should put bare URLs between `<`/`>` or make a proper Markdown link
+  --> atuin-server/src/metrics.rs:23:60
+   |
+23 | /// Someday tower-http might provide a metrics middleware: https://github.com/tower-rs/tower-http/issues/57
+   |                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#doc_markdown
+   = note: `-W clippy::doc-markdown` implied by `-W clippy::pedantic`
+
+warning: you should put bare URLs between `<`/`>` or make a proper Markdown link
+  --> atuin-server/src/metrics.rs:23:60
+   |
+23 | /// Someday tower-http might provide a metrics middleware: https://github.com/tower-rs/tower-http/issues/57
+   |                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#doc_markdown
+   = note: `-W clippy::doc-markdown` implied by `-W clippy::pedantic`
+
+warning: item name ends with its containing module's name
+  --> atuin-server/src/metrics.rs:24:14
+   |
+24 | pub async fn track_metrics<B>(req: Request<B>, next: Next<B>) -> impl IntoResponse {
+   |              ^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#module_name_repetitions
+   = note: `-W clippy::module-name-repetitions` implied by `-W clippy::pedantic`
+
+warning: item name ends with its containing module's name
+  --> atuin-server/src/metrics.rs:24:14
+   |
+24 | pub async fn track_metrics<B>(req: Request<B>, next: Next<B>) -> impl IntoResponse {
+   |              ^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#module_name_repetitions
+   = note: `-W clippy::module-name-repetitions` implied by `-W clippy::pedantic`
+
+warning: unused `async` for function with no await statements
+  --> atuin-server/src/router.rs:78:1
+   |
+78 | / async fn teapot() -> impl IntoResponse {
+79 | |     (http::StatusCode::IM_A_TEAPOT, "🫖")
+80 | | }
+   | |_^
+   |
+   = help: consider removing the `async` from this function
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unused_async
+   = note: `-W clippy::unused-async` implied by `-W clippy::pedantic`
+
+warning: unused `async` for function with no await statements
+  --> atuin-server/src/router.rs:78:1
+   |
+78 | / async fn teapot() -> impl IntoResponse {
+79 | |     (http::StatusCode::IM_A_TEAPOT, "🫖")
+80 | | }
+   | |_^
+   |
+   = help: consider removing the `async` from this function
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unused_async
+   = note: `-W clippy::unused-async` implied by `-W clippy::pedantic`
+
+warning: docs for function which may panic missing `# Panics` section
+  --> atuin-server/src/settings.rs:45:5
+   |
+45 |     pub fn new() -> Result<Self> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: first possible panic found here
+  --> atuin-server/src/settings.rs:78:17
+   |
+78 |                 config_file.to_str().unwrap(),
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+   = note: `-W clippy::missing-panics-doc` implied by `-W clippy::pedantic`
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-server/src/settings.rs:45:5
+   |
+45 |     pub fn new() -> Result<Self> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+   = note: `-W clippy::missing-errors-doc` implied by `-W clippy::pedantic`
+
+warning: docs for function which may panic missing `# Panics` section
+  --> atuin-server/src/settings.rs:45:5
+   |
+45 |     pub fn new() -> Result<Self> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: first possible panic found here
+  --> atuin-server/src/settings.rs:78:17
+   |
+78 |                 config_file.to_str().unwrap(),
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+   = note: `-W clippy::missing-panics-doc` implied by `-W clippy::pedantic`
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-server/src/settings.rs:45:5
+   |
+45 |     pub fn new() -> Result<Self> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+   = note: `-W clippy::missing-errors-doc` implied by `-W clippy::pedantic`
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-server/src/settings.rs:97:1
+   |
+97 | pub fn example_config() -> &'static str {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn example_config() -> &'static str`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+   = note: `-W clippy::must-use-candidate` implied by `-W clippy::pedantic`
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-server/src/settings.rs:97:1
+   |
+97 | pub fn example_config() -> &'static str {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn example_config() -> &'static str`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+   = note: `-W clippy::must-use-candidate` implied by `-W clippy::pedantic`
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-server/src/lib.rs:45:1
+   |
+45 | / pub async fn launch<Db: Database>(
+46 | |     settings: Settings<Db::Settings>,
+47 | |     host: &str,
+48 | |     port: u16,
+49 | | ) -> Result<()> {
+   | |_______________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-server/src/lib.rs:45:1
+   |
+45 | / pub async fn launch<Db: Database>(
+46 | |     settings: Settings<Db::Settings>,
+47 | |     host: &str,
+48 | |     port: u16,
+49 | | ) -> Result<()> {
+   | |_______________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-server/src/lib.rs:58:1
+   |
+58 | / pub async fn launch_with_listener<Db: Database>(
+59 | |     settings: Settings<Db::Settings>,
+60 | |     listener: TcpListener,
+61 | |     shutdown: impl Future<Output = ()>,
+62 | | ) -> Result<()> {
+   | |_______________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-server/src/lib.rs:58:1
+   |
+58 | / pub async fn launch_with_listener<Db: Database>(
+59 | |     settings: Settings<Db::Settings>,
+60 | |     listener: TcpListener,
+61 | |     shutdown: impl Future<Output = ()>,
+62 | | ) -> Result<()> {
+   | |_______________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-server/src/lib.rs:80:1
+   |
+80 | pub async fn launch_metrics_server(host: String, port: u16) -> Result<()> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-server/src/lib.rs:80:1
+   |
+80 | pub async fn launch_metrics_server(host: String, port: u16) -> Result<()> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: warning: `atuin` (build script) generated 1 warning
+warning: `atuin-server-postgres` (lib) generated 4 warnings (run `cargo clippy --fix --lib -p atuin-server-postgres` to apply 1 suggestion)
+warning: `atuin-server` (lib) generated 12 warnings (run `cargo clippy --fix --lib -p atuin-server` to apply 4 suggestions)
+`atuin` (build script) generated 1 warning
+warning: `atuin-server-postgres` (lib) generated 4 warnings (run `cargo clippy --fix --lib -p atuin-server-postgres` to apply 1 suggestion)
+warning: `atuin-server` (lib) generated 12 warnings (run `cargo clippy --fix --lib -p atuin-server` to apply 4 suggestions)
+warning: redundant else block
+   --> atuin-client/src/database.rs:435:32
+    |
+435 |                           } else {
+    |  ________________________________^
+436 | |                             format!("{glob}|{glob}")
+437 | |                         }
+    | |_________________________^
+    |
+    = help: remove the `else` block and move the contents out
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_else
+    = note: `-W clippy::redundant-else` implied by `-W clippy::pedantic`
+
+warning: redundant else block
+   --> atuin-client/src/database.rs:435:32
+    |
+435 |                           } else {
+    |  ________________________________^
+436 | |                             format!("{glob}|{glob}")
+437 | |                         }
+    | |_________________________^
+    |
+    = help: remove the `else` block and move the contents out
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#redundant_else
+    = note: `-W clippy::redundant-else` implied by `-W clippy::pedantic`
+
+warning: long literal lacking separators
+   --> atuin-client/src/settings.rs:293:78
+    |
+293 |             Version::parse(env!("CARGO_PKG_VERSION")).unwrap_or(Version::new(100000, 0, 0));
+    |                                                                              ^^^^^^ help: consider: `100_000`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unreadable_literal
+    = note: `-W clippy::unreadable-literal` implied by `-W clippy::pedantic`
+
+warning: long literal lacking separators
+   --> atuin-client/src/settings.rs:293:78
+    |
+293 |             Version::parse(env!("CARGO_PKG_VERSION")).unwrap_or(Version::new(100000, 0, 0));
+    |                                                                              ^^^^^^ help: consider: `100_000`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unreadable_literal
+    = note: `-W clippy::unreadable-literal` implied by `-W clippy::pedantic`
+
+warning: long literal lacking separators
+   --> atuin-client/src/settings.rs:325:78
+    |
+325 |             Version::parse(env!("CARGO_PKG_VERSION")).unwrap_or(Version::new(100000, 0, 0));
+    |                                                                              ^^^^^^ help: consider: `100_000`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unreadable_literal
+
+warning: long literal lacking separators
+   --> atuin-client/src/settings.rs:325:78
+    |
+325 |             Version::parse(env!("CARGO_PKG_VERSION")).unwrap_or(Version::new(100000, 0, 0));
+    |                                                                              ^^^^^^ help: consider: `100_000`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unreadable_literal
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/api_client.rs:32:1
+   |
+32 | / pub async fn register(
+33 | |     address: &str,
+34 | |     username: &str,
+35 | |     email: &str,
+36 | |     password: &str,
+37 | | ) -> Result<RegisterResponse> {
+   | |_____________________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+   = note: `-W clippy::missing-errors-doc` implied by `-W clippy::pedantic`
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/api_client.rs:32:1
+   |
+32 | / pub async fn register(
+33 | |     address: &str,
+34 | |     username: &str,
+35 | |     email: &str,
+36 | |     password: &str,
+37 | | ) -> Result<RegisterResponse> {
+   | |_____________________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+   = note: `-W clippy::missing-errors-doc` implied by `-W clippy::pedantic`
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/api_client.rs:68:1
+   |
+68 | pub async fn login(address: &str, req: LoginRequest) -> Result<LoginResponse> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/api_client.rs:68:1
+   |
+68 | pub async fn login(address: &str, req: LoginRequest) -> Result<LoginResponse> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/api_client.rs:88:1
+   |
+88 | pub async fn latest_version() -> Result<Version> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:110:5
+    |
+110 | /     pub fn new(
+111 | |         sync_addr: &'a str,
+112 | |         session_token: &str,
+113 | |         connect_timeout: u64,
+114 | |         timeout: u64,
+115 | |     ) -> Result<Self> {
+    | |_____________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/api_client.rs:88:1
+   |
+88 | pub async fn latest_version() -> Result<Version> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:110:5
+    |
+110 | /     pub fn new(
+111 | |         sync_addr: &'a str,
+112 | |         session_token: &str,
+113 | |         connect_timeout: u64,
+114 | |         timeout: u64,
+115 | |     ) -> Result<Self> {
+    | |_____________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:130:5
+    |
+130 |     pub async fn count(&self) -> Result<i64> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:130:5
+    |
+130 |     pub async fn count(&self) -> Result<i64> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:145:5
+    |
+145 |     pub async fn status(&self) -> Result<StatusResponse> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:145:5
+    |
+145 |     pub async fn status(&self) -> Result<StatusResponse> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:160:5
+    |
+160 | /     pub async fn get_history(
+161 | |         &self,
+162 | |         sync_ts: OffsetDateTime,
+163 | |         history_ts: OffsetDateTime,
+164 | |         host: Option<String>,
+165 | |     ) -> Result<SyncHistoryResponse> {
+    | |____________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:160:5
+    |
+160 | /     pub async fn get_history(
+161 | |         &self,
+162 | |         sync_ts: OffsetDateTime,
+163 | |         history_ts: OffsetDateTime,
+164 | |         host: Option<String>,
+165 | |     ) -> Result<SyncHistoryResponse> {
+    | |____________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:199:5
+    |
+199 |     pub async fn post_history(&self, history: &[AddHistoryRequest]) -> Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:208:5
+    |
+208 |     pub async fn delete_history(&self, h: History) -> Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:199:5
+    |
+199 |     pub async fn post_history(&self, history: &[AddHistoryRequest]) -> Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:208:5
+    |
+208 |     pub async fn delete_history(&self, h: History) -> Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:221:5
+    |
+221 |     pub async fn post_records(&self, records: &[Record<EncryptedData>]) -> Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:221:5
+    |
+221 |     pub async fn post_records(&self, records: &[Record<EncryptedData>]) -> Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:230:5
+    |
+230 | /     pub async fn next_records(
+231 | |         &self,
+232 | |         host: HostId,
+233 | |         tag: String,
+234 | |         start: Option<RecordId>,
+235 | |         count: u64,
+236 | |     ) -> Result<Vec<Record<EncryptedData>>> {
+    | |___________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:230:5
+    |
+230 | /     pub async fn next_records(
+231 | |         &self,
+232 | |         host: HostId,
+233 | |         tag: String,
+234 | |         start: Option<RecordId>,
+235 | |         count: u64,
+236 | |     ) -> Result<Vec<Record<EncryptedData>>> {
+    | |___________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:260:5
+    |
+260 |     pub async fn record_index(&self) -> Result<RecordIndex> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:270:5
+    |
+270 |     pub async fn delete(&self) -> Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:260:5
+    |
+260 |     pub async fn record_index(&self) -> Result<RecordIndex> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/api_client.rs:270:5
+    |
+270 |     pub async fn delete(&self) -> Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-client/src/sync.rs:18:1
+   |
+18 | pub fn hash_str(string: &str) -> String {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn hash_str(string: &str) -> String`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+   = note: `-W clippy::must-use-candidate` implied by `-W clippy::pedantic`
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-client/src/sync.rs:18:1
+   |
+18 | pub fn hash_str(string: &str) -> String {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn hash_str(string: &str) -> String`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+   = note: `-W clippy::must-use-candidate` implied by `-W clippy::pedantic`
+
+warning: usage of `FromIterator::from_iter`
+  --> atuin-client/src/sync.rs:49:9
+   |
+49 |         HashSet::<&str>::from_iter(remote_status.deleted.iter().map(String::as_str));
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use `.collect()` instead of `::from_iter()`: `remote_status.deleted.iter().map(String::as_str).collect::<HashSet::from_iter(remote_status.deleted.iter().map(String<&str>>()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#from_iter_instead_of_collect
+   = note: `-W clippy::from-iter-instead-of-collect` implied by `-W clippy::pedantic`
+
+warning: usage of `FromIterator::from_iter`
+  --> atuin-client/src/sync.rs:49:9
+   |
+49 |         HashSet::<&str>::from_iter(remote_status.deleted.iter().map(String::as_str));
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use `.collect()` instead of `::from_iter()`: `remote_status.deleted.iter().map(String::as_str).collect::<HashSet::from_iter(remote_status.deleted.iter().map(String<&str>>()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#from_iter_instead_of_collect
+   = note: `-W clippy::from-iter-instead-of-collect` implied by `-W clippy::pedantic`
+
+warning: empty String is being created manually
+  --> atuin-client/src/sync.rs:62:48
+   |
+62 |     let host: Option<String> = if force { Some(String::from("")) } else { None };
+   |                                                ^^^^^^^^^^^^^^^^ help: consider using: `String::new()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+   = note: `-W clippy::manual-string-new` implied by `-W clippy::pedantic`
+
+warning: empty String is being created manually
+  --> atuin-client/src/sync.rs:62:48
+   |
+62 |     let host: Option<String> = if force { Some(String::from("")) } else { None };
+   |                                                ^^^^^^^^^^^^^^^^ help: consider using: `String::new()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+   = note: `-W clippy::manual-string-new` implied by `-W clippy::pedantic`
+
+warning: empty String is being created manually
+  --> atuin-client/src/sync.rs:78:33
+   |
+78 |                     h.command = String::from("");
+   |                                 ^^^^^^^^^^^^^^^^ help: consider using: `String::new()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/sync.rs:191:1
+    |
+191 | pub async fn sync(settings: &Settings, force: bool, db: &(impl Database + Send)) -> Result<()> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: empty String is being created manually
+  --> atuin-client/src/sync.rs:78:33
+   |
+78 |                     h.command = String::from("");
+   |                                 ^^^^^^^^^^^^^^^^ help: consider using: `String::new()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/sync.rs:191:1
+    |
+191 | pub async fn sync(settings: &Settings, force: bool, db: &(impl Database + Send)) -> Result<()> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: very complex type used. Consider factoring parts into `type` definitions
+   --> atuin-client/src/sync.rs:199:14
+    |
+199 | ...y: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = ...
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
+    = note: `-W clippy::type-complexity` implied by `-W clippy::all`
+
+warning: very complex type used. Consider factoring parts into `type` definitions
+   --> atuin-client/src/sync.rs:199:14
+    |
+199 | ...y: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = ...
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
+    = note: `-W clippy::type-complexity` implied by `-W clippy::all`
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-client/src/database.rs:48:1
+   |
+48 | pub fn current_context() -> Context {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn current_context() -> Context`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+  --> atuin-client/src/database.rs:48:1
+   |
+48 | pub fn current_context() -> Context {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn current_context() -> Context`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/database.rs:121:5
+    |
+121 |     pub async fn new(path: impl AsRef<Path>) -> Result<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> atuin-client/src/database.rs:132:73
+    |
+132 |         let opts: SqliteConnectOptions = SqliteConnectOptions::from_str(path.as_os_str().to_str().unwrap())?
+    |                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+    = note: `-W clippy::missing-panics-doc` implied by `-W clippy::pedantic`
+
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/database.rs:121:5
+    |
+121 |     pub async fn new(path: impl AsRef<Path>) -> Result<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> atuin-client/src/database.rs:132:73
+    |
+132 |         let opts: SqliteConnectOptions = SqliteConnectOptions::from_str(path.as_os_str().to_str().unwrap())?
+    |                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+    = note: `-W clippy::missing-panics-doc` implied by `-W clippy::pedantic`
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/database.rs:121:5
+    |
+121 |     pub async fn new(path: impl AsRef<Path>) -> Result<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/database.rs:121:5
+    |
+121 |     pub async fn new(path: impl AsRef<Path>) -> Result<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:157:15
+    |
+157 |         .bind(h.timestamp.unix_timestamp_nanos() as i64)
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+    = note: `-W clippy::cast-possible-truncation` implied by `-W clippy::pedantic`
+help: ... or use `try_from` and handle the error accordingly
+    |
+157 |         .bind(i64::try_from(h.timestamp.unix_timestamp_nanos()))
+    |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:157:15
+    |
+157 |         .bind(h.timestamp.unix_timestamp_nanos() as i64)
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+    = note: `-W clippy::cast-possible-truncation` implied by `-W clippy::pedantic`
+help: ... or use `try_from` and handle the error accordingly
+    |
+157 |         .bind(i64::try_from(h.timestamp.unix_timestamp_nanos()))
+    |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:164:35
+    |
+164 |         .bind(h.deleted_at.map(|t|t.unix_timestamp_nanos() as i64))
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+164 |         .bind(h.deleted_at.map(|t|i64::try_from(t.unix_timestamp_nanos())))
+    |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:164:35
+    |
+164 |         .bind(h.deleted_at.map(|t|t.unix_timestamp_nanos() as i64))
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+164 |         .bind(h.deleted_at.map(|t|i64::try_from(t.unix_timestamp_nanos())))
+    |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> atuin-client/src/database.rs:171:27
+    |
+171 |     fn query_history(row: SqliteRow) -> History {
+    |                           ^^^^^^^^^ help: consider taking a reference instead: `&SqliteRow`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_pass_by_value
+    = note: `-W clippy::needless-pass-by-value` implied by `-W clippy::pedantic`
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> atuin-client/src/database.rs:171:27
+    |
+171 |     fn query_history(row: SqliteRow) -> History {
+    |                           ^^^^^^^^^ help: consider taking a reference instead: `&SqliteRow`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_pass_by_value
+    = note: `-W clippy::needless-pass-by-value` implied by `-W clippy::pedantic`
+
+warning: casting `i64` to `i128` may become silently lossy if you later change the type
+   --> atuin-client/src/database.rs:177:59
+    |
+177 |                 OffsetDateTime::from_unix_timestamp_nanos(row.get::<i64, _>("timestamp") as i128)
+    |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `i128::from(row.get::<i64, _>("timestamp"))`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless
+    = note: `-W clippy::cast-lossless` implied by `-W clippy::pedantic`
+
+warning: casting `i64` to `i128` may become silently lossy if you later change the type
+   --> atuin-client/src/database.rs:177:59
+    |
+177 |                 OffsetDateTime::from_unix_timestamp_nanos(row.get::<i64, _>("timestamp") as i128)
+    |                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `i128::from(row.get::<i64, _>("timestamp"))`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless
+    = note: `-W clippy::cast-lossless` implied by `-W clippy::pedantic`
+
+warning: casting `i64` to `i128` may become silently lossy if you later change the type
+   --> atuin-client/src/database.rs:187:83
+    |
+187 |                 deleted_at.and_then(|t| OffsetDateTime::from_unix_timestamp_nanos(t as i128).ok()),
+    |                                                                                   ^^^^^^^^^ help: try: `i128::from(t)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless
+
+warning: casting `i64` to `i128` may become silently lossy if you later change the type
+   --> atuin-client/src/database.rs:187:83
+    |
+187 |                 deleted_at.and_then(|t| OffsetDateTime::from_unix_timestamp_nanos(t as i128).ok()),
+    |                                                                                   ^^^^^^^^^ help: try: `i128::from(t)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:240:15
+    |
+240 |         .bind(h.timestamp.unix_timestamp_nanos() as i64)
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+240 |         .bind(i64::try_from(h.timestamp.unix_timestamp_nanos()))
+    |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:240:15
+    |
+240 |         .bind(h.timestamp.unix_timestamp_nanos() as i64)
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+240 |         .bind(i64::try_from(h.timestamp.unix_timestamp_nanos()))
+    |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:247:51
+    |
+247 |         .bind(h.deleted_at.map(|t: OffsetDateTime|t.unix_timestamp_nanos() as i64))
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+247 |         .bind(h.deleted_at.map(|t: OffsetDateTime|i64::try_from(t.unix_timestamp_nanos())))
+    |                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:247:51
+    |
+247 |         .bind(h.deleted_at.map(|t: OffsetDateTime|t.unix_timestamp_nanos() as i64))
+    |                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+247 |         .bind(h.deleted_at.map(|t: OffsetDateTime|i64::try_from(t.unix_timestamp_nanos())))
+    |                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:312:15
+    |
+312 |         .bind(from.unix_timestamp_nanos() as i64)
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+312 |         .bind(i64::try_from(from.unix_timestamp_nanos()))
+    |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:312:15
+    |
+312 |         .bind(from.unix_timestamp_nanos() as i64)
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+312 |         .bind(i64::try_from(from.unix_timestamp_nanos()))
+    |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:313:15
+    |
+313 |         .bind(to.unix_timestamp_nanos() as i64)
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+313 |         .bind(i64::try_from(to.unix_timestamp_nanos()))
+    |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:313:15
+    |
+313 |         .bind(to.unix_timestamp_nanos() as i64)
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+313 |         .bind(i64::try_from(to.unix_timestamp_nanos()))
+    |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:336:15
+    |
+336 |         .bind(timestamp.unix_timestamp_nanos() as i64)
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+336 |         .bind(i64::try_from(timestamp.unix_timestamp_nanos()))
+    |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:336:15
+    |
+336 |         .bind(timestamp.unix_timestamp_nanos() as i64)
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+336 |         .bind(i64::try_from(timestamp.unix_timestamp_nanos()))
+    |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: this function has too many lines (106/100)
+   --> atuin-client/src/database.rs:365:5
+    |
+365 | /     async fn search(
+366 | |         &self,
+367 | |         search_mode: SearchMode,
+368 | |         filter: FilterMode,
+...   |
+502 | |         Ok(ordering::reorder_fuzzy(search_mode, orig_query, res))
+503 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+
+warning: this function has too many lines (106/100)
+   --> atuin-client/src/database.rs:365:5
+    |
+365 | /     async fn search(
+366 | |         &self,
+367 | |         search_mode: SearchMode,
+368 | |         filter: FilterMode,
+...   |
+502 | |         Ok(ordering::reorder_fuzzy(search_mode, orig_query, res))
+503 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+
+warning: unnecessary boolean `not` operation
+   --> atuin-client/src/database.rs:432:25
+    |
+432 | /                         if !is_or {
+433 | |                             is_or = true;
+434 | |                             continue;
+435 | |                         } else {
+436 | |                             format!("{glob}|{glob}")
+437 | |                         }
+    | |_________________________^
+    |
+    = help: remove the `!` and swap the blocks of the `if`/`else`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_not_else
+    = note: `-W clippy::if-not-else` implied by `-W clippy::pedantic`
+
+warning: unnecessary boolean `not` operation
+   --> atuin-client/src/database.rs:432:25
+    |
+432 | /                         if !is_or {
+433 | |                             is_or = true;
+434 | |                             continue;
+435 | |                         } else {
+436 | |                             format!("{glob}|{glob}")
+437 | |                         }
+    | |_________________________^
+    |
+    = help: remove the `!` and swap the blocks of the `if`/`else`
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#if_not_else
+    = note: `-W clippy::if-not-else` implied by `-W clippy::pedantic`
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:480:53
+    |
+480 |                 sql.and_where_lt("timestamp", quote(before.unix_timestamp_nanos() as i64))
+    |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+480 |                 sql.and_where_lt("timestamp", quote(i64::try_from(before.unix_timestamp_nanos())))
+    |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:480:53
+    |
+480 |                 sql.and_where_lt("timestamp", quote(before.unix_timestamp_nanos() as i64))
+    |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+480 |                 sql.and_where_lt("timestamp", quote(i64::try_from(before.unix_timestamp_nanos())))
+    |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:490:78
+    |
+490 |             .map(|after: OffsetDateTime| sql.and_where_gt("timestamp", quote(after.unix_timestamp_nanos() as i64)))
+    |                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+490 |             .map(|after: OffsetDateTime| sql.and_where_gt("timestamp", quote(i64::try_from(after.unix_timestamp_nanos()))))
+    |                                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `i128` to `i64` may truncate the value
+   --> atuin-client/src/database.rs:490:78
+    |
+490 |             .map(|after: OffsetDateTime| sql.and_where_gt("timestamp", quote(after.unix_timestamp_nanos() as i64)))
+    |                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+    |
+490 |             .map(|after: OffsetDateTime| sql.and_where_gt("timestamp", quote(i64::try_from(after.unix_timestamp_nanos()))))
+    |                                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/encryption.rs:33:1
+   |
+33 | pub fn new_key(settings: &Settings) -> Result<Key> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/encryption.rs:33:1
+   |
+33 | pub fn new_key(settings: &Settings) -> Result<Key> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: very complex type used. Consider factoring parts into `type` definitions
+  --> atuin-client/src/encryption.rs:36:14
+   |
+36 | ...y: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = ...
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
+
+warning: very complex type used. Consider factoring parts into `type` definitions
+  --> atuin-client/src/encryption.rs:36:14
+   |
+36 | ...y: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = ...
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/encryption.rs:46:1
+   |
+46 | pub fn load_key(settings: &Settings) -> Result<Key> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/encryption.rs:46:1
+   |
+46 | pub fn load_key(settings: &Settings) -> Result<Key> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: very complex type used. Consider factoring parts into `type` definitions
+  --> atuin-client/src/encryption.rs:49:14
+   |
+49 | ...y: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = ...
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/encryption.rs:59:1
+   |
+59 | pub fn encode_key(key: &Key) -> Result<String> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: very complex type used. Consider factoring parts into `type` definitions
+  --> atuin-client/src/encryption.rs:49:14
+   |
+49 | ...y: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = ...
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/encryption.rs:59:1
+   |
+59 | pub fn encode_key(key: &Key) -> Result<String> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: casting `usize` to `u32` may truncate the value on targets with 64-bit wide pointers
+  --> atuin-client/src/encryption.rs:61:44
+   |
+61 |     rmp::encode::write_array_len(&mut buf, key.len() as u32)
+   |                                            ^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+   |
+61 |     rmp::encode::write_array_len(&mut buf, u32::try_from(key.len()))
+   |                                            ~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `usize` to `u32` may truncate the value on targets with 64-bit wide pointers
+  --> atuin-client/src/encryption.rs:61:44
+   |
+61 |     rmp::encode::write_array_len(&mut buf, key.len() as u32)
+   |                                            ^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+   |
+61 |     rmp::encode::write_array_len(&mut buf, u32::try_from(key.len()))
+   |                                            ~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `u8` to `u64` may become silently lossy if you later change the type
+  --> atuin-client/src/encryption.rs:64:43
+   |
+64 |         rmp::encode::write_uint(&mut buf, *b as u64)
+   |                                           ^^^^^^^^^ help: try: `u64::from(*b)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless
+
+warning: casting `u8` to `u64` may become silently lossy if you later change the type
+  --> atuin-client/src/encryption.rs:64:43
+   |
+64 |         rmp::encode::write_uint(&mut buf, *b as u64)
+   |                                           ^^^^^^^^^ help: try: `u64::from(*b)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_lossless
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/encryption.rs:72:1
+   |
+72 | pub fn decode_key(key: String) -> Result<Key> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: this argument is passed by value, but not consumed in the function body
+  --> atuin-client/src/encryption.rs:72:24
+   |
+72 | pub fn decode_key(key: String) -> Result<Key> {
+   |                        ^^^^^^ help: consider changing the type to: `&str`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_pass_by_value
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/encryption.rs:72:1
+   |
+72 | pub fn decode_key(key: String) -> Result<Key> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: this argument is passed by value, but not consumed in the function body
+  --> atuin-client/src/encryption.rs:72:24
+   |
+72 | pub fn decode_key(key: String) -> Result<Key> {
+   |                        ^^^^^^ help: consider changing the type to: `&str`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_pass_by_value
+
+warning: you seem to be trying to use `match` for destructuring a single pattern. Consider using `if let`
+   --> atuin-client/src/encryption.rs:81:5
+    |
+81  | /     match <[u8; 32]>::try_from(&*buf) {
+82  | |         Ok(key) => Ok(key.into()),
+83  | |         Err(_) => {
+84  | |             let mut bytes: Bytes<'_> = rmp::decode::Bytes::new(&buf);
+...   |
+106 | |         }
+107 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#single_match_else
+    = note: `-W clippy::single-match-else` implied by `-W clippy::pedantic`
+help: try this
+    |
+81  ~     if let Ok(key) = <[u8; 32]>::try_from(&*buf) { Ok(key.into()) } else {
+82  +         let mut bytes: Bytes<'_> = rmp::decode::Bytes::new(&buf);
+83  + 
+84  +         match Marker::from_u8(buf[0]) {
+85  +             Marker::Bin8 => {
+86  +                 let len: u32 = decode::read_bin_len(&mut bytes).map_err(|err: decode::ValueReadError<decode::bytes::BytesReadError>| eyre!("{err:?}"))?;
+87  +                 ensure!(len == 32, "encryption key is not the correct size");
+88  +                 let key: [u8; 32] = <[u8; 32]>::try_from(bytes.remaining_slice())
+89  +                     .context("could not decode encryption key")?;
+90  +                 Ok(key.into())
+91  +             }
+92  +             Marker::Array16 => {
+93  +                 let len: u32 = decode::read_array_len(&mut bytes).map_err(|err: decode::ValueReadError<decode::bytes::BytesReadError>| eyre!("{err:?}"))?;
+94  +                 ensure!(len == 32, "encryption key is not the correct size");
+95  + 
+96  +                 let mut key: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = Key::default();
+97  +                 for i in &mut key {
+98  +                     *i = rmp::decode::read_int(&mut bytes).map_err(|err: decode::NumValueReadError<decode::bytes::BytesReadError>| eyre!("{err:?}"))?;
+99  +                 }
+100 +                 Ok(key)
+101 +             }
+102 +             _ => bail!("could not decode encryption key"),
+103 +         }
+104 +     }
+    |
+
+warning: you seem to be trying to use `match` for destructuring a single pattern. Consider using `if let`
+   --> atuin-client/src/encryption.rs:81:5
+    |
+81  | /     match <[u8; 32]>::try_from(&*buf) {
+82  | |         Ok(key) => Ok(key.into()),
+83  | |         Err(_) => {
+84  | |             let mut bytes: Bytes<'_> = rmp::decode::Bytes::new(&buf);
+...   |
+106 | |         }
+107 | |     }
+    | |_____^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#single_match_else
+    = note: `-W clippy::single-match-else` implied by `-W clippy::pedantic`
+help: try this
+    |
+81  ~     if let Ok(key) = <[u8; 32]>::try_from(&*buf) { Ok(key.into()) } else {
+82  +         let mut bytes: Bytes<'_> = rmp::decode::Bytes::new(&buf);
+83  + 
+84  +         match Marker::from_u8(buf[0]) {
+85  +             Marker::Bin8 => {
+86  +                 let len: u32 = decode::read_bin_len(&mut bytes).map_err(|err: decode::ValueReadError<decode::bytes::BytesReadError>| eyre!("{err:?}"))?;
+87  +                 ensure!(len == 32, "encryption key is not the correct size");
+88  +                 let key: [u8; 32] = <[u8; 32]>::try_from(bytes.remaining_slice())
+89  +                     .context("could not decode encryption key")?;
+90  +                 Ok(key.into())
+91  +             }
+92  +             Marker::Array16 => {
+93  +                 let len: u32 = decode::read_array_len(&mut bytes).map_err(|err: decode::ValueReadError<decode::bytes::BytesReadError>| eyre!("{err:?}"))?;
+94  +                 ensure!(len == 32, "encryption key is not the correct size");
+95  + 
+96  +                 let mut key: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = Key::default();
+97  +                 for i in &mut key {
+98  +                     *i = rmp::decode::read_int(&mut bytes).map_err(|err: decode::NumValueReadError<decode::bytes::BytesReadError>| eyre!("{err:?}"))?;
+99  +                 }
+100 +                 Ok(key)
+101 +             }
+102 +             _ => bail!("could not decode encryption key"),
+103 +         }
+104 +     }
+    |
+
+warning: very complex type used. Consider factoring parts into `type` definitions
+  --> atuin-client/src/encryption.rs:98:34
+   |
+98 | ...y: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = ...
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
+
+warning: very complex type used. Consider factoring parts into `type` definitions
+  --> atuin-client/src/encryption.rs:98:34
+   |
+98 | ...y: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = ...
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/encryption.rs:110:1
+    |
+110 | pub fn encrypt(history: &History, key: &Key) -> Result<EncryptedHistory> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/encryption.rs:110:1
+    |
+110 | pub fn encrypt(history: &History, key: &Key) -> Result<EncryptedHistory> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: very complex type used. Consider factoring parts into `type` definitions
+   --> atuin-client/src/encryption.rs:114:16
+    |
+114 | ...e: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = ...
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
+
+warning: very complex type used. Consider factoring parts into `type` definitions
+   --> atuin-client/src/encryption.rs:114:16
+    |
+114 | ...e: generic_array::GenericArray<u8, generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UInt<generic_array::typenum::UTerm, generic_array::typenum::B1>, generic_array::typenum::B1>, generic_array::typenum::B0>, generic_array::typenum::B0>, generic_array::typenum::B0>> = ...
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#type_complexity
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/encryption.rs:125:1
+    |
+125 | pub fn decrypt(mut encrypted_history: EncryptedHistory, key: &Key) -> Result<History> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-client/src/history.rs:187:5
+    |
+187 |     pub fn success(&self) -> bool {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn success(&self) -> bool`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/encryption.rs:125:1
+    |
+125 | pub fn decrypt(mut encrypted_history: EncryptedHistory, key: &Key) -> Result<History> {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-client/src/history.rs:187:5
+    |
+187 |     pub fn success(&self) -> bool {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn success(&self) -> bool`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-client/src/history.rs:191:5
+    |
+191 |     pub fn should_save(&self, settings: &Settings) -> bool {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn should_save(&self, settings: &Settings) -> bool`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-client/src/history.rs:191:5
+    |
+191 |     pub fn should_save(&self, settings: &Settings) -> bool {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn should_save(&self, settings: &Settings) -> bool`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: casting `usize` to `i32` may truncate the value on targets with 64-bit wide pointers
+  --> atuin-client/src/import/bash.rs:68:53
+   |
+68 |             first_timestamp - timestamp_increment * commands_before_first_timestamp as i32;
+   |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+   |
+68 |             first_timestamp - timestamp_increment * i32::try_from(commands_before_first_timestamp);
+   |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `usize` to `i32` may truncate the value on targets with 64-bit wide pointers
+  --> atuin-client/src/import/bash.rs:68:53
+   |
+68 |             first_timestamp - timestamp_increment * commands_before_first_timestamp as i32;
+   |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: if this is intentional allow the lint with `#[allow(clippy::cast_possible_truncation)]` ...
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_truncation
+help: ... or use `try_from` and handle the error accordingly
+   |
+68 |             first_timestamp - timestamp_increment * i32::try_from(commands_before_first_timestamp);
+   |                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+warning: casting `usize` to `i32` may wrap around the value on targets with 32-bit wide pointers
+  --> atuin-client/src/import/bash.rs:68:53
+   |
+68 |             first_timestamp - timestamp_increment * commands_before_first_timestamp as i32;
+   |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_wrap
+   = note: `-W clippy::cast-possible-wrap` implied by `-W clippy::pedantic`
+
+warning: casting `usize` to `i32` may wrap around the value on targets with 32-bit wide pointers
+  --> atuin-client/src/import/bash.rs:68:53
+   |
+68 |             first_timestamp - timestamp_increment * commands_before_first_timestamp as i32;
+   |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_wrap
+   = note: `-W clippy::cast-possible-wrap` implied by `-W clippy::pedantic`
+
+warning: it is more concise to loop over containers instead of using explicit iteration methods
+  --> atuin-client/src/import/bash.rs:70:21
+   |
+70 |         for line in lines.into_iter() {
+   |                     ^^^^^^^^^^^^^^^^^ help: to write this more concisely, try: `lines`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#explicit_into_iter_loop
+   = note: `-W clippy::explicit-into-iter-loop` implied by `-W clippy::pedantic`
+
+warning: it is more concise to loop over containers instead of using explicit iteration methods
+  --> atuin-client/src/import/bash.rs:70:21
+   |
+70 |         for line in lines.into_iter() {
+   |                     ^^^^^^^^^^^^^^^^^ help: to write this more concisely, try: `lines`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#explicit_into_iter_loop
+   = note: `-W clippy::explicit-into-iter-loop` implied by `-W clippy::pedantic`
+
+warning: you should put bare URLs between `<`/`>` or make a proper Markdown link
+  --> atuin-client/src/import/fish.rs:20:9
+   |
+20 | /// see https://fishshell.com/docs/current/interactive.html#searchable-command-history
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#doc_markdown
+   = note: `-W clippy::doc-markdown` implied by `-W clippy::pedantic`
+
+warning: you should put bare URLs between `<`/`>` or make a proper Markdown link
+  --> atuin-client/src/import/fish.rs:20:9
+   |
+20 | /// see https://fishshell.com/docs/current/interactive.html#searchable-command-history
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#doc_markdown
+   = note: `-W clippy::doc-markdown` implied by `-W clippy::pedantic`
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/import/nu_histdb.rs:75:5
+   |
+75 |     pub fn histpath() -> Result<PathBuf> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: item name starts with its containing module's name
+  --> atuin-client/src/import/resh.rs:17:12
+   |
+17 | pub struct ReshEntry {
+   |            ^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#module_name_repetitions
+   = note: `-W clippy::module-name-repetitions` implied by `-W clippy::pedantic`
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/import/nu_histdb.rs:75:5
+   |
+75 |     pub fn histpath() -> Result<PathBuf> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: item name starts with its containing module's name
+  --> atuin-client/src/import/resh.rs:17:12
+   |
+17 | pub struct ReshEntry {
+   |            ^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#module_name_repetitions
+   = note: `-W clippy::module-name-repetitions` implied by `-W clippy::pedantic`
+
+warning: empty String is being created manually
+  --> atuin-client/src/import/zsh_histdb.rs:68:70
+   |
+68 |                     .unwrap_or_else(|_e: std::string::FromUtf8Error| String::from(""))
+   |                                                                      ^^^^^^^^^^^^^^^^ help: consider using: `String::new()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+
+warning: empty String is being created manually
+  --> atuin-client/src/import/zsh_histdb.rs:68:70
+   |
+68 |                     .unwrap_or_else(|_e: std::string::FromUtf8Error| String::from(""))
+   |                                                                      ^^^^^^^^^^^^^^^^ help: consider using: `String::new()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+
+warning: empty String is being created manually
+  --> atuin-client/src/import/zsh_histdb.rs:74:70
+   |
+74 |                     .unwrap_or_else(|_e: std::string::FromUtf8Error| String::from(""))
+   |                                                                      ^^^^^^^^^^^^^^^^ help: consider using: `String::new()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+
+warning: empty String is being created manually
+  --> atuin-client/src/import/zsh_histdb.rs:74:70
+   |
+74 |                     .unwrap_or_else(|_e: std::string::FromUtf8Error| String::from(""))
+   |                                                                      ^^^^^^^^^^^^^^^^ help: consider using: `String::new()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+
+warning: empty String is being created manually
+  --> atuin-client/src/import/zsh_histdb.rs:81:70
+   |
+81 |                     .unwrap_or_else(|_e: std::string::FromUtf8Error| String::from(""))
+   |                                                                      ^^^^^^^^^^^^^^^^ help: consider using: `String::new()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+
+warning: empty String is being created manually
+  --> atuin-client/src/import/zsh_histdb.rs:81:70
+   |
+81 |                     .unwrap_or_else(|_e: std::string::FromUtf8Error| String::from(""))
+   |                                                                      ^^^^^^^^^^^^^^^^ help: consider using: `String::new()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_string_new
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-client/src/import/zsh_histdb.rs:110:5
+    |
+110 |     pub fn histpath_candidate() -> PathBuf {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn histpath_candidate() -> PathBuf`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-client/src/import/zsh_histdb.rs:110:5
+    |
+110 |     pub fn histpath_candidate() -> PathBuf {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn histpath_candidate() -> PathBuf`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/import/zsh_histdb.rs:110:5
+    |
+110 |     pub fn histpath_candidate() -> PathBuf {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> atuin-client/src/import/zsh_histdb.rs:116:35
+    |
+116 |         let user_dirs: UserDirs = UserDirs::new().unwrap(); // should catch error here?
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/import/zsh_histdb.rs:110:5
+    |
+110 |     pub fn histpath_candidate() -> PathBuf {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> atuin-client/src/import/zsh_histdb.rs:116:35
+    |
+116 |         let user_dirs: UserDirs = UserDirs::new().unwrap(); // should catch error here?
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: called `map(<f>).unwrap_or_else(<g>)` on a `Result` value. This can be done more directly by calling `.map_or_else(<g>, <f>)` instead
+   --> atuin-client/src/import/zsh_histdb.rs:118:9
+    |
+118 | /         std::env::var("HISTDB_FILE")
+119 | |             .as_ref()
+120 | |             .map(|x: &String| Path::new(x).to_path_buf())
+121 | |             .unwrap_or_else(|_err: &std::env::VarError| home_dir.join(".histdb/zsh-history.db"))
+    | |________________________________________________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#map_unwrap_or
+    = note: `-W clippy::map-unwrap-or` implied by `-W clippy::pedantic`
+help: try this
+    |
+118 ~         std::env::var("HISTDB_FILE")
+119 +             .as_ref().map_or_else(|_err: &std::env::VarError| home_dir.join(".histdb/zsh-history.db"), |x: &String| Path::new(x).to_path_buf())
+    |
+
+warning: called `map(<f>).unwrap_or_else(<g>)` on a `Result` value. This can be done more directly by calling `.map_or_else(<g>, <f>)` instead
+   --> atuin-client/src/import/zsh_histdb.rs:118:9
+    |
+118 | /         std::env::var("HISTDB_FILE")
+119 | |             .as_ref()
+120 | |             .map(|x: &String| Path::new(x).to_path_buf())
+121 | |             .unwrap_or_else(|_err: &std::env::VarError| home_dir.join(".histdb/zsh-history.db"))
+    | |________________________________________________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#map_unwrap_or
+    = note: `-W clippy::map-unwrap-or` implied by `-W clippy::pedantic`
+help: try this
+    |
+118 ~         std::env::var("HISTDB_FILE")
+119 +             .as_ref().map_or_else(|_err: &std::env::VarError| home_dir.join(".histdb/zsh-history.db"), |x: &String| Path::new(x).to_path_buf())
+    |
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/import/zsh_histdb.rs:123:5
+    |
+123 |     pub fn histpath() -> Result<PathBuf> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: item name starts with its containing module's name
+  --> atuin-client/src/kv.rs:15:12
+   |
+15 | pub struct KvRecord {
+   |            ^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#module_name_repetitions
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/import/zsh_histdb.rs:123:5
+    |
+123 |     pub fn histpath() -> Result<PathBuf> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: item name starts with its containing module's name
+  --> atuin-client/src/kv.rs:15:12
+   |
+15 | pub struct KvRecord {
+   |            ^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#module_name_repetitions
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/kv.rs:22:5
+   |
+22 |     pub fn serialize(&self) -> Result<DecryptedData> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/kv.rs:22:5
+   |
+22 |     pub fn serialize(&self) -> Result<DecryptedData> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/kv.rs:37:5
+   |
+37 |     pub fn deserialize(data: &DecryptedData, version: &str) -> Result<Self> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: item name starts with its containing module's name
+  --> atuin-client/src/kv.rs:76:12
+   |
+76 | pub struct KvStore;
+   |            ^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#module_name_repetitions
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/kv.rs:37:5
+   |
+37 |     pub fn deserialize(data: &DecryptedData, version: &str) -> Result<Self> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: item name starts with its containing module's name
+  --> atuin-client/src/kv.rs:76:12
+   |
+76 | pub struct KvStore;
+   |            ^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#module_name_repetitions
+
+warning: this method could have a `#[must_use]` attribute
+  --> atuin-client/src/kv.rs:86:5
+   |
+86 |     pub fn new() -> KvStore {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn new() -> KvStore`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this method could have a `#[must_use]` attribute
+  --> atuin-client/src/kv.rs:86:5
+   |
+86 |     pub fn new() -> KvStore {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn new() -> KvStore`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/kv.rs:90:5
+   |
+90 | /     pub async fn set(
+91 | |         &self,
+92 | |         store: &mut (impl Store + Send + Sync),
+93 | |         encryption_key: &[u8; 32],
+...  |
+97 | |         value: &str,
+98 | |     ) -> Result<()> {
+   | |___________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/kv.rs:90:5
+   |
+90 | /     pub async fn set(
+91 | |         &self,
+92 | |         store: &mut (impl Store + Send + Sync),
+93 | |         encryption_key: &[u8; 32],
+...  |
+97 | |         value: &str,
+98 | |     ) -> Result<()> {
+   | |___________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/kv.rs:133:5
+    |
+133 | /     pub async fn get(
+134 | |         &self,
+135 | |         store: &impl Store,
+136 | |         encryption_key: &[u8; 32],
+137 | |         namespace: &str,
+138 | |         key: &str,
+139 | |     ) -> Result<Option<KvRecord>> {
+    | |_________________________________^
+    |
+note: first possible panic found here
+   --> atuin-client/src/kv.rs:155:93
+    |
+155 | ... = tails.iter().max_by_key(|r: &&atuin_common::record::Record<atuin_common::record::EncryptedData>| r.timestamp).unwrap().cl...
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/kv.rs:133:5
+    |
+133 | /     pub async fn get(
+134 | |         &self,
+135 | |         store: &impl Store,
+136 | |         encryption_key: &[u8; 32],
+137 | |         namespace: &str,
+138 | |         key: &str,
+139 | |     ) -> Result<Option<KvRecord>> {
+    | |_________________________________^
+    |
+note: first possible panic found here
+   --> atuin-client/src/kv.rs:155:93
+    |
+155 | ... = tails.iter().max_by_key(|r: &&atuin_common::record::Record<atuin_common::record::EncryptedData>| r.timestamp).unwrap().cl...
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/kv.rs:133:5
+    |
+133 | /     pub async fn get(
+134 | |         &self,
+135 | |         store: &impl Store,
+136 | |         encryption_key: &[u8; 32],
+137 | |         namespace: &str,
+138 | |         key: &str,
+139 | |     ) -> Result<Option<KvRecord>> {
+    | |_________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/kv.rs:133:5
+    |
+133 | /     pub async fn get(
+134 | |         &self,
+135 | |         store: &impl Store,
+136 | |         encryption_key: &[u8; 32],
+137 | |         namespace: &str,
+138 | |         key: &str,
+139 | |     ) -> Result<Option<KvRecord>> {
+    | |_________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/kv.rs:183:5
+    |
+183 | /     pub async fn build_kv(
+184 | |         &self,
+185 | |         store: &impl Store,
+186 | |         encryption_key: &[u8; 32],
+187 | |     ) -> Result<BTreeMap<String, BTreeMap<String, String>>> {
+    | |___________________________________________________________^
+    |
+note: first possible panic found here
+   --> atuin-client/src/kv.rs:195:93
+    |
+195 | ... = tails.iter().max_by_key(|r: &&atuin_common::record::Record<atuin_common::record::EncryptedData>| r.timestamp).unwrap().cl...
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/kv.rs:183:5
+    |
+183 | /     pub async fn build_kv(
+184 | |         &self,
+185 | |         store: &impl Store,
+186 | |         encryption_key: &[u8; 32],
+187 | |     ) -> Result<BTreeMap<String, BTreeMap<String, String>>> {
+    | |___________________________________________________________^
+    |
+note: first possible panic found here
+   --> atuin-client/src/kv.rs:195:93
+    |
+195 | ... = tails.iter().max_by_key(|r: &&atuin_common::record::Record<atuin_common::record::EncryptedData>| r.timestamp).unwrap().cl...
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/kv.rs:183:5
+    |
+183 | /     pub async fn build_kv(
+184 | |         &self,
+185 | |         store: &impl Store,
+186 | |         encryption_key: &[u8; 32],
+187 | |     ) -> Result<BTreeMap<String, BTreeMap<String, String>>> {
+    | |___________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/kv.rs:183:5
+    |
+183 | /     pub async fn build_kv(
+184 | |         &self,
+185 | |         store: &impl Store,
+186 | |         encryption_key: &[u8; 32],
+187 | |     ) -> Result<BTreeMap<String, BTreeMap<String, String>>> {
+    | |___________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: this function could have a `#[must_use]` attribute
+ --> atuin-client/src/ordering.rs:5:1
+  |
+5 | pub fn reorder_fuzzy(mode: SearchMode, query: &str, res: Vec<History>) -> Vec<History> {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn reorder_fuzzy(mode: SearchMode, query: &str, res: Vec<History>) -> Vec<History>`
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this function could have a `#[must_use]` attribute
+ --> atuin-client/src/ordering.rs:5:1
+  |
+5 | pub fn reorder_fuzzy(mode: SearchMode, query: &str, res: Vec<History>) -> Vec<History> {
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn reorder_fuzzy(mode: SearchMode, query: &str, res: Vec<History>) -> Vec<History>`
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this argument is passed by value, but not consumed in the function body
+  --> atuin-client/src/ordering.rs:12:42
+   |
+12 | fn reorder<F, A>(query: &str, f: F, res: Vec<A>) -> Vec<A>
+   |                                          ^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_pass_by_value
+help: consider changing the type to
+   |
+12 | fn reorder<F, A>(query: &str, f: F, res: &[A]) -> Vec<A>
+   |                                          ~~~~
+help: change `res.clone()` to
+   |
+17 |     let mut r: Vec<A> = res.to_owned();
+   |                         ~~~~~~~~~~~~~~
+
+warning: this argument is passed by value, but not consumed in the function body
+  --> atuin-client/src/ordering.rs:12:42
+   |
+12 | fn reorder<F, A>(query: &str, f: F, res: Vec<A>) -> Vec<A>
+   |                                          ^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_pass_by_value
+help: consider changing the type to
+   |
+12 | fn reorder<F, A>(query: &str, f: F, res: &[A]) -> Vec<A>
+   |                                          ~~~~
+help: change `res.clone()` to
+   |
+17 |     let mut r: Vec<A> = res.to_owned();
+   |                         ~~~~~~~~~~~~~~
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> atuin-client/src/record/encryption.rs:117:33
+    |
+117 |     fn decrypt_cek(wrapped_cek: String, key: &[u8; 32]) -> Result<Key<V4, Local>> {
+    |                                 ^^^^^^ help: consider changing the type to: `&str`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_pass_by_value
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> atuin-client/src/record/encryption.rs:117:33
+    |
+117 |     fn decrypt_cek(wrapped_cek: String, key: &[u8; 32]) -> Result<Key<V4, Local>> {
+    |                                 ^^^^^^ help: consider changing the type to: `&str`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_pass_by_value
+
+warning: docs for function which may panic missing `# Panics` section
+  --> atuin-client/src/record/sqlite_store.rs:27:5
+   |
+27 |     pub async fn new(path: impl AsRef<Path>) -> Result<Self> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: first possible panic found here
+  --> atuin-client/src/record/sqlite_store.rs:39:73
+   |
+39 |         let opts: SqliteConnectOptions = SqliteConnectOptions::from_str(path.as_os_str().to_str().unwrap())?
+   |                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: docs for function which may panic missing `# Panics` section
+  --> atuin-client/src/record/sqlite_store.rs:27:5
+   |
+27 |     pub async fn new(path: impl AsRef<Path>) -> Result<Self> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: first possible panic found here
+  --> atuin-client/src/record/sqlite_store.rs:39:73
+   |
+39 |         let opts: SqliteConnectOptions = SqliteConnectOptions::from_str(path.as_os_str().to_str().unwrap())?
+   |                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/record/sqlite_store.rs:27:5
+   |
+27 |     pub async fn new(path: impl AsRef<Path>) -> Result<Self> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/record/sqlite_store.rs:27:5
+   |
+27 |     pub async fn new(path: impl AsRef<Path>) -> Result<Self> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: casting `u64` to `i64` may wrap around the value
+  --> atuin-client/src/record/sqlite_store.rs:70:15
+   |
+70 |         .bind(r.timestamp as i64)
+   |               ^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_wrap
+
+warning: casting `u64` to `i64` may wrap around the value
+  --> atuin-client/src/record/sqlite_store.rs:70:15
+   |
+70 |         .bind(r.timestamp as i64)
+   |               ^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_wrap
+
+warning: this argument is passed by value, but not consumed in the function body
+  --> atuin-client/src/record/sqlite_store.rs:81:23
+   |
+81 |     fn query_row(row: SqliteRow) -> Record<EncryptedData> {
+   |                       ^^^^^^^^^ help: consider taking a reference instead: `&SqliteRow`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_pass_by_value
+
+warning: casting `i64` to `u64` may lose the sign of the value
+  --> atuin-client/src/record/sqlite_store.rs:96:24
+   |
+96 |             timestamp: timestamp as u64,
+   |                        ^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_sign_loss
+   = note: `-W clippy::cast-sign-loss` implied by `-W clippy::pedantic`
+
+warning: this argument is passed by value, but not consumed in the function body
+  --> atuin-client/src/record/sqlite_store.rs:81:23
+   |
+81 |     fn query_row(row: SqliteRow) -> Record<EncryptedData> {
+   |                       ^^^^^^^^^ help: consider taking a reference instead: `&SqliteRow`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_pass_by_value
+
+warning: casting `i64` to `u64` may lose the sign of the value
+  --> atuin-client/src/record/sqlite_store.rs:96:24
+   |
+96 |             timestamp: timestamp as u64,
+   |                        ^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_sign_loss
+   = note: `-W clippy::cast-sign-loss` implied by `-W clippy::pedantic`
+
+warning: casting `i64` to `u64` may lose the sign of the value
+   --> atuin-client/src/record/sqlite_store.rs:142:12
+    |
+142 |         Ok(res.0 as u64)
+    |            ^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_sign_loss
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/record/sync.rs:24:1
+   |
+24 | pub async fn diff(settings: &Settings, store: &mut impl Store) -> Result<(Vec<Diff>, RecordIndex)> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: casting `i64` to `u64` may lose the sign of the value
+   --> atuin-client/src/record/sqlite_store.rs:142:12
+    |
+142 |         Ok(res.0 as u64)
+    |            ^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_sign_loss
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/record/sync.rs:24:1
+   |
+24 | pub async fn diff(settings: &Settings, store: &mut impl Store) -> Result<(Vec<Diff>, RecordIndex)> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/record/sync.rs:44:1
+   |
+44 | pub async fn operations(diffs: Vec<Diff>, store: &impl Store) -> Result<Vec<Operation>> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+  --> atuin-client/src/record/sync.rs:44:1
+   |
+44 | pub async fn operations(diffs: Vec<Diff>, store: &impl Store) -> Result<Vec<Operation>> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: casting `u64` to `i64` may wrap around the value
+   --> atuin-client/src/record/sync.rs:217:8
+    |
+217 |     Ok(total as i64)
+    |        ^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_wrap
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/record/sync.rs:220:1
+    |
+220 | / pub async fn sync_remote(
+221 | |     operations: Vec<Operation>,
+222 | |     remote_index: &RecordIndex,
+223 | |     local_store: &mut impl Store,
+224 | |     settings: &Settings,
+225 | | ) -> Result<(i64, i64)> {
+    | |_______________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+warning: casting `u64` to `i64` may wrap around the value
+   --> atuin-client/src/record/sync.rs:217:8
+    |
+217 |     Ok(total as i64)
+    |        ^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#cast_possible_wrap
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/record/sync.rs:220:1
+    |
+220 | / pub async fn sync_remote(
+221 | |     operations: Vec<Operation>,
+222 | |     remote_index: &RecordIndex,
+223 | |     local_store: &mut impl Store,
+224 | |     settings: &Settings,
+225 | | ) -> Result<(i64, i64)> {
+    | |_______________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: item name starts with its containing module's name
+   --> atuin-client/src/record/sync.rs:220:14
+    |
+220 | pub async fn sync_remote(
+    |              ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#module_name_repetitions
+
+
+warning: item name starts with its containing module's name
+   --> atuin-client/src/record/sync.rs:220:14
+    |
+220 | pub async fn sync_remote(
+    |              ^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#module_name_repetitions
+
+warning: consider adding a `;` to the last statement for consistent formatting
+   --> atuin-client/src/record/sync.rs:240:17
+    |
+240 | /                 uploaded +=
+241 | |                     sync_upload(local_store, remote_index, &client, (host, tag, tail)).await?
+    | |_____________________________________________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#semicolon_if_nothing_returned
+    = note: `-W clippy::semicolon-if-nothing-returned` implied by `-W clippy::pedantic`
+help: add a `;` here
+    |
+240 ~                 uploaded +=
+241 +                     sync_upload(local_store, remote_index, &client, (host, tag, tail)).await?;
+    |
+
+warning: consider adding a `;` to the last statement for consistent formatting
+   --> atuin-client/src/record/sync.rs:240:17
+    |
+240 | /                 uploaded +=
+241 | |                     sync_upload(local_store, remote_index, &client, (host, tag, tail)).await?
+    | |_____________________________________________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#semicolon_if_nothing_returned
+    = note: `-W clippy::semicolon-if-nothing-returned` implied by `-W clippy::pedantic`
+help: add a `;` here
+    |
+240 ~                 uploaded +=
+241 +                     sync_upload(local_store, remote_index, &client, (host, tag, tail)).await?;
+    |
+
+warning: consider adding a `;` to the last statement for consistent formatting
+   --> atuin-client/src/record/sync.rs:244:17
+    |
+244 | /                 downloaded +=
+245 | |                     sync_download(local_store, remote_index, &client, (host, tag, tail)).await?
+    | |_______________________________________________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#semicolon_if_nothing_returned
+help: add a `;` here
+    |
+244 ~                 downloaded +=
+245 +                     sync_download(local_store, remote_index, &client, (host, tag, tail)).await?;
+    |
+
+warning: consider adding a `;` to the last statement for consistent formatting
+   --> atuin-client/src/record/sync.rs:244:17
+    |
+244 | /                 downloaded +=
+245 | |                     sync_download(local_store, remote_index, &client, (host, tag, tail)).await?
+    | |_______________________________________________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#semicolon_if_nothing_returned
+help: add a `;` here
+    |
+244 ~                 downloaded +=
+245 +                     sync_download(local_store, remote_index, &client, (host, tag, tail)).await?;
+    |
+
+warning: this method could have a `#[must_use]` attribute
+  --> atuin-client/src/settings.rs:46:5
+   |
+46 |     pub fn as_str(&self) -> &'static str {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn as_str(&self) -> &'static str`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this method could have a `#[must_use]` attribute
+  --> atuin-client/src/settings.rs:46:5
+   |
+46 |     pub fn as_str(&self) -> &'static str {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn as_str(&self) -> &'static str`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this method could have a `#[must_use]` attribute
+  --> atuin-client/src/settings.rs:54:5
+   |
+54 |     pub fn next(&self, settings: &Settings) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn next(&self, settings: &Settings) -> Self`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this method could have a `#[must_use]` attribute
+  --> atuin-client/src/settings.rs:54:5
+   |
+54 |     pub fn next(&self, settings: &Settings) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn next(&self, settings: &Settings) -> Self`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: missing `#[must_use]` attribute on a method returning `Self`
+  --> atuin-client/src/settings.rs:54:5
+   |
+54 | /     pub fn next(&self, settings: &Settings) -> Self {
+55 | |         match self {
+56 | |             SearchMode::Prefix => SearchMode::FullText,
+57 | |             // if the user is using skim, we go to skim
+...  |
+62 | |         }
+63 | |     }
+   | |_____^
+   |
+   = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#return_self_not_must_use
+   = note: `-W clippy::return-self-not-must-use` implied by `-W clippy::pedantic`
+
+warning: missing `#[must_use]` attribute on a method returning `Self`
+  --> atuin-client/src/settings.rs:54:5
+   |
+54 | /     pub fn next(&self, settings: &Settings) -> Self {
+55 | |         match self {
+56 | |             SearchMode::Prefix => SearchMode::FullText,
+57 | |             // if the user is using skim, we go to skim
+...  |
+62 | |         }
+63 | |     }
+   | |_____^
+   |
+   = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#return_self_not_must_use
+   = note: `-W clippy::return-self-not-must-use` implied by `-W clippy::pedantic`
+
+warning: this method could have a `#[must_use]` attribute
+  --> atuin-client/src/settings.rs:85:5
+   |
+85 |     pub fn as_str(&self) -> &'static str {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn as_str(&self) -> &'static str`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this method could have a `#[must_use]` attribute
+  --> atuin-client/src/settings.rs:85:5
+   |
+85 |     pub fn as_str(&self) -> &'static str {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn as_str(&self) -> &'static str`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: more than 3 bools in a struct
+   --> atuin-client/src/settings.rs:147:1
+    |
+147 | / pub struct Settings {
+148 | |     pub dialect: Dialect,
+149 | |     pub style: Style,
+150 | |     pub auto_sync: bool,
+...   |
+186 | |     pub session_token: String,
+187 | | }
+    | |_^
+    |
+    = help: consider using a state machine or refactoring bools into two-variant enums
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#struct_excessive_bools
+    = note: `-W clippy::struct-excessive-bools` implied by `-W clippy::pedantic`
+
+warning: more than 3 bools in a struct
+   --> atuin-client/src/settings.rs:147:1
+    |
+147 | / pub struct Settings {
+148 | |     pub dialect: Dialect,
+149 | |     pub style: Style,
+150 | |     pub auto_sync: bool,
+...   |
+186 | |     pub session_token: String,
+187 | | }
+    | |_^
+    |
+    = help: consider using a state machine or refactoring bools into two-variant enums
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#struct_excessive_bools
+    = note: `-W clippy::struct-excessive-bools` implied by `-W clippy::pedantic`
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:234:5
+    |
+234 |     pub fn save_sync_time() -> Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:234:5
+    |
+234 |     pub fn save_sync_time() -> Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:238:5
+    |
+238 |     pub fn save_version_check_time() -> Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:238:5
+    |
+238 |     pub fn save_version_check_time() -> Result<()> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:242:5
+    |
+242 |     pub fn last_sync() -> Result<OffsetDateTime> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:246:5
+    |
+246 |     pub fn last_version_check() -> Result<OffsetDateTime> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:242:5
+    |
+242 |     pub fn last_sync() -> Result<OffsetDateTime> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:246:5
+    |
+246 |     pub fn last_version_check() -> Result<OffsetDateTime> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-client/src/settings.rs:250:5
+    |
+250 |     pub fn host_id() -> Option<HostId> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn host_id() -> Option<HostId>`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-client/src/settings.rs:250:5
+    |
+250 |     pub fn host_id() -> Option<HostId> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn host_id() -> Option<HostId>`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/settings.rs:267:5
+    |
+267 |     pub fn should_sync(&self) -> Result<bool> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> atuin-client/src/settings.rs:274:41
+    |
+274 |                 let d: time::Duration = time::Duration::try_from(d).unwrap();
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:267:5
+    |
+267 |     pub fn should_sync(&self) -> Result<bool> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/settings.rs:267:5
+    |
+267 |     pub fn should_sync(&self) -> Result<bool> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> atuin-client/src/settings.rs:274:41
+    |
+274 |                 let d: time::Duration = time::Duration::try_from(d).unwrap();
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:267:5
+    |
+267 |     pub fn should_sync(&self) -> Result<bool> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: unused `self` argument
+   --> atuin-client/src/settings.rs:281:27
+    |
+281 |     fn needs_update_check(&self) -> Result<bool> {
+    |                           ^^^^^
+    |
+    = help: consider refactoring to an associated function
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unused_self
+    = note: `-W clippy::unused-self` implied by `-W clippy::pedantic`
+
+warning: unused `self` argument
+   --> atuin-client/src/settings.rs:281:27
+    |
+281 |     fn needs_update_check(&self) -> Result<bool> {
+    |                           ^^^^^
+    |
+    = help: consider refactoring to an associated function
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#unused_self
+    = note: `-W clippy::unused-self` implied by `-W clippy::pedantic`
+
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/settings.rs:319:5
+    |
+319 |     pub async fn needs_update(&self) -> Option<Version> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> atuin-client/src/settings.rs:333:31
+    |
+333 |         let latest: Version = latest.unwrap();
+    |                               ^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:342:5
+    |
+342 |     pub fn builder() -> Result<ConfigBuilder<DefaultState>> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/settings.rs:319:5
+    |
+319 |     pub async fn needs_update(&self) -> Option<Version> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> atuin-client/src/settings.rs:333:31
+    |
+333 |         let latest: Version = latest.unwrap();
+    |                               ^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:342:5
+    |
+342 |     pub fn builder() -> Result<ConfigBuilder<DefaultState>> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/settings.rs:395:5
+    |
+395 |     pub fn new() -> Result<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> atuin-client/src/settings.rs:418:17
+    |
+418 |                 config_file.to_str().unwrap(),
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: docs for function which may panic missing `# Panics` section
+   --> atuin-client/src/settings.rs:395:5
+    |
+395 |     pub fn new() -> Result<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> atuin-client/src/settings.rs:418:17
+    |
+418 |                 config_file.to_str().unwrap(),
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_panics_doc
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:395:5
+    |
+395 |     pub fn new() -> Result<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-client/src/settings.rs:458:5
+    |
+458 |     pub fn example_config() -> &'static str {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn example_config() -> &'static str`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: docs for function returning `Result` missing `# Errors` section
+   --> atuin-client/src/settings.rs:395:5
+    |
+395 |     pub fn new() -> Result<Self> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#missing_errors_doc
+
+warning: this method could have a `#[must_use]` attribute
+   --> atuin-client/src/settings.rs:458:5
+    |
+458 |     pub fn example_config() -> &'static str {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add the attribute: `#[must_use] pub fn example_config() -> &'static str`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#must_use_candidate
+
+warning: `atuin-client` (lib) generated 112 warnings (run `cargo clippy --fix --lib -p atuin-client` to apply 24 suggestions)warning: `atuin-client` (lib) generated 112 warnings (run `cargo clippy --fix --lib -p atuin-client` to apply 24 suggestions)
+
+        Finished dev [unoptimized + debuginfo] target(s) in 0.39s
+Finished dev [unoptimized + debuginfo] target(s) in 0.39s
