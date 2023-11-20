@@ -96,7 +96,7 @@ pub trait Database: Send + Sync + 'static {
     // Yes I know, it's a lot.
     // Could maybe break it down to a searchparams struct or smth but that feels a little... pointless.
     // Been debating maybe a DSL for search? eg "before:time limit:1 the query"
-    #[allow(clippy::too_many_arguments)]
+    // #[allow(clippy::too_many_arguments)]
     async fn search(
         &self,
         search_mode: SearchMode,

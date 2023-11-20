@@ -80,7 +80,7 @@ async fn fuzzy_search(
             FilterMode::Workspace if history.cwd.split(':').contains(&git_root) => {}
             _ => continue,
         }
-        #[allow(clippy::cast_lossless, clippy::cast_precision_loss)]
+        // #[allow(clippy::cast_lossless, clippy::cast_precision_loss)]
         if let Some((score, indices)) = engine.fuzzy_indices(&history.command, query) {
             let begin = indices.first().copied().unwrap_or_default();
 

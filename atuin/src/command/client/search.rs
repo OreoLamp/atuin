@@ -18,7 +18,7 @@ mod history_list;
 mod interactive;
 pub use duration::{format_duration, format_duration_into};
 
-#[allow(clippy::struct_excessive_bools)]
+// #[allow(clippy::struct_excessive_bools)]
 #[derive(Parser, Debug)]
 pub struct Cmd {
     /// Filter search result by directory
@@ -183,7 +183,8 @@ impl Cmd {
 
 // This is supposed to more-or-less mirror the command line version, so ofc
 // it is going to have a lot of args
-#[allow(clippy::too_many_arguments, clippy::cast_possible_truncation)]
+// Oreo: Lol it doesn't even complain about this
+// #[allow(clippy::too_many_arguments, clippy::cast_possible_truncation)]
 async fn run_non_interactive(
     settings: &Settings,
     filter_options: OptFilters,

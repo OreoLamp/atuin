@@ -118,7 +118,7 @@ struct DrawState<'a> {
 }
 
 // longest line prefix I could come up with
-#[allow(clippy::cast_possible_truncation)] // we know that this is <65536 length
+// #[allow(clippy::cast_possible_truncation)] // we know that this is <65536 length
 pub const PREFIX_LENGTH: u16 = " > 123ms 59s ago".len() as u16;
 
 impl DrawState<'_> {
@@ -143,7 +143,7 @@ impl DrawState<'_> {
         self.draw(&format_duration(duration), status);
     }
 
-    #[allow(clippy::cast_possible_truncation)] // we know that time.len() will be <6
+    // #[allow(clippy::cast_possible_truncation)] // we know that time.len() will be <6
     fn time(&mut self, h: &History) {
         let style: Style = Style::default().fg(Color::Blue);
 

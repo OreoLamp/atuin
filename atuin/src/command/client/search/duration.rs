@@ -1,7 +1,7 @@
 use core::fmt;
 use std::{ops::ControlFlow, time::Duration};
 
-#[allow(clippy::module_name_repetitions)]
+// #[allow(clippy::module_name_repetitions)]
 pub fn format_duration_into(dur: Duration, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     fn item(unit: &'static str, value: u64) -> ControlFlow<(&'static str, u64)> {
         if value > 0 {
@@ -50,7 +50,7 @@ pub fn format_duration_into(dur: Duration, f: &mut fmt::Formatter<'_>) -> fmt::R
     }
 }
 
-#[allow(clippy::module_name_repetitions)]
+// #[allow(clippy::module_name_repetitions)]
 pub fn format_duration(f: Duration) -> String {
     struct F(Duration);
     impl fmt::Display for F {

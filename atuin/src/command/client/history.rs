@@ -103,7 +103,7 @@ impl ListMode {
     }
 }
 
-#[allow(clippy::cast_sign_loss)]
+// #[allow(clippy::cast_sign_loss)]
 pub fn print_list(
     h: &[History],
     list_mode: ListMode,
@@ -190,7 +190,7 @@ static TIME_FMT: &[time::format_description::FormatItem<'static>] =
 
 /// defines how to format the history
 impl FormatKey for FmtHistory<'_> {
-    #[allow(clippy::cast_sign_loss)]
+    // #[allow(clippy::cast_sign_loss)]
     fn fmt(&self, key: &str, f: &mut fmt::Formatter<'_>) -> Result<(), FormatKeyError> {
         match key {
             "command" => f.write_str(self.0.command.trim())?,
@@ -237,7 +237,7 @@ fn parse_fmt(format: &str) -> ParsedFmt {
 }
 
 impl Cmd {
-    #[allow(clippy::too_many_lines, clippy::cast_possible_truncation)]
+    // #[allow(clippy::too_many_lines, clippy::cast_possible_truncation)]
     async fn handle_start(
         db: &impl Database,
         settings: &Settings,
@@ -310,8 +310,9 @@ impl Cmd {
         Ok(())
     }
 
-    #[allow(clippy::too_many_arguments)]
-    #[allow(clippy::fn_params_excessive_bools)]
+    // TODO: Refactor to use more sane arguments
+    // #[allow(clippy::too_many_arguments)]
+    // #[allow(clippy::fn_params_excessive_bools)]
     async fn handle_list(
         db: &impl Database,
         settings: &Settings,

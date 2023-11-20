@@ -111,8 +111,10 @@ impl State {
         None
     }
 
-    #[allow(clippy::too_many_lines)]
-    #[allow(clippy::cognitive_complexity)]
+
+    // TODO: Implement in a sane way, wtf lol
+    // #[allow(clippy::too_many_lines)]
+    // #[allow(clippy::cognitive_complexity)]
     fn handle_key_input(&mut self, settings: &Settings, input: &KeyEvent) -> Option<usize> {
         if input.kind == event::KeyEventKind::Release {
             return None;
@@ -312,8 +314,8 @@ impl State {
         self.results_state.select(i.min(self.results_len - 1));
     }
 
-    #[allow(clippy::cast_possible_truncation)]
-    #[allow(clippy::bool_to_int_with_if)]
+    // #[allow(clippy::cast_possible_truncation)]
+    // #[allow(clippy::bool_to_int_with_if)]
     fn draw(&mut self, f: &mut Frame, results: &[History], settings: &Settings) {
         let compact: bool = match settings.style {
             atuin_client::settings::Style::Auto => f.size().height < 14,
@@ -437,7 +439,7 @@ impl State {
         title
     }
 
-    #[allow(clippy::unused_self)]
+    // #[allow(clippy::unused_self)]
     fn build_help(&mut self) -> Paragraph {
         let help: Paragraph<'_> = Paragraph::new(Text::from(Line::from(vec![
             Span::styled("Esc", Style::default().add_modifier(Modifier::BOLD)),
@@ -599,7 +601,7 @@ impl Write for Stdout {
 // this is a big blob of horrible! clean it up!
 // for now, it works. But it'd be great if it were more easily readable, and
 // modular. I'd like to add some more stats and stuff at some point
-#[allow(clippy::cast_possible_truncation, clippy::too_many_lines)]
+// #[allow(clippy::cast_possible_truncation, clippy::too_many_lines)]
 pub async fn history(
     query: &[String],
     settings: &Settings,

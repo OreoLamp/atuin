@@ -46,7 +46,8 @@ pub struct History {
 }
 
 impl History {
-    #[allow(clippy::too_many_arguments)]
+    // #[allow(clippy::too_many_arguments)]
+    // TODO: Refactor, take less parameters, be more informative about them
     fn new(
         timestamp: OffsetDateTime,
         command: String,

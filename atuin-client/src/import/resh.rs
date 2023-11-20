@@ -104,15 +104,15 @@ impl Importer for Resh {
                 Err(_) => continue, // skip invalid json :shrug:
             };
 
-            #[allow(clippy::cast_possible_truncation)]
-            #[allow(clippy::cast_sign_loss)]
+            // #[allow(clippy::cast_possible_truncation)]
+            // #[allow(clippy::cast_sign_loss)]
             let timestamp: OffsetDateTime = {
                 let secs: i64 = entry.realtime_before.floor() as i64;
                 let nanosecs: i64 = (entry.realtime_before.fract() * 1_000_000_000_f64).round() as i64;
                 OffsetDateTime::from_unix_timestamp(secs)? + time::Duration::nanoseconds(nanosecs)
             };
-            #[allow(clippy::cast_possible_truncation)]
-            #[allow(clippy::cast_sign_loss)]
+            // #[allow(clippy::cast_possible_truncation)]
+            // #[allow(clippy::cast_sign_loss)]
             let duration: i64 = {
                 let secs: i64 = entry.realtime_after.floor() as i64;
                 let nanosecs: i64 = (entry.realtime_after.fract() * 1_000_000_000_f64).round() as i64;
